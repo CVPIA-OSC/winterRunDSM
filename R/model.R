@@ -1,5 +1,5 @@
-#' @title Fall Run Chinook Model
-#' @description Fall Run Chinook life cycle model used for CVPIA's Structured
+#' @title Winter Run Chinook Model
+#' @description Winter Run Chinook life cycle model used for CVPIA's Structured
 #' Decision Making Process
 #' @param scenario Model inputs, can be modified to test management actions
 #' @param seeds The default value is NULL runs the model in seeding mode,
@@ -7,7 +7,7 @@
 #' returned value can be fed into the model again as the value for the seeds argument
 #' @source IP-117068
 #' @export
-fall_run_model <- function(scenario = NULL, seeds = NULL){
+winter_run_model <- function(scenario = NULL, seeds = NULL){
 
   watershed_labels <- c("Upper Sacramento River", "Antelope Creek", "Battle Creek",
                         "Bear Creek", "Big Chico Creek", "Butte Creek", "Clear Creek",
