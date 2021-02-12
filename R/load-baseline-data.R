@@ -36,10 +36,10 @@
 #'
 #' \strong{Habitat Inputs}
 #' \itemize{
-#'   \item spawning_habitat - \link[DSMhabitat]{fr_spawn}
-#'   \item inchannel_habitat_fry - \link[DSMhabitat]{fr_fry}
-#'   \item inchannel_habitat_juvenile - \link[DSMhabitat]{fr_juv}
-#'   \item floodplain_habitat - \link[DSMhabitat]{fr_fp}
+#'   \item spawning_habitat - \link[DSMhabitat]{wr_spawn}
+#'   \item inchannel_habitat_fry - \link[DSMhabitat]{wr_fry}
+#'   \item inchannel_habitat_juvenile - \link[DSMhabitat]{wr_juv}
+#'   \item floodplain_habitat - \link[DSMhabitat]{wr_fp}
 #'   \item weeks_flooded - \link[DSMhabitat]{weeks_flooded}
 #'   \item delta_habitat - \link[DSMhabitat]{delta_habitat}
 #'   \item sutter_habitat - \link[DSMhabitat]{sutter_habitat}
