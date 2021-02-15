@@ -34,14 +34,14 @@
 surv_juv_rear <- function(max_temp_thresh, avg_temp_thresh, high_predation,
                           contact_points, prop_diversions, total_diversions,
                           stranded, weeks_flooded,
-                          betas = c(`2nd calibration adjustment` = 3.5,
+                          betas = c(`2nd calibration adjustment` = -0.6558315,
                                     `average temperature` = -0.717,
                                     predation = -0.122,
-                                    `contact points` = 0.0358,
+                                    `contact points` =  0.0194795,
                                     `contact points scaler` = -0.189,
-                                    `proportion diverted` = 0.05,
+                                    `proportion diverted` =0.1000000,
                                     `proportion diverted scaler` = -3.51,
-                                    `total diverted` = 0.215,
+                                    `total diverted` = 0.3000000,
                                     `total diverted scaler` = -0.0021,
                                     stranded = -1.939,
                                     medium = 1.48,
@@ -109,7 +109,7 @@ surv_juv_rear <- function(max_temp_thresh, avg_temp_thresh, high_predation,
 #' @source IP-117068
 #' @export
 surv_juv_bypass <- function(max_temp_thresh, avg_temp_thresh, high_predation,
-                            betas = c(intercept = -3.5, `average temperature` = -0.717,
+                            betas = c(intercept = -3.4999845, `average temperature` = -0.717,
                                       predation = -0.122, medium = 1.48, large = 2.223,
                                       `floodplain habitat` = 0.47)){
 
@@ -148,10 +148,12 @@ surv_juv_bypass <- function(max_temp_thresh, avg_temp_thresh, high_predation,
 #' @export
 surv_juv_delta <- function(max_temp_thresh, avg_temp_thresh, high_predation, contact_points,
                            prop_diverted, total_diverted,
-                           betas = c(intercept = 1.4, `avg temp thresh` = -0.717,
-                                     predation = -0.122, contact = 0.0358 * -0.189,
+                           betas = c(intercept = 1.4933417,
+                                     `avg temp thresh` = -0.717,
+                                     predation = -0.122,
+                                     contact = 0.0194795 * -0.189,
                                      `prop diversions` = -3.51,
-                                     `total diversions` = 0.5 * -0.0021,
+                                     `total diversions` = 0.4820249 * -0.0021,
                                      medium = 1.48, large = 2.223)){
 
   base_score <- betas[1] +
@@ -290,10 +292,11 @@ get_rearing_survival_rates <- function(year, month, scenario) {
 #' @source IP-117068
 #' @export
 surv_juv_outmigration_sac <- function(flow_cms, avg_temp, total_diversions, prop_diversions,
-                                  betas = c(`intercept 1` = 2.5, flow = 0.0092,
-                                            `proportion diversion` = -3.51 * 0.05,
-                                            `total diversion` = -0.0021 * 0.215,
-                                            `intercept 2` = 0.3,
+                                  betas = c(`intercept 1` = 2.0000003,
+                                            flow = 0.0092,
+                                            `proportion diversion` = 0.1000000 * -3.51,
+                                            `total diversion` = 0.3000000 * -0.0021,
+                                            `intercept 2` = 0.7999889,
                                             `average temperature` = 0.554,
                                             `model weight` = .5,
                                             medium = 1.48, large = 2.223)){
@@ -331,7 +334,9 @@ surv_juv_outmigration_sac <- function(flow_cms, avg_temp, total_diversions, prop
 #' }
 #' @source IP-117068
 #' @export
-surv_juv_outmigration_san_joaquin <- function(betas = c(intercept = -3.5, medium = 1.48, large = 2.223)){
+surv_juv_outmigration_san_joaquin <- function(betas = c(intercept = -3.0188308,
+                                                        medium = 1.48,
+                                                        large = 2.223)){
 
   s <- boot::inv.logit(betas[1])
   m <- boot::inv.logit(betas[1] + betas[2])
@@ -349,8 +354,10 @@ surv_juv_outmigration_san_joaquin <- function(betas = c(intercept = -3.5, medium
 #' @source IP-117068
 #' @export
 surv_juv_outmigration_sac_delta <- function(delta_flow, avg_temp, perc_diversions,
-                                            betas = c(`intercept 1` = -3.5, `intercept 2` =  0.3,
-                                                      `intercept 3` = -3.5, flow = 0.0013,
+                                            betas = c(`intercept 1` = -3.5000000,
+                                                      `intercept 2` = -0.1999996,
+                                                      `intercept 3` = -3.4999920,
+                                                      flow = 0.0013,
                                                       `average temperature` = 0.386,
                                                       `percent diversions` = -0.033,
                                                       medium = 1.48, large = 2.223)){

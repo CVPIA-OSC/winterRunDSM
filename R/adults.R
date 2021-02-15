@@ -58,7 +58,7 @@ adult_stray <- function(wild, natal_flow, south_delta_watershed, cross_channel_g
 #' @source IP-117068
 #' @export
 surv_adult_enroute <- function(migratory_temp, bypass_overtopped, adult_harvest,
-                               betas = c(intercept = 3, temperature = -0.26, overtop = -0.019)) {
+                               betas = c(intercept = 3.4999976, temperature = -0.26, overtop = -0.019)) {
 
   pmax(boot::inv.logit(betas[1] + betas[2] * migratory_temp + betas[3] * bypass_overtopped) - adult_harvest, 0)
 
