@@ -53,7 +53,7 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
     annual_migrants <- matrix(0, nrow = 31, ncol = 4, dimnames = list(watershed_labels, size_class_labels))
     avg_ocean_transition_month <- ocean_transition_month() # 2
 
-    hatch_adults <- rmultinom(1, size = round(runif(1, 83097.01,532203.1)), prob = hatchery_allocation)[ , 1]
+    hatch_adults <- rmultinom(1, size = round(runif(1,355,775)), prob = hatchery_allocation)[ , 1]
     spawners <- get_spawning_adults(year, round(adults[ , year]), hatch_adults)
     init_adults <- spawners$init_adults
 
@@ -64,22 +64,35 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
     egg_to_fry_surv <- surv_egg_to_fry(
       proportion_natural = 1 - proportion_hatchery,
       scour = prob_nest_scoured,
-      temperature_effect = mean_egg_temp_effect
+      temperature_effect = rep(0.6466230, 31)
     )
-    # TODO fix degree days see spring run for example
     min_spawn_habitat <- apply(spawning_habitat[ , 1:4, year], 1, min)
 
-    accumulated_degree_days <- cbind(jan = rowSums(degree_days[ , 1:4, year]),
-                                     feb = rowSums(degree_days[ , 2:4, year]),
-                                     march = rowSums(degree_days[ , 3:4, year]),
-                                     april = degree_days[ , 4, year])
-
-    # TODO init adult
-    # TODO use triangle distribution to get average degree days during spawning period)(line 989 OG)
+    # Deg Days pre-spawn
+    accumulated_degree_days <- cbind(jan = rowSums(degree_days[ , 1:4, year] * (spawners$init_adults_by_month > 0)),
+                                     feb = rowSums(degree_days[ , 2:4, year] * (spawners$init_adults_by_month[, 2:4] > 0)),
+                                     march = rowSums(degree_days[ , 3:4, year] * (spawners$init_adults_by_month[, 3:4] > 0)),
+                                     april = degree_days[ , 4, year] * (spawners$init_adults_by_month[, 4] > 0))
 
     average_degree_days <- apply(accumulated_degree_days, 1, weighted.mean, month_return_proportions)
     prespawn_survival <- surv_adult_prespawn(average_degree_days)
 
+    # init adult who survived prespawn period 
+    init_adults <-  rbinom(n = 31, size = round(init_adults), prob = prespawn_survival)
+    
+    # TODO use triangle distribution to get average degree days during spawning period)(line 989 OG)
+    # Deg days durring spawning period 
+    spawntime_proportions <- c(0.2222222, 0.5555556, 0.2222222)
+    spawners_by_month <- matrix(0, nrow = 31, ncol = 3, dimnames = list(watershed_labels, c("May", "June", "July")))
+    spawners_by_month[1,] <- as.vector(rmultinom(1, round(init_adults[1]), spawntime_proportions))
+    
+    spawning_accumulated_degree_days <- cbind(may = degree_days[ , 5, year] * (spawners_by_month[ , 1] > 0 ), # Spawn in may only may degree days 
+                                              june = rowsum(degree_days[ , 5:6, year] * (spawners_by_month[ , 1:2] > 0 )),
+                                              july = rowsum(degree_days[ , 5:7, year] * (spawners_by_month > 0 )))
+    
+    spawning_average_degree_days <- apply(spawning_accumulated_degree_days, 1, weighted.mean, spawntime_proportions)  
+    prespawn_survival <- surv_adult_prespawn(spawning_average_degree_days)
+    
     juveniles <- spawn_success(escapement = init_adults,
                                adult_prespawn_survival = prespawn_survival,
                                egg_to_fry_survival = egg_to_fry_surv,
