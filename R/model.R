@@ -87,8 +87,8 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
     spawners_by_month[1,] <- as.vector(rmultinom(1, round(init_adults[1]), spawntime_proportions))
     
     spawning_accumulated_degree_days <- cbind(may = degree_days[ , 5, year] * (spawners_by_month[ , 1] > 0 ), # Spawn in may only may degree days 
-                                              june = rowsum(degree_days[ , 5:6, year] * (spawners_by_month[ , 1:2] > 0 )),
-                                              july = rowsum(degree_days[ , 5:7, year] * (spawners_by_month > 0 )))
+                                              june = rowSums(degree_days[ , 5:6, year] * (spawners_by_month[ , 1:2] > 0 )),
+                                              july = rowSums(degree_days[ , 5:7, year] * (spawners_by_month > 0 )))
     
     spawning_average_degree_days <- apply(spawning_accumulated_degree_days, 1, weighted.mean, spawntime_proportions)  
     prespawn_survival <- surv_adult_prespawn(spawning_average_degree_days)
@@ -100,6 +100,7 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
                                spawn_habitat = min_spawn_habitat)
 
     for (month in c(9:12, 1:5)) {
+      if (month %in% 1:5) juv_dynamics_year <- year + 1 else juv_dynamics_year <- year
       habitat <- get_habitat(year, month) # habitat$yolo
       rearing_survival <- get_rearing_survival_rates(year, month, scenario) # rearing_survival$inchannel
       migratory_survival <- get_migratory_survival_rates(year, month) #migratory_survival$uppermid_sac
@@ -121,7 +122,7 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
         migrants[18:20, ] <- migrants[18:20, ] + yolo_fish
         migrants[28:30, ] <- san_joaquin_fish
 
-        delta_fish <- route_and_rear_deltas(year = year, month = month,
+        delta_fish <- route_and_rear_deltas(year = juv_dynamics_year, month = month,
                                             migrants = round(migrants),
                                             north_delta_fish = north_delta_fish,
                                             south_delta_fish = south_delta_fish,
@@ -141,7 +142,7 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
       } else {
         # if month < 8
         # route northern natal fish stay and rear or migrate downstream ------
-        upper_sac_trib_fish <-  route(year = year,
+        upper_sac_trib_fish <-  route(year = juv_dynamics_year,
                                       month = month,
                                       juveniles = juveniles[1:15, ],
                                       inchannel_habitat = habitat$inchannel[1:15],
@@ -155,7 +156,7 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
                                     floodplain_juveniles = upper_sac_trib_fish$floodplain,
                                     floodplain_survival_rate = rearing_survival$floodplain[1:15, ],
                                     floodplain_growth = growth_rates_floodplain,
-                                    weeks_flooded = weeks_flooded[1:15, month, year])
+                                    weeks_flooded = weeks_flooded[1:15, month, juv_dynamics_year])
 
         juveniles[1:15, ] <- upper_sac_trib_rear$inchannel + upper_sac_trib_rear$floodplain
 
@@ -186,14 +187,14 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
                                    floodplain_juveniles = upper_mid_sac_fish$floodplain,
                                    floodplain_survival_rate = rearing_survival$floodplain[16, ],
                                    floodplain_growth = growth_rates_floodplain,
-                                   weeks_flooded = rep(weeks_flooded[16, month, year], nrow(upper_mid_sac_fish$inchannel)))
+                                   weeks_flooded = rep(weeks_flooded[16, month, juv_dynamics_year], nrow(upper_mid_sac_fish$inchannel)))
 
         upper_mid_sac_fish <- upper_mid_sac_fish$inchannel + upper_mid_sac_fish$floodplain
 
         # route migrant fish into Lower-mid Sac Region (fish from watersheds 18:20, and migrants from Upper-mid Sac Region)
         # regional fish stay and rear
         # or migrate further downstream  or in yolo bypass
-        lower_mid_sac_trib_fish <- route(year = year,
+        lower_mid_sac_trib_fish <- route(year = juv_dynamics_year,
                                          month = month,
                                          juveniles = juveniles[18:20, ],
                                          inchannel_habitat = habitat$inchannel[18:20],
@@ -207,7 +208,7 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
                                         floodplain_juveniles = lower_mid_sac_trib_fish$floodplain,
                                         floodplain_survival_rate = rearing_survival$floodplain[18:20, ],
                                         floodplain_growth = growth_rates_floodplain,
-                                        weeks_flooded = weeks_flooded[18:20, month, year])
+                                        weeks_flooded = weeks_flooded[18:20, month, juv_dynamics_year])
 
         juveniles[18:20, ] <- lower_mid_sac_trib_rear$inchannel + lower_mid_sac_trib_rear$floodplain
 
@@ -237,14 +238,14 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
                                    floodplain_juveniles = lower_mid_sac_fish$floodplain,
                                    floodplain_survival_rate = rearing_survival$floodplain[21, ],
                                    floodplain_growth = growth_rates_floodplain,
-                                   weeks_flooded = rep(weeks_flooded[21, month, year], nrow(lower_mid_sac_fish$inchannel)))
+                                   weeks_flooded = rep(weeks_flooded[21, month, juv_dynamics_year], nrow(lower_mid_sac_fish$inchannel)))
 
         lower_mid_sac_fish <- lower_mid_sac_fish$inchannel + lower_mid_sac_fish$floodplain
 
         # route migrant fish into Lower Sac Region (fish from watershed 23, and migrants from Lower-mid Sac Region)
         # regional fish stay and rear
         # or migrate north delta
-        lower_sac_trib_fish <- route(year = year,
+        lower_sac_trib_fish <- route(year = juv_dynamics_year,
                                      month = month,
                                      juveniles = juveniles[23, , drop = FALSE],
                                      inchannel_habitat = habitat$inchannel[23],
@@ -257,7 +258,7 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
                                     floodplain_juveniles = lower_sac_trib_fish$floodplain,
                                     floodplain_survival_rate = rearing_survival$floodplain[23, , drop = FALSE],
                                     floodplain_growth = growth_rates_floodplain,
-                                    weeks_flooded = weeks_flooded[23, month, year])
+                                    weeks_flooded = weeks_flooded[23, month, juv_dynamics_year])
 
         juveniles[23, ] <- lower_sac_trib_rear$inchannel + lower_sac_trib_rear$floodplain
 
@@ -278,7 +279,7 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
                                floodplain_juveniles = lower_sac_fish$floodplain,
                                floodplain_survival_rate = rearing_survival$floodplain[24, ],
                                floodplain_growth = growth_rates_floodplain,
-                               weeks_flooded = rep(weeks_flooded[24, month, year], nrow(lower_sac_fish$inchannel)))
+                               weeks_flooded = rep(weeks_flooded[24, month, juv_dynamics_year], nrow(lower_sac_fish$inchannel)))
 
         lower_sac_fish <- lower_sac_fish$inchannel + lower_sac_fish$floodplain
 
@@ -287,7 +288,7 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
         # route migrant fish into South Delta Region (fish from watersheds 25:27)
         # regional fish stay and rear
         # or migrate to south delta
-        south_delta_trib_fish <- route(year = year,
+        south_delta_trib_fish <- route(year = juv_dynamics_year,
                                        month = month,
                                        juveniles = juveniles[25:27, ],
                                        inchannel_habitat = habitat$inchannel[25:27],
@@ -300,7 +301,7 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
                                       floodplain_juveniles = south_delta_trib_fish$floodplain,
                                       floodplain_survival_rate = rearing_survival$floodplain[25:27, ],
                                       floodplain_growth = growth_rates_floodplain,
-                                      weeks_flooded = weeks_flooded[25:27, month, year])
+                                      weeks_flooded = weeks_flooded[25:27, month, juv_dynamics_year])
 
         juveniles[25:27, ] <- south_delta_trib_rear$inchannel + south_delta_trib_rear$floodplain
 
@@ -310,7 +311,7 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
         # regional fish stay and rear
         # or migrate to south delta
 
-        san_joaquin_trib_fish <- route(year = year,
+        san_joaquin_trib_fish <- route(year = juv_dynamics_year,
                                        month = month,
                                        juveniles = juveniles[28:30, ],
                                        inchannel_habitat = habitat$inchannel[28:30],
@@ -323,7 +324,7 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
                                       floodplain_juveniles = san_joaquin_trib_fish$floodplain,
                                       floodplain_survival_rate = rearing_survival$floodplain[28:30, ],
                                       floodplain_growth = growth_rates_floodplain,
-                                      weeks_flooded = weeks_flooded[28:30, month, year])
+                                      weeks_flooded = weeks_flooded[28:30, month, juv_dynamics_year])
 
         juveniles[28:30, ] <- san_joaquin_trib_rear$inchannel + san_joaquin_trib_rear$floodplain
 
@@ -342,11 +343,11 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
                                  floodplain_juveniles = san_joaquin_fish$floodplain,
                                  floodplain_survival_rate = rearing_survival$floodplain[31, ],
                                  floodplain_growth = growth_rates_floodplain,
-                                 weeks_flooded = rep(weeks_flooded[31, month, year], nrow(san_joaquin_fish$inchannel)))
+                                 weeks_flooded = rep(weeks_flooded[31, month, juv_dynamics_year], nrow(san_joaquin_fish$inchannel)))
 
         san_joaquin_fish <- san_joaquin_fish$inchannel + san_joaquin_fish$floodplain
 
-        delta_fish <- route_and_rear_deltas(year = year, month = month,
+        delta_fish <- route_and_rear_deltas(year = juv_dynamics_year, month = month,
                                             migrants = round(migrants),
                                             north_delta_fish = north_delta_fish,
                                             south_delta_fish = south_delta_fish,
