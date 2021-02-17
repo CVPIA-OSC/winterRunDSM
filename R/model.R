@@ -66,12 +66,16 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
       scour = prob_nest_scoured,
       temperature_effect = mean_egg_temp_effect
     )
+    # TODO fix degree days see spring run for example
+    min_spawn_habitat <- apply(spawning_habitat[ , 1:4, year], 1, min)
 
-    min_spawn_habitat <- apply(spawning_habitat[ , 10:12, year], 1, min)
+    accumulated_degree_days <- cbind(jan = rowSums(degree_days[ , 1:4, year]),
+                                     feb = rowSums(degree_days[ , 2:4, year]),
+                                     march = rowSums(degree_days[ , 3:4, year]),
+                                     april = degree_days[ , 4, year])
 
-    accumulated_degree_days <- cbind(oct = rowSums(degree_days[ , 10:12, year]),
-                                     nov = rowSums(degree_days[ , 11:12, year]),
-                                     dec = degree_days[ , 12, year])
+    # TODO init adult
+    # TODO use triangle distribution to get average degree days during spawning period)(line 989 OG)
 
     average_degree_days <- apply(accumulated_degree_days, 1, weighted.mean, month_return_proportions)
     prespawn_survival <- surv_adult_prespawn(average_degree_days)
@@ -82,13 +86,13 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
                                prob_scour = prob_nest_scoured,
                                spawn_habitat = min_spawn_habitat)
 
-    for (month in 1:8) {
+    for (month in c(9:12, 1:5)) {
       habitat <- get_habitat(year, month) # habitat$yolo
       rearing_survival <- get_rearing_survival_rates(year, month, scenario) # rearing_survival$inchannel
       migratory_survival <- get_migratory_survival_rates(year, month) #migratory_survival$uppermid_sac
       migrants <- matrix(0, nrow = 31, ncol = 4, dimnames = list(watershed_labels, size_class_labels))
 
-      if (month == 8) {
+      if (month == 5) {
         # all remaining fish outmigrate
         sutter_fish <- migrate(sutter_fish, migratory_survival$sutter)
         upper_mid_sac_fish <- migrate(upper_mid_sac_fish + juveniles[1:15, ], migratory_survival$uppermid_sac)
