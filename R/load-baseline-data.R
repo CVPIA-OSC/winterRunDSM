@@ -149,3 +149,47 @@ load_baseline_data <- function() {
     prob_nest_scoured = prob_nest_scoured
   )
 }
+
+
+#' @title Load 2019 Baseline Data
+#' @description loads baseline data from OG model and calibrates for model comparisons 
+#' @export
+load_2019_baseline_data <- function(){
+  # Vect2 contains habitat scalars 
+  vect2<-c(1.1975408, 0.9999999, 0.5000000, 0.9934527, 1.0031454, 1.2284905, 0.9940085, 1.0307768, 1.0000048)
+  
+  
+  current_data <- load_baseline_data()
+  
+  current_data$spawning_habitat <- baseline_2019$IChab.spawn
+  current_data$inchannel_habitat_fry <- baseline_2019$IChab.fry
+  current_data$inchannel_habitat_juvenile <- baseline_2019$IChab.juv
+  
+  current_data$sutter_habitat <- baseline_2019$IChab.bypass[1,,] + baseline_2019$IChab.bypass[2,,] +
+                                 baseline_2019$IChab.bypass[3,,] + baseline_2019$IChab.bypass[4,,]
+  current_data$yolo_habitat <- baseline_2019$IChab.bypass[5,,] + baseline_2019$IChab.bypass[6,,]
+  current_data$delta_habitat <- baseline_2019$DLThab
+  
+  
+  current_data$spawning_habitat[1,,] <- current_data$spawning_habitat[1,,] * vect2[1] #Upper Sac 
+  
+  current_data$inchannel_habitat_fry[1,,] <- current_data$inchannel_habitat_fry[1,,] * vect2[2] # Upper Sac 
+  current_data$inchannel_habitat_fry[16,,] <- current_data$inchannel_habitat_fry[16,,] * vect2[3] # Upper-mid Sac
+  current_data$inchannel_habitat_fry[21,,] <- current_data$inchannel_habitat_fry[21,,] * vect2[4] # Lower-mid Sac Sutter
+  current_data$inchannel_habitat_fry[24,,] <- current_data$inchannel_habitat_fry[24,,] * vect2[5] # Lower-mid Sac Yolo
+  
+  current_data$inchannel_habitat_juvenile[1,,] <- current_data$inchannel_habitat_juvenile[1,,] * vect2[2] # Upper Sac 
+  current_data$inchannel_habitat_juvenile[16,,] <- current_data$inchannel_habitat_juvenile[16,,] * vect2[3] # Upper-mid Sac
+  current_data$inchannel_habitat_juvenile[21,,] <- current_data$inchannel_habitat_juvenile[21,,] * vect2[4] # Lower-mid Sac Sutter 
+  current_data$inchannel_habitat_juvenile[24,,] <- current_data$inchannel_habitat_juvenile[24,,] * vect2[5] # Lower-mid Sac Yolo
+  
+  current_data$sutter_habitat <- current_data$sutter_habitat * vect2[6] # sutter bypass hab 
+  current_data$yolo_habitat <- current_data$yolo_habitat * vect2[7] # yolo bypass hab 
+  
+  current_data$delta_habitat[,,1] <- current_data$delta_habitat[,,1] * vect2[8] # North Delta Hab 
+  current_data$delta_habitat[,,2] <- current_data$delta_habitat[,,2] * vect2[8] # South Delta Hab 
+  
+  return(current_data)
+}
+
+
