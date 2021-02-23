@@ -6,6 +6,17 @@
 get_spawning_adults <- function(year, adults, hatch_adults) {
 
   returning_hatchery_adults <- hatch_adults
+  
+  # Split adults by month 
+  adults_by_month <- t(sapply(1:31, function(watershed) {
+    rmultinom(1, adult_seeds[watershed], month_return_proportions)
+  }))
+  
+  natural_adults_by_month <- sapply(1:4, function(month) {
+    rbinom(n = 31, 
+           size = round(adults_by_month[, month]), 
+           prob = 1 - natural_adult_removal_rate)
+  })
 
   # well they all return the same surival
   stray_prop <- adult_stray(wild = 1,
@@ -45,7 +56,8 @@ get_spawning_adults <- function(year, adults, hatch_adults) {
 
   list(init_adults = init_adults,
        proportion_natural = replace(proportion_natural, is.nan(proportion_natural), NA_real_),
-       natural_adults = surviving_natural_adults)
+       natural_adults = surviving_natural_adults,
+       init_adults_by_month = natural_adults_by_month)
 
 }
 

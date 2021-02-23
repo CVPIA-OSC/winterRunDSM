@@ -19,7 +19,7 @@
 #' @source IP-117068
 #' @export
 surv_egg_to_fry <- function(proportion_natural, scour, temperature_effect,
-                            betas = c('intercept' = 0.6466230, `Natural Adults` = 0.533, 'scour' = -0.655)){
+                            betas = c('intercept' = 0.041, `Natural Adults` = 0.533, 'scour' = -0.655)){
 
   boot::inv.logit(betas[1] + betas[2] * proportion_natural + betas[3] * scour) * temperature_effect
 }
