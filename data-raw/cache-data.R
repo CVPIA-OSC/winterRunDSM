@@ -4,7 +4,6 @@ adult_seeds <- matrix(0, nrow = 31, ncol = 30)
 adult_seeds[ 1, 1] <- 2786.6
 
 rownames(adult_seeds) <- DSMhabitat::watershed_metadata$watershed[-32]
-
 usethis::use_data(adult_seeds, overwrite = TRUE)
 
 #TODO check on why in OG model they only have a single number not a vector of values
@@ -57,3 +56,8 @@ diversity_group <- original_groups$DiversityGroup
 names(diversity_group) <- original_groups$watershed
 usethis::use_data(diversity_group, overwrite = TRUE)
 
+
+
+# Read in Baseling_2019.rds to get inpts from OG model 
+baseline_2019 <- readRDS("data-raw/baseline_2019.rds")
+usethis::use_data(baseline_2019, overwrite = TRUE)
