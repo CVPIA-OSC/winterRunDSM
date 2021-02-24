@@ -64,7 +64,7 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
     egg_to_fry_surv <- surv_egg_to_fry(
       proportion_natural = 1 - proportion_hatchery,
       scour = prob_nest_scoured,
-      temperature_effect = rep(0.6466230, 31)
+      temperature_effect = mean_egg_temp_effect
     )
     min_spawn_habitat <- apply(spawning_habitat[ , 1:4, year], 1, min)
 

@@ -62,6 +62,12 @@ usethis::use_data(diversity_group, overwrite = TRUE)
 baseline_2019 <- readRDS("data-raw/baseline_2019.rds")
 usethis::use_data(baseline_2019, overwrite = TRUE)
 
+# Mean egg temp effect different in winter run 
+# TODO update in DSMtemperature 
+mean_egg_temp_effect <- rep(0.6466230, 31)
+names(mean_egg_temp_effect) <- watershed_attributes$watershed
+usethis::use_data(mean_egg_temp_effect, overwrite = TRUE)
+
 # TODO needs to be added to the appropriate package (flow)
 # gate overtopped 
 gates_overtopped <- structure(c(TRUE, TRUE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, 
