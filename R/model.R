@@ -46,7 +46,7 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
   growth_rates_floodplain <- growth_floodplain()
 
   adults <- if(is.null(seeds)) adult_seeds else seeds
-  simulation_length <- ifelse(is.null(seeds), 5, 20)
+  simulation_length <- ifelse(is.null(seeds), 5, 19) # TODO fix this in the data packages
 
   for (year in 1:simulation_length) {
     adults_in_ocean <- numeric(31)
