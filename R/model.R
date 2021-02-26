@@ -54,7 +54,7 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
     avg_ocean_transition_month <- ocean_transition_month() # 2
 
     hatch_adults <- rmultinom(1, size = round(runif(1,355,775)), prob = hatchery_allocation)[ , 1]
-    spawners <- get_spawning_adults(year, round(adults[ , year]), hatch_adults)
+    spawners <- get_spawning_adults(year, round(adults[ , year]), hatch_adults, seeds)
     init_adults <- spawners$init_adults
 
     output$spawners[ , year] <- init_adults
@@ -64,7 +64,7 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
     egg_to_fry_surv <- surv_egg_to_fry(
       proportion_natural = 1 - proportion_hatchery,
       scour = prob_nest_scoured,
-      temperature_effect = rep(0.6466230, 31)
+      temperature_effect = mean_egg_temp_effect
     )
     min_spawn_habitat <- apply(spawning_habitat[ , 1:4, year], 1, min)
 
