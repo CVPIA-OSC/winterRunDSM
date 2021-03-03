@@ -16,17 +16,19 @@
 #' @export
 ocean_entry_success <- function(migrants, month, avg_ocean_transition_month,
                                 length = c(-0.0897309864, -0.0709704348, -0.0208590732, 0.0732620916),
-                                betas = c(`intercept 1` = -2.9839253, `intercept 2` = -2.9839253, `intercept 3` = -2.9839253,
-                                          `intercept 4` = -2.9839253, `intercept 5` = -2.9839253, `intercept 6` = -2.9839253,
-                                          `intercept 7` = -2.9839253, `intercept 8` = -2.9839253, `intercept 9` = -2.9839253,
-                                          `intercept 10` = -2.9839253, `intercept 11` = -2.9839253, `intercept 12` = -2.9839253,
-                                          `intercept 13` = -2.9839253, `intercept 14` = -2.9839253, `intercept 15` = -2.9839253,
-                                          `intercept 16` = -2.9839253, `intercept 17` = -2.9839253, `intercept 18` = -2.9839253,
-                                          `intercept 19` = -2.9839253, `intercept 20` = -2.9839253, `intercept 21` = -2.9839253,
-                                          `intercept 22` = -2.9839253, `intercept 23` = -2.9839253, `intercept 24` = -2.9839253,
-                                          `intercept 25` = -2.9839253, `intercept 26` = -2.9839253, `intercept 27` = -2.9839253,
-                                          `intercept 28` = -2.9839253, `intercept 29` = -2.9839253, `intercept 30` = -2.9839253,
-                                          `intercept 31` = -2.9839253, months = 0.35)){
+                                betas = c(`Upper Sacramento River` = -2.9839253, `Antelope Creek` = -2.9839253, 
+                                          `Battle Creek` = -2.9839253, `Bear Creek` = -2.9839253, `Big Chico Creek` = -2.9839253, 
+                                          `Butte Creek` = -2.9839253, `Clear Creek` = -2.9839253, `Cottonwood Creek` = -2.9839253, 
+                                          `Cow Creek` = -2.9839253, `Deer Creek` = -2.9839253, `Elder Creek` = -2.9839253, 
+                                          `Mill Creek` = -2.9839253, `Paynes Creek` = -2.9839253, `Stony Creek` = -2.9839253, 
+                                          `Thomes Creek` = -2.9839253, `Upper-mid Sacramento River` = -2.9839253, 
+                                          `Sutter Bypass` = -2.9839253, `Bear River` = -2.9839253, `Feather River` = -2.9839253, 
+                                          `Yuba River` = -2.9839253, `Lower-mid Sacramento River` = -2.9839253, 
+                                          `Yolo Bypass` = -2.9839253, `American River` = -2.9839253, `Lower Sacramento River` = -2.9839253, 
+                                          `Calaveras River` = -2.9839253, `Cosumnes River` = -2.9839253, 
+                                          `Mokelumne River` = -2.9839253, `Merced River` = -2.9839253, 
+                                          `Stanislaus River` = -2.9839253, `Tuolumne River` = -2.9839253, 
+                                          `San Joaquin River` = -2.9839253, months = 0.35)){
 
   month_since <- ifelse(month <= avg_ocean_transition_month, 0, max(1, month - avg_ocean_transition_month))
 

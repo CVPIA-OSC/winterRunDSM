@@ -4,7 +4,6 @@ adult_seeds <- matrix(0, nrow = 31, ncol = 30)
 adult_seeds[ 1, 1] <- 2786.6
 
 rownames(adult_seeds) <- DSMhabitat::watershed_metadata$watershed[-32]
-
 usethis::use_data(adult_seeds, overwrite = TRUE)
 
 #TODO check on why in OG model they only have a single number not a vector of values
@@ -56,4 +55,16 @@ original_groups <- read_csv("data-raw/misc/Grouping.csv")
 diversity_group <- original_groups$DiversityGroup
 names(diversity_group) <- original_groups$watershed
 usethis::use_data(diversity_group, overwrite = TRUE)
+
+
+
+# Read in Baseling_2019.rds to get inpts from OG model 
+baseline_2019 <- readRDS("data-raw/baseline_2019.rds")
+usethis::use_data(baseline_2019, overwrite = TRUE)
+
+# Mean egg temp effect different in winter run 
+# TODO update in DSMtemperature 
+mean_egg_temp_effect <- rep(0.6466230, 31)
+names(mean_egg_temp_effect) <- watershed_attributes$watershed
+usethis::use_data(mean_egg_temp_effect, overwrite = TRUE)
 
