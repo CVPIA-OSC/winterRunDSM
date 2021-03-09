@@ -11,7 +11,7 @@ surv_adult_enroute(
   migratory_temp,
   bypass_overtopped,
   adult_harvest,
-  betas = c(intercept = 3, temperature = -0.26, overtop = -0.019)
+  betas = c(intercept = 3.4999976, temperature = -0.26, overtop = -0.019)
 )
 }
 \arguments{
