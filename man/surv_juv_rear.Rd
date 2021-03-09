@@ -16,10 +16,10 @@ surv_juv_rear(
   total_diversions,
   stranded,
   weeks_flooded,
-  betas = c(`2nd calibration adjustment` = 3.5, `average temperature` = -0.717,
-    predation = -0.122, `contact points` = 0.0358, `contact points scaler` = -0.189,
-    `proportion diverted` = 0.05, `proportion diverted scaler` = -3.51, `total diverted`
-    = 0.215, `total diverted scaler` = -0.0021, stranded = -1.939, medium = 1.48, large =
+  betas = c(`2nd calibration adjustment` = -0.6558315, `average temperature` = -0.717,
+    predation = -0.122, `contact points` = 0.0194795, `contact points scaler` = -0.189,
+    `proportion diverted` = 0.1, `proportion diverted scaler` = -3.51, `total diverted` =
+    0.3, `total diverted scaler` = -0.0021, stranded = -1.939, medium = 1.48, large =
     2.223, `floodplain habitat` = 0.47, `surival adjustments` = 1)
 )
 }

@@ -12,16 +12,19 @@ ocean_entry_success(
   month,
   avg_ocean_transition_month,
   length = c(-0.0897309864, -0.0709704348, -0.0208590732, 0.0732620916),
-  betas = c(`intercept 1` = -0.5108849, `intercept 2` = 1.2, `intercept 3` = 1.2,
-    `intercept 4` = 1.2, `intercept 5` = 1.2, `intercept 6` = -3.3233638, `intercept 7` =
-    1.2, `intercept 8` = 1.2, `intercept 9` = 1.2, `intercept 10` = -3.2304288,
-    `intercept 11` = 1.2, `intercept 12` = -3.4148335, `intercept 13` = 1.2, `intercept
-    14` = 1.2, `intercept 15` = 1.2, `intercept 16` = 1.2, `intercept 17` = 1.2,
-    `intercept 18` = -3.5, `intercept 19` = -3.5, `intercept 20` = -3.5, `intercept 21` =
-    1.2, `intercept 22` = 1.2,      `intercept 23` = -1.308341, `intercept 24` = 1.2,
-    `intercept 25` = -1.9841364, `intercept 26` = -1.9841364, `intercept 27` = 2.5000007,
-    `intercept 28` = -3.5, `intercept 29` = -3, `intercept 30` = -0.9, `intercept 31` =
-    1.2, months = 0.35)
+  betas = c(`Upper Sacramento River` = -2.9839253, `Antelope Creek` = -2.9839253,
+    `Battle Creek` = -2.9839253, `Bear Creek` = -2.9839253, `Big Chico Creek` =
+    -2.9839253, `Butte Creek` = -2.9839253, `Clear Creek` = -2.9839253, `Cottonwood
+    Creek` = -2.9839253, `Cow Creek` = -2.9839253, `Deer Creek` = -2.9839253, `Elder
+    Creek` = -2.9839253, `Mill Creek` = -2.9839253, `Paynes Creek` = -2.9839253, `Stony
+    Creek` = -2.9839253, `Thomes Creek` = -2.9839253, `Upper-mid Sacramento River` =
+    -2.9839253, `Sutter Bypass` = -2.9839253,      `Bear River` = -2.9839253, `Feather
+    River` = -2.9839253, `Yuba River` = -2.9839253, `Lower-mid Sacramento River` =
+    -2.9839253, `Yolo Bypass` = -2.9839253, `American River` = -2.9839253, `Lower
+    Sacramento River` = -2.9839253, `Calaveras River` = -2.9839253, `Cosumnes River` =
+    -2.9839253, `Mokelumne River` = -2.9839253, `Merced River` = -2.9839253, `Stanislaus
+    River` = -2.9839253, `Tuolumne River` = -2.9839253, `San Joaquin River` = -2.9839253,
+    months = 0.35)
 )
 }
 \arguments{

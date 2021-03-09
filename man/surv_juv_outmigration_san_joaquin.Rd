@@ -8,7 +8,7 @@ IP-117068
 }
 \usage{
 surv_juv_outmigration_san_joaquin(
-  betas = c(intercept = -3.5, medium = 1.48, large = 2.223)
+  betas = c(intercept = -3.0188308, medium = 1.48, large = 2.223)
 )
 }
 \arguments{
