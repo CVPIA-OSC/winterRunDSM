@@ -181,7 +181,7 @@ surv_juv_delta <- function(max_temp_thresh, avg_temp_thresh, high_predation, con
 #' @param scenario The current scenario
 #' @source IP-117068
 #' @export
-get_rearing_survival_rates <- function(year, month, scenario) {
+get_rearing_survival_rates <- function(year, month, scenario = NULL) {
   watershed_labels <- c("Upper Sacramento River", "Antelope Creek", "Battle Creek",
                         "Bear Creek", "Big Chico Creek", "Butte Creek", "Clear Creek",
                         "Cottonwood Creek", "Cow Creek", "Deer Creek", "Elder Creek",
@@ -242,7 +242,7 @@ get_rearing_survival_rates <- function(year, month, scenario) {
   river_surv <- matrix(unlist(rear_surv[ , 1]), ncol = 4, byrow = TRUE)
   flood_surv <- matrix(unlist(rear_surv[ , 2]), ncol = 4, byrow = TRUE)
 
-  if (!is.null(scenario)) {
+  if (is.null(scenario)) {
     survival_increase <- matrix(0, nrow = 31, ncol = 4)
   }
 

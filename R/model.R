@@ -41,6 +41,7 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
   juveniles_at_chipps <- matrix(0, nrow = 31, ncol = 4, dimnames = list(watershed_labels, size_class_labels))
   proportion_natural <- matrix(NA_real_, nrow = 31, ncol = 20)
 
+  optimal_decision <- matrix(NA, ncol = 20, nrow = 31)
   # calculate growth rates
   growth_rates <- growth()
   growth_rates_floodplain <- growth_floodplain()
@@ -384,7 +385,29 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
 
     # distribute returning adults for future spawning
     adults[1:31, (year + 2):(year + 4)] <- adults[1:31, (year + 2):(year + 4)] + adults_returning
-
+  
+    if (!is.null(seeds)) {
+      for (trib in 1:31) {
+        if (watershed_attributes$is_regulated[trib] & watershed_attributes$group[trib] < 7) {
+          if (is.na(optimal_decision[trib, year])) {
+            for (y in year:20) {
+              spawning_habitat[trib,,y] <<- spawning_habitat[trib,,y] * runif(1,(watershed_attributes$spawn_decay[trib]-(1-watershed_attributes$spawn_decay[trib])),1)
+              inchannel_habitat_fry[trib,,y] <<- inchannel_habitat_fry[trib,,y] * runif(1,(watershed_attributes$rear_decay[trib]-(1-watershed_attributes$rear_decay[trib])),1)
+              inchannel_habitat_juvenile[trib,,y] <<- inchannel_habitat_juvenile[trib,,y] * runif(1,(watershed_attributes$rear_decay[trib]-(1-watershed_attributes$rear_decay[trib])),1)
+            }
+          }
+        }
+        if (watershed_attributes$group[trib] == 7) {
+          if (is.na(optimal_decision[trib, year])) {
+            for (y in year:20) {
+              inchannel_habitat_fry[trib,,y] <<- inchannel_habitat_fry[trib,,y] * runif(1,(watershed_attributes$rear_decay[trib]-(1-watershed_attributes$rear_decay[trib])),1)
+              inchannel_habitat_juvenile[trib,,y] <<- inchannel_habitat_juvenile[trib,,y] * runif(1,(watershed_attributes$rear_decay[trib]-(1-watershed_attributes$rear_decay[trib])),1)
+            }
+          }
+        }
+      }
+    }
+    
   } # end year for loop
 
   if (is.null(seeds)) {
