@@ -88,10 +88,10 @@ load_baseline_data <- function() {
   migratory_temperature_proportion_over_20 <- DSMtemperature::migratory_temperature_proportion_over_20
 
   # DSMhabitat variables -----
-  spawning_habitat <- DSMhabitat::fr_spawn
-  inchannel_habitat_fry <- DSMhabitat::fr_fry
-  inchannel_habitat_juvenile <- DSMhabitat::fr_juv
-  floodplain_habitat <- DSMhabitat::fr_fp
+  spawning_habitat <- DSMhabitat::wr_spawn
+  inchannel_habitat_fry <- DSMhabitat::wr_fry
+  inchannel_habitat_juvenile <- DSMhabitat::wr_juv
+  floodplain_habitat <- DSMhabitat::wr_fp
   weeks_flooded <- DSMhabitat::weeks_flooded
   delta_habitat <- DSMhabitat::delta_habitat
   sutter_habitat <- DSMhabitat::sutter_habitat

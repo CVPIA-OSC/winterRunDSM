@@ -11,9 +11,9 @@ surv_juv_outmigration_sac_delta(
   delta_flow,
   avg_temp,
   perc_diversions,
-  betas = c(`intercept 1` = -3.5, `intercept 2` = 0.3, `intercept 3` = -3.5, flow =
-    0.0013, `average temperature` = 0.386, `percent diversions` = -0.033, medium = 1.48,
-    large = 2.223)
+  betas = c(`intercept 1` = -3.5, `intercept 2` = -0.1999996, `intercept 3` =
+    -3.499992, flow = 0.0013, `average temperature` = 0.386, `percent diversions` =
+    -0.033, medium = 1.48, large = 2.223)
 )
 }
 \arguments{

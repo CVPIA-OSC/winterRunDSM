@@ -41,12 +41,13 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
   juveniles_at_chipps <- matrix(0, nrow = 31, ncol = 4, dimnames = list(watershed_labels, size_class_labels))
   proportion_natural <- matrix(NA_real_, nrow = 31, ncol = 20)
 
+  optimal_decision <- matrix(NA, ncol = 20, nrow = 31)
   # calculate growth rates
   growth_rates <- growth()
   growth_rates_floodplain <- growth_floodplain()
 
   adults <- if(is.null(seeds)) adult_seeds else seeds
-  simulation_length <- ifelse(is.null(seeds), 5, 19) # TODO fix this in the data packages
+  simulation_length <- ifelse(is.null(seeds), 5, 20) # TODO fix this in the data packages
 
   for (year in 1:simulation_length) {
     adults_in_ocean <- numeric(31)
@@ -54,7 +55,7 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
     avg_ocean_transition_month <- ocean_transition_month() # 2
 
     hatch_adults <- rmultinom(1, size = round(runif(1,355,775)), prob = hatchery_allocation)[ , 1]
-    spawners <- get_spawning_adults(year, round(adults[ , year]), hatch_adults, seeds)
+    spawners <- get_spawning_adults(year, round(adults), hatch_adults, seeds)
     init_adults <- spawners$init_adults
 
     output$spawners[ , year] <- init_adults
@@ -102,6 +103,7 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
     for (month in c(9:12, 1:5)) {
       if (month %in% 1:5) juv_dynamics_year <- year + 1 else juv_dynamics_year <- year
       habitat <- get_habitat(year, month) # habitat$yolo
+      
       rearing_survival <- get_rearing_survival_rates(year, month, scenario) # rearing_survival$inchannel
       migratory_survival <- get_migratory_survival_rates(year, month) #migratory_survival$uppermid_sac
       migrants <- matrix(0, nrow = 31, ncol = 4, dimnames = list(watershed_labels, size_class_labels))
@@ -383,7 +385,29 @@ winter_run_model <- function(scenario = NULL, seeds = NULL){
 
     # distribute returning adults for future spawning
     adults[1:31, (year + 2):(year + 4)] <- adults[1:31, (year + 2):(year + 4)] + adults_returning
-
+  
+    if (!is.null(seeds)) {
+      for (trib in 1:31) {
+        if (watershed_attributes$is_regulated[trib] & watershed_attributes$group[trib] < 7) {
+          if (is.na(optimal_decision[trib, year])) {
+            for (y in year:20) {
+              spawning_habitat[trib,,y] <<- spawning_habitat[trib,,y] * runif(1,(watershed_attributes$spawn_decay[trib]-(1-watershed_attributes$spawn_decay[trib])),1)
+              inchannel_habitat_fry[trib,,y] <<- inchannel_habitat_fry[trib,,y] * runif(1,(watershed_attributes$rear_decay[trib]-(1-watershed_attributes$rear_decay[trib])),1)
+              inchannel_habitat_juvenile[trib,,y] <<- inchannel_habitat_juvenile[trib,,y] * runif(1,(watershed_attributes$rear_decay[trib]-(1-watershed_attributes$rear_decay[trib])),1)
+            }
+          }
+        }
+        if (watershed_attributes$group[trib] == 7) {
+          if (is.na(optimal_decision[trib, year])) {
+            for (y in year:20) {
+              inchannel_habitat_fry[trib,,y] <<- inchannel_habitat_fry[trib,,y] * runif(1,(watershed_attributes$rear_decay[trib]-(1-watershed_attributes$rear_decay[trib])),1)
+              inchannel_habitat_juvenile[trib,,y] <<- inchannel_habitat_juvenile[trib,,y] * runif(1,(watershed_attributes$rear_decay[trib]-(1-watershed_attributes$rear_decay[trib])),1)
+            }
+          }
+        }
+      }
+    }
+    
   } # end year for loop
 
   if (is.null(seeds)) {
