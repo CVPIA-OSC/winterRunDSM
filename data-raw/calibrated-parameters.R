@@ -18,10 +18,6 @@ vect<-c(-0.6558315, # 1 default calibration intercept
         0.4820249) # 16 delta total diverted beta
 
 surv.adj <- rep(1, 31)
-surv.adj[c(2, 4, 5, 8, 9, 11, 14, 13, 15, 18)] <- 0.025
-surv.adj[c(8)] <- 0.50
-surv.adj[c(9)] <- 0.25
-
 
 # Create a dataframe that contains the watersheds and corresponding betas for each
 # Looks like for winterRunDSM we do not need to update rear suv in watersheds (just outmigtarion)
@@ -35,18 +31,15 @@ beta_to_update <- tibble(
   `2nd calibration adjustment`
 )
 
-survival_betas <- cvpiaData::watershed_ordering %>%
-  # left_join(beta_to_update) %>%
-  # mutate(`2nd calibration adjustment` = ifelse(is.na(`2nd calibration adjustment`),
-  #                                              -0.6558315, `2nd calibration adjustment`)) %>%
+survival_betas <- winterRunDSM::watershed_attributes %>% select(order, watershed) %>% 
   add_column(`2nd calibration adjustment` = -0.6558315,
              `average temperature` = -0.717,
              predation = -0.122,
              `contact points` = 0.0194795,
              `contact points scaler` = -0.189,
-             `proportion diverted` = 0.1000000,
+             `proportion diverted` = 0.1,
              `proportion diverted scaler` = -3.51,
-             `total diverted` = 0.3000000,
+             `total diverted` = 0.3,
              `total diverted scaler` = -0.0021,
              stranded = -1.939,
              medium = 1.48,

@@ -5,7 +5,7 @@ list2env(load_2019_baseline_data(), envir = .GlobalEnv)
 
 number_of_cores <- detectCores()
 
-seeded_adults <- winter_run_model(seeds = adult_seeds)
+seeded_adults <- winter_run_model(seeds = NULL)
 
 # run_model <- function() {
 #   seeded_adults <- winter_run_model()
