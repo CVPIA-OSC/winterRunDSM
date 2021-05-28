@@ -11,7 +11,7 @@ fill_regional(
   juveniles,
   habitat,
   floodplain_habitat = NULL,
-  territory_size = c(0.0498944803729701, 0.138941944739835, 0.471083652829798, 0),
+  territory_size = c(0.05423379, 0.14539419, 0.48471474, 0),
   up_to_size_class = 3
 )
 }
