@@ -7,7 +7,7 @@
 IP-117068
 }
 \usage{
-get_rearing_survival_rates(year, month, scenario)
+get_rearing_survival_rates(year, month, scenario = NULL)
 }
 \arguments{
 \item{year}{The simulation year, 1-20}
