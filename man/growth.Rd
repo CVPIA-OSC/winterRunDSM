@@ -2,7 +2,7 @@
 % Please edit documentation in R/growth.R
 \name{growth}
 \alias{growth}
-\title{Growth Transistion Probability}
+\title{Growth Transition Probability}
 \source{
 IP-117068
 }
