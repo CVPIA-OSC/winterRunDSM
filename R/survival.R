@@ -176,16 +176,21 @@ surv_juv_delta <- function(avg_temp, max_temp_thresh, avg_temp_thresh, high_pred
     .prop_diverted * prop_diverted[2] +
     .surv_juv_delta_total_diverted * ..surv_juv_delta_total_diverted * total_diverted[2]
 
-  #TODO add stochastic branch after discussion
-  s <- ifelse(max_temp_thresh[2], min_survival_rate, boot::inv.logit(base_score))
-  m <- ifelse(max_temp_thresh[2], min_survival_rate, boot::inv.logit(base_score + .medium))
-  l <- ifelse(max_temp_thresh[2], min_survival_rate, boot::inv.logit(base_score + .large))
+  if (stochastic) {
+    s <- ifelse(max_temp_thresh[2], min_survival_rate, boot::inv.logit(base_score))
+    m <- ifelse(max_temp_thresh[2], min_survival_rate, boot::inv.logit(base_score + .medium))
+    l <- ifelse(max_temp_thresh[2], min_survival_rate, boot::inv.logit(base_score + .large))
+  } else {
+    s <- (boot::inv.logit(base_score) * (1 - max_temp_thresh[2])) + (min_survival_rate * max_temp_thresh[2])
+    m <- (boot::inv.logit(base_score + .medium) * (1 - max_temp_thresh[2])) + (min_survival_rate * max_temp_thresh[2])
+    l <- (boot::inv.logit(base_score + .large) * (1 - max_temp_thresh[2])) + (min_survival_rate * max_temp_thresh[2])
+  }
 
   south_delta_surv <- cbind(s = s, m = m, l = l, vl = 1)
   result <- rbind("north_delta" = north_delta_surv, "south_delta" = south_delta_surv)
   row.names(result) <- c("North Delta", "South Delta")
 
-  result
+  return(result)
 }
 
 
@@ -382,7 +387,6 @@ get_rearing_survival <- function(year, month,
   sutter_surv <- bp_surv
   yolo_surv <- bp_surv
 
-  # TODO update with stochastic after discussion
   delta_juv_surv <- surv_juv_delta(avg_temp = avg_temp_delta[month, year, "North Delta"],
                                    max_temp_thresh = maxT25D,
                                    avg_temp_thresh = aveT20D,
@@ -400,7 +404,8 @@ get_rearing_survival <- function(year, month,
                                    .prop_diverted = .surv_juv_delta_prop_diverted,
                                    .medium = .surv_juv_delta_medium,
                                    .large = .surv_juv_delta_large,
-                                   min_survival_rate = min_survival_rate)
+                                   min_survival_rate = min_survival_rate,
+                                   stochastic = stochastic)
 
   return(
     list(
@@ -476,18 +481,17 @@ surv_juv_outmigration_sac_delta <- function(delta_flow, avg_temp, perc_diversion
   base_score2 <- .intercept_two + .avg_temp * avg_temp
   base_score3 <- .intercept_three + .perc_diversions * perc_diversions
 
-  s <- min(sum(model_weights * c(boot::inv.logit(base_score1),
-                                 boot::inv.logit(base_score2),
-                                 boot::inv.logit(base_score3))), 1)
-
-
-  m <- min(sum(model_weights * c(boot::inv.logit(base_score1 + .medium),
-                                 boot::inv.logit(base_score2 + .medium),
-                                 boot::inv.logit(base_score3 + .medium))), 1)
-
-  vl <- l <- min(sum(model_weights * c(boot::inv.logit(base_score1 + .large),
-                                       boot::inv.logit(base_score2 + .large),
-                                       boot::inv.logit(base_score3 + .large))), 1)
+  s <- boot::inv.logit(base_score1) * model_weights[1] +
+    boot::inv.logit(base_score2) * model_weights[2] +
+    boot::inv.logit(base_score3) * model_weights[3]
+  
+  m <- boot::inv.logit(base_score1 + .medium) * model_weights[1] +
+    boot::inv.logit(base_score2 + .medium) * model_weights[2] +
+    boot::inv.logit(base_score3 + .medium) * model_weights[3]
+  
+  vl <- l <- boot::inv.logit(base_score1 + .large) * model_weights[1] +
+    boot::inv.logit(base_score2 + .large) * model_weights[2] +
+    boot::inv.logit(base_score3 + .large) * model_weights[3]
 
   cbind(s = s, m = m, l = l, vl = vl)
 }
