@@ -42,11 +42,11 @@ surv_juv_rear <- function(max_temp_thresh, avg_temp_thresh, high_predation,
                           .large = winterRunDSM::params$.surv_juv_rear_large,
                           .floodplain = winterRunDSM::params$.surv_juv_rear_floodplain,
                           min_survival_rate = winterRunDSM::params$min_survival_rate, 
-stochastic){
+                          stochastic){
   # determine the proportion of weeks when flooded vs not
   prop_ic <-ifelse(weeks_flooded > 0, (4 - weeks_flooded) / 4, 1)
   prop_fp <- 1 - prop_ic
-
+  
   base_score_inchannel <- ..surv_juv_rear_int +
     (.avg_temp_thresh * avg_temp_thresh) +
     (.high_predation * high_predation) +
@@ -54,10 +54,10 @@ stochastic){
     (.surv_juv_rear_prop_diversions * ..surv_juv_rear_prop_diversions * prop_diversions) +
     (.surv_juv_rear_total_diversions * ..surv_juv_rear_total_diversions * total_diversions) +
     (.stranded * stranded)
-
+  
   base_score_floodplain <- ..surv_juv_rear_int + .floodplain +
     (.avg_temp_thresh  * avg_temp_thresh) + (.high_predation * high_predation)
-
+  
   if (stochastic) {
     s1 <- ifelse(max_temp_thresh, min_survival_rate, boot::inv.logit(base_score_inchannel))
     m1 <- ifelse(max_temp_thresh, min_survival_rate, boot::inv.logit(base_score_inchannel + .medium))
@@ -73,7 +73,7 @@ stochastic){
     m2 <- ((boot::inv.logit(base_score_floodplain + .medium) * (1 - max_temp_thresh)) + (min_survival_rate * max_temp_thresh)) ^ prop_fp
     l2 <- ((boot::inv.logit(base_score_floodplain + .large) * (1 - max_temp_thresh)) + (min_survival_rate * max_temp_thresh)) ^ prop_fp
   }
-
+  
   list(
     inchannel = cbind(s = s1,
                       m = m1,
@@ -109,12 +109,12 @@ surv_juv_bypass <- function(max_temp_thresh, avg_temp_thresh, high_predation,
                             .large = winterRunDSM::params$.surv_juv_bypass_large,
                             .floodplain = winterRunDSM::params$.surv_juv_bypass_floodplain,
                             min_survival_rate = winterRunDSM::params$min_survival_rate, 
-stochastic){
-
+                            stochastic){
+  
   base_score <- ..surv_juv_bypass_int + .floodplain +
     .avg_temp_thresh * avg_temp_thresh +
     .high_predation * high_predation
-
+  
   if (stochastic) {
     s <- ifelse(max_temp_thresh, min_survival_rate, boot::inv.logit(base_score))
     m <- ifelse(max_temp_thresh, min_survival_rate, boot::inv.logit(base_score + .medium))
@@ -124,7 +124,7 @@ stochastic){
     m <- (boot::inv.logit(base_score + .medium) * (1 - max_temp_thresh)) + (min_survival_rate * max_temp_thresh)
     l <- (boot::inv.logit(base_score + .large) * (1 - max_temp_thresh)) + (min_survival_rate * max_temp_thresh)
   }
-
+  
   cbind(s = s, m = m, l = l, vl = 1)
 }
 
@@ -164,33 +164,26 @@ surv_juv_delta <- function(avg_temp, max_temp_thresh, avg_temp_thresh, high_pred
                            .medium = winterRunDSM::params$.surv_juv_delta_medium,
                            .large =  winterRunDSM::params$.surv_juv_delta_large,
                            min_survival_rate = winterRunDSM::params$min_survival_rate){
-  # north delta
-  north_delta_surv <- c(rep((avg_temp <= 16.5)*.42 + (avg_temp > 16.5 & avg_temp < 19.5) * 0.42 /
-                              (1.55^(avg_temp-15.5)) + (avg_temp > 19.5 & avg_temp < 25)*0.035,3), 1)
-
-  # south delta
+  
   base_score <- ..surv_juv_delta_int +
-    .avg_temp_thresh * avg_temp_thresh[2] +
-    .high_predation * high_predation[2] +
-    .surv_juv_delta_contact_points * ..surv_juv_delta_contact_points * contact_points[2] * high_predation[2] +
-    .prop_diverted * prop_diverted[2] +
-    .surv_juv_delta_total_diverted * ..surv_juv_delta_total_diverted * total_diverted[2]
-
+    .avg_temp_thresh * avg_temp_thresh +
+    .high_predation * high_predation +
+    .surv_juv_delta_contact_points * ..surv_juv_delta_contact_points * contact_points * high_predation +
+    .prop_diverted * prop_diverted +
+    .surv_juv_delta_total_diverted * ..surv_juv_delta_total_diverted * total_diverted
+  
   if (stochastic) {
-    s <- ifelse(max_temp_thresh[2], min_survival_rate, boot::inv.logit(base_score))
-    m <- ifelse(max_temp_thresh[2], min_survival_rate, boot::inv.logit(base_score + .medium))
-    l <- ifelse(max_temp_thresh[2], min_survival_rate, boot::inv.logit(base_score + .large))
+    s <- ifelse(max_temp_thresh, min_survival_rate, boot::inv.logit(base_score))
+    m <- ifelse(max_temp_thresh, min_survival_rate, boot::inv.logit(base_score + .medium))
+    l <- ifelse(max_temp_thresh, min_survival_rate, boot::inv.logit(base_score + .large))
   } else {
-    s <- (boot::inv.logit(base_score) * (1 - max_temp_thresh[2])) + (min_survival_rate * max_temp_thresh[2])
-    m <- (boot::inv.logit(base_score + .medium) * (1 - max_temp_thresh[2])) + (min_survival_rate * max_temp_thresh[2])
-    l <- (boot::inv.logit(base_score + .large) * (1 - max_temp_thresh[2])) + (min_survival_rate * max_temp_thresh[2])
+    s <- (boot::inv.logit(base_score) * (1 - max_temp_thresh)) + (min_survival_rate * max_temp_thresh)
+    m <- (boot::inv.logit(base_score + .medium) * (1 - max_temp_thresh)) + (min_survival_rate * max_temp_thresh)
+    l <- (boot::inv.logit(base_score + .large) * (1 - max_temp_thresh)) + (min_survival_rate * max_temp_thresh)
   }
-
-  south_delta_surv <- cbind(s = s, m = m, l = l, vl = 1)
-  result <- rbind("north_delta" = north_delta_surv, "south_delta" = south_delta_surv)
-  row.names(result) <- c("North Delta", "South Delta")
-
-  return(result)
+  
+  return(cbind(s = s, m = m, l = l, vl = 1))
+  
 }
 
 
@@ -292,12 +285,12 @@ get_rearing_survival <- function(year, month,
                                  .surv_juv_delta_large,
                                  min_survival_rate,
                                  stochastic) {
-
+  
   aveT20 <- boot::inv.logit(-14.32252 + 0.72102 * avg_temp[ , month , year])
   maxT25 <- boot::inv.logit(-23.1766 + 1.4566 * avg_temp[ , month, year])
   aveT20D <- boot::inv.logit(-18.30017 + 0.96991 * avg_temp_delta[month, year, ])
   maxT25D <- boot::inv.logit(-157.537 + 6.998 * avg_temp_delta[month, year, ])
-
+  
   if (stochastic) {
     aveT20 <- rbinom(31, 1, aveT20)
     maxT25 <- rbinom(31, 1, maxT25)
@@ -306,37 +299,37 @@ get_rearing_survival <- function(year, month,
   }
   # set proportion fish stranding
   prob_ws_strand <- if(month > 8) prob_strand_early else prob_strand_late
-
+  
   ws_strand <- if (stochastic) {
     rbinom(31, 1, prob_ws_strand)
   } else {
     prob_ws_strand
   }
-
+  
   # proportion and total water diverted
   proportion_diverted <- proportion_diverted[ , month, year]
   total_diverted <- total_diverted[ , month, year]
   delta_proportion_diverted <- delta_proportion_diverted[month, year, ]
   delta_total_diverted <- delta_total_diverted[ month, year, ]
-
+  
   # weeks flooded
   weeks_flood <- weeks_flooded[ , month, year]
-
+  
   # predator information
-
+  
   high_predation <- if (stochastic) {
     rbinom(31, 1, prop_high_predation)
   } else {
     prop_high_predation
   }
-
+  
   num_contact_points <- contact_points
   delta_num_contact_points <- delta_contact_points
   delta_high_predation <- delta_prop_high_predation
-
+  
   # replicate values if needed
   if (length(..surv_juv_rear_int) == 1) ..surv_juv_rear_int <- rep(..surv_juv_rear_int, 31)
-
+  
   rear_surv <- t(sapply(1:31, function(x) {
     surv_juv_rear(max_temp_thresh = maxT25[x],
                   avg_temp_thresh = aveT20[x],
@@ -362,16 +355,15 @@ get_rearing_survival <- function(year, month,
                   min_survival_rate = min_survival_rate,
                   stochastic = stochastic)
   }))
-
+  
   river_surv <- matrix(unlist(rear_surv[ , 1]), ncol = 4, byrow = TRUE)
   flood_surv <- matrix(unlist(rear_surv[ , 2]), ncol = 4, byrow = TRUE)
-
-
+  
   if (mode != "seed") {
     river_surv <- pmin(river_surv * survival_adjustment[, year], 1)
     flood_surv <- pmin(flood_surv * survival_adjustment[, year], 1)
   }
-
+  
   bp_surv <- surv_juv_bypass(max_temp_thresh = maxT25[22],
                              avg_temp_thresh = aveT20[22],
                              high_predation = 0,
@@ -383,10 +375,10 @@ get_rearing_survival <- function(year, month,
                              .floodplain = .surv_juv_bypass_floodplain,
                              min_survival_rate = min_survival_rate,
                              stochastic = stochastic)
-
+  
   sutter_surv <- bp_surv
   yolo_surv <- bp_surv
-
+  
   delta_juv_surv <- surv_juv_delta(avg_temp = avg_temp_delta[month, year, "North Delta"],
                                    max_temp_thresh = maxT25D,
                                    avg_temp_thresh = aveT20D,
@@ -406,7 +398,7 @@ get_rearing_survival <- function(year, month,
                                    .large = .surv_juv_delta_large,
                                    min_survival_rate = min_survival_rate,
                                    stochastic = stochastic)
-
+  
   return(
     list(
       inchannel = pmin(river_surv, 1),
@@ -420,14 +412,54 @@ get_rearing_survival <- function(year, month,
 # JUVENILE MIGRATORY SURVIVAL -----
 #' @title Juvenile Mainstem Sacramento Outmigration Survival
 #' @description Calculates the Mainstem Sacramento juvenile out migration survival
-#' @param flow_cms Variable representing upper Sacramento River flow in cubic meters per second
+#' @param flow_cms Upper Sacramento River flow in cubic meters per second
+#' @param avg_temp Monthly mean temperature in celsius
+#' @param total_diversions Monthly mean total diversions in cubic feet per second
+#' @param prop_diversions Monthly mean proportion diverted
+#' @param betas Parameter estimates from calibration
+#' @section Parameters:
+#' Parameters from the model are obtained from either literature, calibration, export elicitation,
+#' and meta-analysis. The source for each parameter in this function are detailed below.
+#' \itemize{
+#' \item intercept 1 & 2: calibration estimate; varies by tributary
+#' \item flow: emperical model fit to the 2014 late-fall-run Chinook salmon tag release data
+#' \item proportion diverted: calibration estimate
+#' \item total diverted: calibration estimate
+#' \item average temperature: emperical model fit to the 2014 late-fall-run Chinook salmon tag release data
+#' \item model weight:
+#' \item medium: \href{https://dsm-docs.s3-us-west-2.amazonaws.com/perry_2010.pdf}{Perry (2010)}
+#' \item large" \href{https://dsm-docs.s3-us-west-2.amazonaws.com/perry_2010.pdf}{Perry (2010)}
+#' }
 #' @source IP-117068
 #' @export
-surv_juv_outmigration_sac <- function(flow_cms){
-
-  result <- rep((flow_cms <= 122) * 0.03 + (flow_cms > 122 & flow_cms <= 303) * 0.189 + (flow_cms > 303) * 0.508, 4)
-  setNames(result, winterRunDSM::size_class_labels)
+surv_juv_outmigration_sac <- function(flow_cms, avg_temp, total_diversions, prop_diversions,
+                                      betas = c(`intercept 1` = 2, flow = .0092,
+                                                `proportion diversion` = -3.51 * 0.1,
+                                                `total diversion` = -0.0021 * 0.3,
+                                                `intercept 2` = .7999889,
+                                                `average temperature` = 0.554,
+                                                `model weight` = .5,
+                                                medium = 1.48, large = 2.223)){
+  
+  
+  base_score1 <- betas[1] + betas[2] * flow_cms + betas[3] * prop_diversions + betas[4] * total_diversions
+  base_score2 <- betas[5] + betas[6] * avg_temp + betas[3] * prop_diversions + betas[4] * total_diversions
+  model_weighting <- betas[7]
+  model_weighting_compliment <- 1 - model_weighting
+  
+  s <- min(boot::inv.logit(base_score1) * model_weighting +
+             boot::inv.logit(base_score2) * model_weighting_compliment, 1)
+  
+  m <- min(boot::inv.logit(base_score1 + betas[8]) * model_weighting +
+             boot::inv.logit(base_score2 + betas[8]) * model_weighting_compliment, 1)
+  
+  l <- vl <- min(boot::inv.logit(base_score1 + betas[9]) * model_weighting +
+                   boot::inv.logit(base_score2 + betas[9]) * model_weighting_compliment, 1)
+  
+  cbind(s = s, m = m, l = l, vl = vl)
+  
 }
+
 
 
 #' @title Juvenile San Joaquin Outmigration Survival
@@ -441,11 +473,11 @@ surv_juv_outmigration_sac <- function(flow_cms){
 surv_juv_outmigration_san_joaquin <- function(..surv_juv_outmigration_sj_int = winterRunDSM::params$..surv_juv_outmigration_sj_int,
                                               .medium = winterRunDSM::params$.surv_juv_outmigration_san_joaquin_medium,
                                               .large = winterRunDSM::params$.surv_juv_outmigration_san_joaquin_large){
-
+  
   s <- boot::inv.logit(..surv_juv_outmigration_sj_int)
   m <- boot::inv.logit(..surv_juv_outmigration_sj_int + .medium)
   l <- vl <- boot::inv.logit(..surv_juv_outmigration_sj_int + .large)
-
+  
   cbind(s = s, m = m, l = l, vl = vl)
 }
 
@@ -476,11 +508,11 @@ surv_juv_outmigration_sac_delta <- function(delta_flow, avg_temp, perc_diversion
                                             .medium = winterRunDSM::params$.surv_juv_outmigration_sac_delta_medium,
                                             .large = winterRunDSM::params$.surv_juv_outmigration_sac_delta_large,
                                             model_weights = winterRunDSM::params$surv_juv_outmigration_sac_delta_model_weights){
-
+  
   base_score1 <- .intercept_one + .delta_flow * delta_flow
   base_score2 <- .intercept_two + .avg_temp * avg_temp
   base_score3 <- .intercept_three + .perc_diversions * perc_diversions
-
+  
   s <- boot::inv.logit(base_score1) * model_weights[1] +
     boot::inv.logit(base_score2) * model_weights[2] +
     boot::inv.logit(base_score3) * model_weights[3]
@@ -492,7 +524,7 @@ surv_juv_outmigration_sac_delta <- function(delta_flow, avg_temp, perc_diversion
   vl <- l <- boot::inv.logit(base_score1 + .large) * model_weights[1] +
     boot::inv.logit(base_score2 + .large) * model_weights[2] +
     boot::inv.logit(base_score3 + .large) * model_weights[3]
-
+  
   cbind(s = s, m = m, l = l, vl = vl)
 }
 
@@ -524,50 +556,50 @@ surv_juv_outmigration_delta <- function(prop_DCC_closed, hor_barr, freeport_flow
                                         vernalis_temperature,
                                         prisoners_point_temperature, CVP_exp,
                                         SWP_exp, trap_trans){
-
+  
   prop_DCC_open <- 1 - prop_DCC_closed
-
+  
   # number of CVP pumps operating
   pump_operation_breaks <- c(60, 95.6, 499)
   possible_number_of_pumps <- c(1, 2, 3, 5)
-
+  
   pump_index <- findInterval(CVP_exp, pump_operation_breaks) + 1
   number_of_pumps <- possible_number_of_pumps[pump_index]
-
+  
   #### First estimate North Delta parameters
   freeport <- (freeport_flow - 610.1) / 814.2
-
+  
   #Entrained into sutter/steamboat
   param_steamboat_intercept <- 2.014670488
   param_steamboat_flow <- 2.458233791 # Standardized Sacramento mean discharge at Freeport
   param_steamboat_upper_limit <- 0.36241455 # Upper asymptote for entrainment into Sutter/Steamboat
   psi_steam <- param_steamboat_upper_limit * boot::inv.logit(param_steamboat_intercept + param_steamboat_flow * freeport)
-
+  
   # remain in Sacramento
   psi_sac1 <- 1- psi_steam
-
+  
   # entrained DCC
   param_dcc_intercept <- -1.515076654
   param_dcc_discharge <- -1.282849232
   param_dcc_gates <- 0.030214424
-
+  
   psi_dcc <- boot::inv.logit((-1.515076654 - 1.282849232 * freeport + 0.030214424 * prop_DCC_open)) * prop_DCC_open +
     (1 - prop_DCC_open) * boot::inv.logit(-10)
-
+  
   # entrained georgiana slough
   param_georgiana_intercept <- -3.111
   param_georgiana_gates <- -0.9443
   param_georgiana_flow <- -3.1743
   param_georgiana_lower_limit <- 0.2669
   psi_geo <- (1 - psi_dcc) * (0.2669 + (1 - 0.2669) * boot::inv.logit(-3.111 - 0.9443 * prop_DCC_open - 3.1743 * freeport))
-
+  
   # remain in Sacramento
   psi_sac2 <- 1- psi_dcc - psi_geo
-
+  
   #size cutoffs 42,72,110, use min from study as smallest
   FL <- c(81, 81, 81, 140)
   size <-  0.152 * (FL - 155.1) / 21.6
-
+  
   regions <-  c('Sac Freeport to Sutter/Steamboat junction', 'Sac Sutter/Steamboat junction to Georgiana',
                 'Sutter/Steamboat Slough', 'Sac Georgiana Junction to Rio Vista',
                 'Georgiana Slough', 'DCC to Moke', 'Sac Rio Vista to Chipps Island',
@@ -577,73 +609,73 @@ surv_juv_outmigration_delta <- function(prop_DCC_closed, hor_barr, freeport_flow
     b_dcc_open = c(0.3225, 0.0673, 0.1508, -0.7343, -0.0769, -0.2541, -0.4816, -0.12312),
     b_freeport_flow = c(1.1049, 1.1049, 2.2758, 2.5756, 2.1591, 1.1510, 0.0379, 0.03898)
   )
-
+  
   score <- function( b0, b_dcc_open, b_freeport_flow) {
     b0 + b_dcc_open * prop_DCC_open + b_freeport_flow * freeport
   }
-
+  
   survival_rates <- purrr::map(purrr::pmap_dbl(betas, score), ~ boot::inv.logit(.x + size))
   names(survival_rates) <- regions
-
+  
   #### Next estimate South Delta parameters
   # Probability of remaining in SJR at HOR
   prob_remain_at_head_old_river_intercept <- -0.75908
   prob_remain_at_head_old_river_barrier <- 1.72020
   prob_remain_at_head_old_river_flow <- 0.00361
   psi_sjr1 <- boot::inv.logit(-0.75908 + 1.72020 * hor_barr + 0.00361 * vernalis_flow + 0.02718 * hor_barr * vernalis_flow)
-
+  
   # Probability of entering old river
   psi_OR <- 1 - psi_sjr1
-
+  
   #Probability of remaining in SJR at Turner Cut
   prob_remain_at_turner_cut_intercept <-
     psi_sjr2 <- boot::inv.logit(5.83131 - 0.037708993 * stockton_flow)
-
+  
   # probability of entering Turner cut
   psi_TC <- 1 - psi_sjr2
-
+  
   #Probability of entrainment at CVP (Karp et al 2017) logit link
   psi_CVP <- boot::inv.logit(-3.9435 + 2.9025 * number_of_pumps -0.3771 * number_of_pumps^2)
-
+  
   #Probability of entrainment at SWP
   psi_SWP <- (1 - psi_CVP) * boot::inv.logit(-1.48969 + 0.016459209 * SWP_exp)
-
+  
   # Probability of remaining old river north
   psi_ORN <- 1 - psi_CVP - psi_SWP
-
+  
   #Survival Tributaries to HOR logit link
   s_prea <- boot::inv.logit(5.77500 + 0.00706 * vernalis_flow - 0.32810 * vernalis_temperature + size)
-
+  
   #Survival HOR to Turner Cut logit link
   s_a <- boot::inv.logit(-2.90330+ 0.01059 * vernalis_flow + size)
-
+  
   #Survival SJR Turner Cut to Chipps
   s_bc <- boot::inv.logit(13.41840 - 0.90070 * prisoners_point_temperature + size)
-
+  
   #Survival down OR HOR to CVP
   s_d <- boot::inv.logit(2.16030 -0.20500 * vernalis_temperature + size)
-
+  
   #Survival ORN to Chipps Island (SJRGA)
   s_efc <- 0.01
-
+  
   #Survival through CVP (Karp et al 2017) logit link
   s_CVP <- boot::inv.logit(-3.0771 + 1.8561 * number_of_pumps - 0.2284 * number_of_pumps^2)
-
+  
   #Survival through SWP (Gingras 1997)
   s_SWP <- 0.1325
-
+  
   # North origin fish movement and survival
   northern_fish <- survival_rates[[1]] * psi_steam * survival_rates[[3]] * survival_rates[[7]] +
     survival_rates[[1]] * psi_sac1 * survival_rates[[2]] * psi_sac2 * survival_rates[[4]] * survival_rates[[7]] +
     survival_rates[[1]] * psi_sac1 * survival_rates[[2]] * psi_dcc * survival_rates[[6]] * survival_rates[[8]] +
     survival_rates[[1]] * psi_sac1 * survival_rates[[2]] * psi_geo * survival_rates[[5]] * survival_rates[[8]]
-
+  
   # Cosumnes and Mokelume fish
   cosumnes_mokelumne_fish <- survival_rates[[6]] * (s_bc ^ 1/2)
-
+  
   #Calavaras River
   calaveras_fish <- s_bc
-
+  
   #South origin fish
   southern_fish <-
     (1 - trap_trans) * s_prea * psi_sjr1 * s_a * psi_sjr2 * s_bc +
@@ -652,11 +684,11 @@ surv_juv_outmigration_delta <- function(prop_DCC_closed, hor_barr, freeport_flow
     (1 - trap_trans) * s_prea * psi_OR * s_d * psi_CVP * s_CVP +
     (1 - trap_trans) * s_prea * psi_OR * s_d * psi_SWP * s_SWP +
     trap_trans
-
+  
   survival_rates <- rbind(northern_fish, cosumnes_mokelumne_fish, calaveras_fish, southern_fish)
   colnames(survival_rates) <- winterRunDSM::size_class_labels
   return(survival_rates)
-
+  
 }
 
 #' @title Get Migratory Survival Rates
@@ -719,15 +751,15 @@ get_migratory_survival <- function(year, month,
                                    min_survival_rate,
                                    surv_juv_outmigration_sac_delta_model_weights,
                                    stochastic) {
-
+  
   aveT20 <- boot::inv.logit(-14.32252 + 0.72102 * avg_temp[ , month , year])
   maxT25 <- boot::inv.logit(-23.1766 + 1.4566 * avg_temp[ , month, year])
-
+  
   if (stochastic) {
     aveT20 <- rbinom(31, 1, aveT20)
     maxT25 <- rbinom(31, 1, maxT25)
   }
-
+  
   delta_survival <- surv_juv_outmigration_delta(
     prop_DCC_closed = cc_gates_prop_days_closed[month],
     hor_barr = 0,
@@ -739,18 +771,18 @@ get_migratory_survival <- function(year, month,
     CVP_exp = CVP_exports[month, year],
     SWP_exp = SWP_exports[month, year],
     trap_trans = 0) # newDsurv
-
+  
   u_sac_flow <- upper_sacramento_flows[month, year]
   sj_migration_surv <- surv_juv_outmigration_san_joaquin(..surv_juv_outmigration_sj_int = ..surv_juv_outmigration_sj_int,
                                                          .medium = .surv_juv_outmigration_san_joaquin_medium,
                                                          .large = .surv_juv_outmigration_san_joaquin_large)
-
+  
   uppermid_sac_migration_surv <- surv_juv_outmigration_sac(flow_cms = u_sac_flow)
-
+  
   lowermid_sac_migration_surv <- surv_juv_outmigration_sac(flow_cms = u_sac_flow)
-
+  
   lower_sac_migration_surv <- surv_juv_outmigration_sac(flow_cms = u_sac_flow)
-
+  
   sac_delta_migration_surv <- surv_juv_outmigration_sac_delta(delta_flow = delta_inflow[month, year, ],
                                                               avg_temp = avg_temp_delta[month, year, ],
                                                               perc_diversions = delta_proportion_diverted[month, year, ] * 100,
@@ -763,15 +795,15 @@ get_migratory_survival <- function(year, month,
                                                               .medium = .surv_juv_outmigration_sac_delta_medium,
                                                               .large = .surv_juv_outmigration_sac_delta_large,
                                                               model_weights = surv_juv_outmigration_sac_delta_model_weights) #Sac.Delt.S
-
+  
   bay_delta_migration_surv <- mean(c(0.43, 0.46, 0.26, 0.25, 0.39)) # Bay.S Chipps island to bay
-
+  
   bp_surv <- sqrt(surv_juv_bypass(max_temp_thresh = maxT25[22],
                                   avg_temp_thresh = aveT20[22],
                                   high_predation = 0,
                                   min_survival_rate = min_survival_rate,
                                   stochastic = stochastic))
-
+  
   return(
     list(
       delta = pmin(delta_survival, 1),
