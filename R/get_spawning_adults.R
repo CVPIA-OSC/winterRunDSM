@@ -60,9 +60,9 @@ get_spawning_adults <- function(year, adults, hatch_adults, mode,
       if (stochastic) {
         rbinom(n = 31,
                size = round(adults_by_month[, month]),
-               prob = 1 - fallRunDSM::params$natural_adult_removal_rate)
+               prob = 1 - winterRunDSM::params$natural_adult_removal_rate)
       } else {
-        round(adults_by_month[, month] * (1 - fallRunDSM::params$natural_adult_removal_rate))
+        round(adults_by_month[, month] * (1 - winterRunDSM::params$natural_adult_removal_rate))
       }
     })
 

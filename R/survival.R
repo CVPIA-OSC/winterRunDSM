@@ -300,7 +300,7 @@ get_rearing_survival <- function(year, month,
     maxT25D <- rbinom(2, 1, maxT25D)
   }
   # set proportion fish stranding
-  prob_ws_strand <- if(month < 4) prob_strand_early else prob_strand_late
+  prob_ws_strand <- if(month > 8) prob_strand_early else prob_strand_late
 
   ws_strand <- if (stochastic) {
     rbinom(31, 1, prob_ws_strand)

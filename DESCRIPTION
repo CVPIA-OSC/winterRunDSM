@@ -16,7 +16,7 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
-URL: https://CVPIA-OSC.github.io/fallRunDSM/
+URL: https://CVPIA-OSC.github.io/winterRunDSM/
 Imports: 
     boot
 Suggests: 
