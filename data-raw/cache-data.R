@@ -29,11 +29,10 @@ adult_seed_values <- DSMCalibrationData::mean_escapement_2013_2017 %>%
 rownames(adult_seeds) <- watershed_labels
 
 adult_seeds[ , 1] <- adult_seed_values
-adult_seeds["Battle Creek", 1] <- 600
+# TODO undoing for comparison to old model
+adult_seeds["Battle Creek", 1] <- 0
+# adult_seeds["Battle Creek", 1] <- 600
 
-usethis::use_data(adult_seeds, overwrite = TRUE)
-
-rownames(adult_seeds) <- watershed_labels
 usethis::use_data(adult_seeds, overwrite = TRUE)
 
 #TODO check on why in OG model they only have a single number not a vector of values
