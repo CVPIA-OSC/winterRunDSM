@@ -85,8 +85,8 @@ params_2019 <- list(
 
   # Sac delta outmigration coefficients and variables
   .surv_juv_outmigration_sac_delta_intercept_one = -3.5,
-  .surv_juv_outmigration_sac_delta_intercept_two =  0.3,
-  .surv_juv_outmigration_sac_delta_intercept_three = -3.5,
+  .surv_juv_outmigration_sac_delta_intercept_two = -0.1999996,
+  .surv_juv_outmigration_sac_delta_intercept_three = -3.499992,
   .surv_juv_outmigration_sac_delta_delta_flow = 0.0013,
   .surv_juv_outmigration_sac_delta_avg_temp = 0.386,
   .surv_juv_outmigration_sac_delta_perc_diversions = -0.033,
@@ -168,7 +168,7 @@ params_2019 <- list(
   ..surv_juv_delta_int = 1.4,
   ..surv_juv_delta_contact_points = .0358,
   ..surv_juv_delta_total_diverted = .5,
-  ..surv_juv_outmigration_sj_int = -3.5,
+  ..surv_juv_outmigration_sj_int = -3.018831,
   # Ocean entry success coefficient and variable
   ..ocean_entry_success_int =  c(
     `Upper Sacramento River` = -2.9839253,

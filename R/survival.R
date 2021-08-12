@@ -187,12 +187,11 @@ stochastic){
     l <- (boot::inv.logit(base_score + .large) * (1 - max_temp_thresh[2])) + (min_survival_rate * max_temp_thresh[2])
   }
 
-
   south_delta_surv <- cbind(s = s, m = m, l = l, vl = 1)
   result <- rbind("north_delta" = north_delta_surv, "south_delta" = south_delta_surv)
   row.names(result) <- c("North Delta", "South Delta")
 
-  result
+  return(result)
 }
 
 
