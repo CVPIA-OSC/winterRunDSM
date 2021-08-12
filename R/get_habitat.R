@@ -20,7 +20,9 @@ get_habitat <- function(year, month,
                         yolo_habitat,
                         delta_habitat) {
   # set monthly habitat values
+  print(paste("year:", year, "month:", month))
   ic_habitat <- if (month > 8) inchannel_habitat_fry[ , month, year] else inchannel_habitat_juvenile[ , month, year]
+  # TODO figure this out
   floodplain_activation <- matrix(0, nrow = 31, ncol = 12)
   fp_habitat <- floodplain_habitat[ , month, year] + floodplain_activation[ , month]
   habitat_sutter <- sutter_habitat[month, year]
