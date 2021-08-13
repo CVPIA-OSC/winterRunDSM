@@ -27,7 +27,8 @@ surv_juv_delta(
     ..surv_juv_delta_total_diverted = winterRunDSM::params$..surv_juv_delta_total_diverted,
   .medium = winterRunDSM::params$.surv_juv_delta_medium,
   .large = winterRunDSM::params$.surv_juv_delta_large,
-  min_survival_rate = winterRunDSM::params$min_survival_rate
+  min_survival_rate = winterRunDSM::params$min_survival_rate,
+  stochastic
 )
 }
 \arguments{
