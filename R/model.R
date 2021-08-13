@@ -131,10 +131,10 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
     egg_to_fry_surv <- surv_egg_to_fry(
       proportion_natural = spawners$proportion_natural,
       scour = ..params$prob_nest_scoured,
+      .surv_egg_to_fry_int = ..params$.surv_egg_to_fry_int,
       ..surv_egg_to_fry_mean_egg_temp_effect = ..params$..surv_egg_to_fry_mean_egg_temp_effect,
       .proportion_natural = ..params$.surv_egg_to_fry_proportion_natural,
-      .scour = ..params$.surv_egg_to_fry_scour,
-      ..surv_egg_to_fry_int = ..params$..surv_egg_to_fry_int
+      .scour = ..params$.surv_egg_to_fry_scour
     )
     
     min_spawn_habitat <- apply(..params$spawning_habitat[ , 1:4, year], 1, min)
@@ -147,7 +147,7 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
     average_degree_days <- apply(accumulated_degree_days, 1, weighted.mean, ..params$month_return_proportions)
     
     prespawn_survival <- surv_adult_prespawn(average_degree_days,
-                                             ..surv_adult_prespawn_int = ..params$..surv_adult_prespawn_int,
+                                             .adult_prespawn_int = ..params$.adult_prespawn_int,
                                              .deg_day = ..params$.adult_prespawn_deg_day)
     
     init_adults <- if (stochastic) {
@@ -164,7 +164,7 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
     
     spawning_average_degree_days <- apply(spawning_accumulated_degree_days, 1, weighted.mean, spawntime_proportions)
     prespawn_survival <- surv_adult_prespawn(spawning_average_degree_days,
-                                             ..surv_adult_prespawn_int = ..params$..surv_adult_prespawn_int,
+                                             .adult_prespawn_int = ..params$.adult_prespawn_int,
                                              .deg_day = ..params$.adult_prespawn_deg_day)
     
     juveniles <- spawn_success(escapement = init_adults,
@@ -249,9 +249,9 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                                    avg_temp_delta = ..params$avg_temp_delta,
                                                    avg_temp = ..params$avg_temp,
                                                    delta_proportion_diverted = ..params$delta_proportion_diverted,
-                                                   .surv_juv_outmigration_sac_delta_intercept_one = ..params$.surv_juv_outmigration_sac_delta_intercept_one,
-                                                   .surv_juv_outmigration_sac_delta_intercept_two = ..params$.surv_juv_outmigration_sac_delta_intercept_two,
-                                                   .surv_juv_outmigration_sac_delta_intercept_three = ..params$.surv_juv_outmigration_sac_delta_intercept_three,
+                                                   ..surv_juv_outmigration_sac_delta_intercept_one = ..params$..surv_juv_outmigration_sac_delta_intercept_one,
+                                                   ..surv_juv_outmigration_sac_delta_intercept_two = ..params$..surv_juv_outmigration_sac_delta_intercept_two,
+                                                   ..surv_juv_outmigration_sac_delta_intercept_three = ..params$..surv_juv_outmigration_sac_delta_intercept_three,
                                                    .surv_juv_outmigration_sac_delta_delta_flow = ..params$.surv_juv_outmigration_sac_delta_delta_flow,
                                                    .surv_juv_outmigration_sac_delta_avg_temp = ..params$.surv_juv_outmigration_sac_delta_avg_temp,
                                                    .surv_juv_outmigration_sac_delta_perc_diversions = ..params$.surv_juv_outmigration_sac_delta_perc_diversions,
@@ -651,7 +651,7 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
   if (mode == "seed") {
     return(adults[ , 6:30])
   } else if (mode == "calibrate") {
-    return(calculated_adults[, 6:20])
+    return(calculated_adults[, 6:19])
   }
   
   spawn_change <- sapply(1:19, function(year) {

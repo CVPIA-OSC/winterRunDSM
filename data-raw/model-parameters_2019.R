@@ -25,6 +25,7 @@ params_2019 <- list(
   .adult_en_route_migratory_temp = -0.26,
   .adult_en_route_bypass_overtopped = -0.019,
   .adult_en_route_adult_harvest_rate = winterRunDSM::adult_harvest_rate, # varies by run
+  .adult_prespawn_int = 3,
   .adult_prespawn_deg_day = -0.000669526,
 
   # Ocean entry success coefficient and variable
@@ -48,6 +49,7 @@ params_2019 <- list(
   spawn_success_fecundity = 5522,
 
   # Egg to fry survival coefficients
+  .surv_egg_to_fry_int = 0.041,
   .surv_egg_to_fry_proportion_natural = 0.533,
   .surv_egg_to_fry_scour = -0.655,
 
@@ -84,9 +86,6 @@ params_2019 <- list(
   .surv_juv_outmigration_san_joaquin_large = 2.223,
 
   # Sac delta outmigration coefficients and variables
-  .surv_juv_outmigration_sac_delta_intercept_one = -3.5,
-  .surv_juv_outmigration_sac_delta_intercept_two = -0.1999996,
-  .surv_juv_outmigration_sac_delta_intercept_three = -3.499992,
   .surv_juv_outmigration_sac_delta_delta_flow = 0.0013,
   .surv_juv_outmigration_sac_delta_avg_temp = 0.386,
   .surv_juv_outmigration_sac_delta_perc_diversions = -0.033,
@@ -145,64 +144,20 @@ params_2019 <- list(
 
   # Calibration Variables (vary by run)
   ..surv_adult_enroute_int = 3.4999976,
-  ..surv_adult_prespawn_int = 3,
-  ..surv_egg_to_fry_int = 0.041,
   ..surv_egg_to_fry_mean_egg_temp_effect = 0.646623,
-  ..surv_juv_rear_int =  c(`Upper Sacramento River` = -0.6558315, `Antelope Creek` = -0.6558315, `Battle Creek` = -0.6558315,
-                           `Bear Creek` = -0.6558315, `Big Chico Creek` = -0.6558315, `Butte Creek` = -0.6558315,
-                           `Clear Creek` = -0.6558315, `Cottonwood Creek` = -0.6558315, `Cow Creek` = -0.6558315,
-                           `Deer Creek` = -0.6558315, `Elder Creek` = -0.6558315, `Mill Creek` = -0.6558315,
-                           `Paynes Creek` = -0.6558315, `Stony Creek` = -0.6558315, `Thomes Creek` = -0.6558315,
-                           `Upper-mid Sacramento River` = -0.6558315, `Sutter Bypass` = -0.6558315,
-                           `Bear River` = -0.6558315, `Feather River` = -0.6558315, `Yuba River` = -0.6558315,
-                           `Lower-mid Sacramento River` = -0.6558315, `Yolo Bypass` = -0.6558315, `American River` = -0.6558315,
-                           `Lower Sacramento River` = -0.6558315, `Calaveras River` = -0.6558315, `Cosumnes River` = -0.6558315,
-                           `Mokelumne River` = -0.6558315, `Merced River` = -0.6558315, `Stanislaus River` = -0.6558315,
-                           `Tuolumne River` = -0.6558315, `San Joaquin River` = -0.6558315),
+  ..surv_juv_rear_int = rep(-0.6558315, 31),
   ..surv_juv_rear_contact_points = 0.0194795,
-  .surv_juv_rear_contact_points = -0.189, # from literature
   ..surv_juv_rear_prop_diversions = 0.1,
-  .surv_juv_rear_prop_diversions = -3.51, # from literature
   ..surv_juv_rear_total_diversions = 0.3,
-  .surv_juv_rear_total_diversions = -0.0021, # from literature
-  ..surv_juv_bypass_int = -3.5,
+  ..surv_juv_bypass_int = -3.499985,
   ..surv_juv_delta_int = 1.493342,
   ..surv_juv_delta_contact_points = 0.0194795,
   ..surv_juv_delta_total_diverted = 0.4820249,
   ..surv_juv_outmigration_sj_int = -3.018831,
-  # Ocean entry success coefficient and variable
-  ..ocean_entry_success_int =  c(
-    `Upper Sacramento River` = -2.9839253,
-    `Antelope Creek` = -2.9839253,
-    `Battle Creek` = -2.9839253,
-    `Bear Creek` = -2.9839253,
-    `Big Chico Creek` = -2.9839253,
-    `Butte Creek` = -2.9839253,
-    `Clear Creek` = -2.9839253,
-    `Cottonwood Creek` = -2.9839253,
-    `Cow Creek` = -2.9839253,
-    `Deer Creek` = -2.9839253,
-    `Elder Creek` = -2.9839253,
-    `Mill Creek` = -2.9839253,
-    `Paynes Creek` = -2.9839253,
-    `Stony Creek` = -2.9839253,
-    `Thomes Creek` = -2.9839253,
-    `Upper-mid Sacramento River` = -2.9839253,
-    `Sutter Bypass` = -2.9839253,
-    `Bear River` = -2.9839253,
-    `Feather River` = -2.9839253,
-    `Yuba River` = -2.9839253,
-    `Lower-mid Sacramento River` = -2.9839253,
-    `Yolo Bypass` = -2.9839253,
-    `American River` = -2.9839253,
-    `Lower Sacramento River` = -2.9839253,
-    `Calaveras River` = -2.9839253,
-    `Cosumnes River` = -2.9839253,
-    `Mokelumne River` = -2.9839253,
-    `Merced River` = -2.9839253,
-    `Stanislaus River` = -2.9839253,
-    `Tuolumne River` = -2.9839253,
-    `San Joaquin River` = -2.9839253)
+  ..surv_juv_outmigration_sac_delta_intercept_one = -3.5,
+  ..surv_juv_outmigration_sac_delta_intercept_two = -0.1999996,
+  ..surv_juv_outmigration_sac_delta_intercept_three = -3.499992,
+  ..ocean_entry_success_int = rep(-2.983925, 31)
 )
 
 usethis::use_data(params_2019, overwrite = TRUE)

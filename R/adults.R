@@ -61,13 +61,13 @@ surv_adult_enroute <- function(migratory_temp, bypass_overtopped, adult_harvest,
 #' @description Calculate the adult prespawn survival
 #' @details See \code{\link{params}} for details on parameter sources
 #' @param deg_day Variable describing average degree days
-#' @param ..surv_adult_prespawn_int Intercept
+#' @param .adult_prespawn_int Intercept
 #' @param .deg_day Coefficient for \code{deg_day} variable
 #' @source IP-117068
 #' @export
 surv_adult_prespawn <- function(deg_day,
-                                ..surv_adult_prespawn_int = winterRunDSM::params$..surv_adult_prespawn_int,
+                                .adult_prespawn_int = winterRunDSM::params$.adult_prespawn_int,
                                 .deg_day = winterRunDSM::params$.adult_prespawn_deg_day){
 
-  boot::inv.logit(..surv_adult_prespawn_int + .deg_day * deg_day)
+  boot::inv.logit(.adult_prespawn_int + .deg_day * deg_day)
 }

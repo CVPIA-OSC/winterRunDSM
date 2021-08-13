@@ -468,9 +468,9 @@ surv_juv_outmigration_san_joaquin <- function(..surv_juv_outmigration_sj_int = w
 #' @source IP-117068
 #' @export
 surv_juv_outmigration_sac_delta <- function(delta_flow, avg_temp, perc_diversions,
-                                            .intercept_one = winterRunDSM::params$.surv_juv_outmigration_sac_delta_intercept_one,
-                                            .intercept_two = winterRunDSM::params$.surv_juv_outmigration_sac_delta_intercept_two,
-                                            .intercept_three = winterRunDSM::params$.surv_juv_outmigration_sac_delta_intercept_three,
+                                            ..intercept_one = winterRunDSM::params$..surv_juv_outmigration_sac_delta_intercept_one,
+                                            ..intercept_two = winterRunDSM::params$..surv_juv_outmigration_sac_delta_intercept_two,
+                                            ..intercept_three = winterRunDSM::params$..surv_juv_outmigration_sac_delta_intercept_three,
                                             .delta_flow = winterRunDSM::params$.surv_juv_outmigration_sac_delta_delta_flow,
                                             .avg_temp = winterRunDSM::params$.surv_juv_outmigration_sac_delta_avg_temp,
                                             .perc_diversions = winterRunDSM::params$.surv_juv_outmigration_sac_delta_perc_diversions,
@@ -478,9 +478,9 @@ surv_juv_outmigration_sac_delta <- function(delta_flow, avg_temp, perc_diversion
                                             .large = winterRunDSM::params$.surv_juv_outmigration_sac_delta_large,
                                             model_weights = winterRunDSM::params$surv_juv_outmigration_sac_delta_model_weights){
 
-  base_score1 <- .intercept_one + .delta_flow * delta_flow
-  base_score2 <- .intercept_two + .avg_temp * avg_temp
-  base_score3 <- .intercept_three + .perc_diversions * perc_diversions
+  base_score1 <- ..intercept_one + .delta_flow * delta_flow
+  base_score2 <- ..intercept_two + .avg_temp * avg_temp
+  base_score3 <- ..intercept_three + .perc_diversions * perc_diversions
 
   s <- boot::inv.logit(base_score1) * model_weights[1] +
     boot::inv.logit(base_score2) * model_weights[2] +
@@ -702,9 +702,9 @@ get_migratory_survival <- function(year, month,
                                    avg_temp_delta,
                                    avg_temp,
                                    delta_proportion_diverted,
-                                   .surv_juv_outmigration_sac_delta_intercept_one,
-                                   .surv_juv_outmigration_sac_delta_intercept_two,
-                                   .surv_juv_outmigration_sac_delta_intercept_three,
+                                   ..surv_juv_outmigration_sac_delta_intercept_one,
+                                   ..surv_juv_outmigration_sac_delta_intercept_two,
+                                   ..surv_juv_outmigration_sac_delta_intercept_three,
                                    .surv_juv_outmigration_sac_delta_delta_flow,
                                    .surv_juv_outmigration_sac_delta_avg_temp,
                                    .surv_juv_outmigration_sac_delta_perc_diversions,
@@ -755,9 +755,9 @@ get_migratory_survival <- function(year, month,
   sac_delta_migration_surv <- surv_juv_outmigration_sac_delta(delta_flow = delta_inflow[month, year, ],
                                                               avg_temp = avg_temp_delta[month, year, ],
                                                               perc_diversions = delta_proportion_diverted[month, year, ] * 100,
-                                                              .intercept_one = .surv_juv_outmigration_sac_delta_intercept_one,
-                                                              .intercept_two = .surv_juv_outmigration_sac_delta_intercept_two,
-                                                              .intercept_three = .surv_juv_outmigration_sac_delta_intercept_three,
+                                                              ..intercept_one = ..surv_juv_outmigration_sac_delta_intercept_one,
+                                                              ..intercept_two = ..surv_juv_outmigration_sac_delta_intercept_two,
+                                                              ..intercept_three = ..surv_juv_outmigration_sac_delta_intercept_three,
                                                               .delta_flow = .surv_juv_outmigration_sac_delta_delta_flow,
                                                               .avg_temp = .surv_juv_outmigration_sac_delta_avg_temp,
                                                               .perc_diversions = .surv_juv_outmigration_sac_delta_perc_diversions,
