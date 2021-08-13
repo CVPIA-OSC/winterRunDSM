@@ -14,3 +14,10 @@ v1.0 <- c(5561.59606157809, 6266.17487538245, 6129.31357891974, 7439.79093041294
 
 cbind(v1.1, v1.0, (v1.1-v1.0)/v1.0)
 summary((v1.1-v1.0)/v1.0)
+
+tibble(year = 1:20,
+       v1.1, v1.0,
+       mean = (v1.1 + v1.0)/2) %>% 
+  gather(scenario, spawners, - year) %>% 
+  ggplot(aes(year, spawners, color = scenario)) +
+  geom_line()
