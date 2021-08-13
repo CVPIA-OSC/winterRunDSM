@@ -126,9 +126,9 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
     output$proportion_natural[ , year] <- spawners$proportion_natural
 
     egg_to_fry_surv <- surv_egg_to_fry(
-      proportion_natural = 1 - ..params$proportion_hatchery,
+      proportion_natural = spawners$proportion_natural,
       scour = ..params$prob_nest_scoured,
-      temperature_effect = ..params$mean_egg_temp_effect,
+      ..surv_egg_to_fry_mean_egg_temp_effect = ..params$..surv_egg_to_fry_mean_egg_temp_effect,
       .proportion_natural = ..params$.surv_egg_to_fry_proportion_natural,
       .scour = ..params$.surv_egg_to_fry_scour,
       ..surv_egg_to_fry_int = ..params$..surv_egg_to_fry_int
@@ -310,6 +310,7 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
       } else {
         # if month < 8
         # route northern natal fish stay and rear or migrate downstream ------
+
         upper_sac_trib_fish <-  route(year = juv_dynamics_year,
                                       month = month,
                                       juveniles = juveniles[1:15, ],
@@ -337,7 +338,7 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                     stochastic = stochastic)
         
         juveniles[1:15, ] <- upper_sac_trib_rear$inchannel + upper_sac_trib_rear$floodplain
-        
+
         # route migrant fish into Upper-mid Sac Region (fish from watersheds 1:15)
         # regional fish stay and rear
         # or migrate further downstream or in sutter bypass
@@ -624,7 +625,7 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                                                ..ocean_entry_success_int = ..params$..ocean_entry_success_int,
                                                                .ocean_entry_success_months = ..params$.ocean_entry_success_months,
                                                                stochastic = stochastic)
-      
+
     } # end month loop
     
     output$juvenile_biomass[ , year] <- juveniles_at_chipps %*% winterRunDSM::params$mass_by_size_class
