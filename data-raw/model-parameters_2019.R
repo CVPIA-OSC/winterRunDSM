@@ -147,6 +147,7 @@ params_2019 <- list(
   ..surv_adult_enroute_int = 3.4999976,
   ..surv_adult_prespawn_int = 3,
   ..surv_egg_to_fry_int = 0.041,
+  ..surv_egg_to_fry_mean_egg_temp_effect = 0.646623,
   ..surv_juv_rear_int =  c(`Upper Sacramento River` = -0.6558315, `Antelope Creek` = -0.6558315, `Battle Creek` = -0.6558315,
                            `Bear Creek` = -0.6558315, `Big Chico Creek` = -0.6558315, `Butte Creek` = -0.6558315,
                            `Clear Creek` = -0.6558315, `Cottonwood Creek` = -0.6558315, `Cow Creek` = -0.6558315,
@@ -165,9 +166,9 @@ params_2019 <- list(
   ..surv_juv_rear_total_diversions = 0.3,
   .surv_juv_rear_total_diversions = -0.0021, # from literature
   ..surv_juv_bypass_int = -3.5,
-  ..surv_juv_delta_int = 1.4,
-  ..surv_juv_delta_contact_points = .0358,
-  ..surv_juv_delta_total_diverted = .5,
+  ..surv_juv_delta_int = 1.493342,
+  ..surv_juv_delta_contact_points = 0.0194795,
+  ..surv_juv_delta_total_diverted = 0.4820249,
   ..surv_juv_outmigration_sj_int = -3.018831,
   # Ocean entry success coefficient and variable
   ..ocean_entry_success_int =  c(
