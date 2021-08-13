@@ -1,45 +1,25 @@
 library(tidyverse)
 source('data-raw/load_old_inputs.R')
 
-old_seeds <- read_csv('calibration/filledknownAdults_1998_2016.csv') %>%
-  select(-watershed, -order) %>%
-  as.matrix()
+sim <- winter_run_model(seeds = old_seeds, stochastic = FALSE,
+                      mode = "simulate", ..params = params)
 
-sim <- fall_run_model(seeds = old_seeds, stochastic = FALSE,
-                      mode = "calibrate", ..params = params)
 
-keep_num <- c(1,6,7,10,12,19,20,23,26:30)
+v1.1 <- sim$spawners[1,]
+v1.0 <- c(5561.59606157809, 6266.17487538245, 6129.31357891974, 7439.79093041294, 
+          10080.1925188065, 13990.5481407844, 15535.1423417474, 9826.0099297483, 
+          5303.04478082644, 4977.80275075076, 3498.17267369412, 2240.68334788748, 
+          2084.66251592811, 1951.65668330439, 1399.99119040546, 1313.69928209578, 
+          1764.34100184047, 1707.18065295024, 2390.79665757517, 3495.40365882031
+)
 
-# grand_tab <- as_tibble(old_seeds[keep_num, ]) %>%
-#   mutate(watershed = DSMscenario::watershed_labels[keep_num]) %>%
-#   gather(year, spawners, -watershed) %>%
-#   filter(!is.na(spawners)) %>%
-#   mutate(year = parse_number(year),
-#          observed_nat_spawn = spawners*(1-fallRunDSM::params$proportion_hatchery[watershed]))
+cbind(v1.1, v1.0, (v1.1-v1.0)/v1.0)
+summary((v1.1-v1.0)/v1.0)
 
-grand_tab <- as_tibble(adam_grand_tab) %>%
-  mutate(watershed = DSMscenario::watershed_labels[keep_num]) %>%
-  gather(year, spawners, -watershed) %>%
-  filter(!is.na(spawners)) %>%
-  mutate(year = parse_number(year) + 5,
-         observed = spawners)
+tibble(year = 1:20,
+       v1.1, v1.0) %>% 
+  gather(scenario, spawners, - year) %>% 
+  ggplot(aes(year, spawners, color = scenario)) +
+  geom_line()
 
-nat_spawn <- as_tibble(sim[keep_num, ]) %>%
-  mutate(watershed = DSMscenario::watershed_labels[keep_num]) %>%
-  gather(year, predicted, -watershed) %>%
-  mutate(year = parse_number(year) + 5)
-
-both <- nat_spawn %>%
-  left_join(grand_tab)
-
-both %>%
-  select(-spawners) %>%
-  # group_by(watershed) %>%
-  summarise(r = cor(predicted, observed, use = 'pairwise.complete.obs'))
-
-both %>%
-  select(-spawners) %>%
-  gather(type, spawners, -watershed, -year) %>%
-  ggplot(aes(year, spawners, color = type)) +
-  geom_line() +
-  facet_wrap(~watershed, scales = 'free_y')
+mean(v1.1) - mean(v1.0)
