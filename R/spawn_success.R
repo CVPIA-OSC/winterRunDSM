@@ -23,7 +23,7 @@ stochastic){
   spawner_potential <- if(stochastic) {
     rbinom(31, round(escapement), (adult_prespawn_survival * sex_ratio))
   } else {
-    round(escapement * adult_prespawn_survival * sex_ratio)
+    escapement * adult_prespawn_survival * sex_ratio
   }
 
   spawners <- pmin(spawner_potential, capacity)
