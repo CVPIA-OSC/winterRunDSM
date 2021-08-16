@@ -12,7 +12,7 @@ gamma_MOM <- function(mu, sigma){
 #' @title Growth Transition Probability
 #' @description Generates transition probability matrices for growth inchannel
 #' @param daily_rates The daily growth rate for inchannel (default value is 0.5 mm/day)
-#' @param @param size_class_breaks The fork length size class breaks (default values are s = 35mm, m = 42mm, l = 72mm, vl = 110mm))
+#' @param size_class_breaks The fork length size class breaks (default values are s = 35mm, m = 42mm, l = 72mm, vl = 110mm))
 #' @source IP-117068
 #' @export
 growth <- function(daily_growth_rate = .5, size_class_breaks = c(35, 42, 72, 110)){
