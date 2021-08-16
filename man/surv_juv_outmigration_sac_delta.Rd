@@ -11,10 +11,12 @@ surv_juv_outmigration_sac_delta(
   delta_flow,
   avg_temp,
   perc_diversions,
-  .intercept_one = winterRunDSM::params$.surv_juv_outmigration_sac_delta_intercept_one,
-  .intercept_two = winterRunDSM::params$.surv_juv_outmigration_sac_delta_intercept_two,
  
-    .intercept_three = winterRunDSM::params$.surv_juv_outmigration_sac_delta_intercept_three,
+    ..intercept_one = winterRunDSM::params$..surv_juv_outmigration_sac_delta_intercept_one,
+ 
+    ..intercept_two = winterRunDSM::params$..surv_juv_outmigration_sac_delta_intercept_two,
+ 
+    ..intercept_three = winterRunDSM::params$..surv_juv_outmigration_sac_delta_intercept_three,
   .delta_flow = winterRunDSM::params$.surv_juv_outmigration_sac_delta_delta_flow,
   .avg_temp = winterRunDSM::params$.surv_juv_outmigration_sac_delta_avg_temp,
  
@@ -31,23 +33,23 @@ surv_juv_outmigration_sac_delta(
 
 \item{perc_diversions}{Variable describing monthly mean percent diverted}
 
-\item{.intercept_one}{Intercept for model one}
+\item{.delta_flow}{Coefficient for \code{delta_flow} variable}
 
-\item{.intercept_two}{Intercept for model two}
+\item{.avg_temp}{Coefficient for \code{avg_temp} variable}
 
-\item{.intercept_three}{Intercept for model three}
-
-\item{.delta_flow}{Coefficient for delta_flow variable}
-
-\item{.avg_temp}{Coefficient for avg_temp variable}
-
-\item{.perc_diversions}{Coefficient for perc_diversions variable}
+\item{.perc_diversions}{Coefficient for \code{perc_diversions} variable}
 
 \item{.medium}{Size related intercept for medium sized fish}
 
 \item{.large}{Size related intercept for large sized fish}
 
 \item{model_weights}{weights for competing models}
+
+\item{.intercept_one}{Intercept for model one}
+
+\item{.intercept_two}{Intercept for model two}
+
+\item{.intercept_three}{Intercept for model three}
 }
 \description{
 Calculates the Sacramento Delta juvenile out migration survival

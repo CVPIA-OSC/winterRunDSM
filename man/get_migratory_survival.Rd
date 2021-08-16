@@ -23,9 +23,9 @@ get_migratory_survival(
   avg_temp_delta,
   avg_temp,
   delta_proportion_diverted,
-  .surv_juv_outmigration_sac_delta_intercept_one,
-  .surv_juv_outmigration_sac_delta_intercept_two,
-  .surv_juv_outmigration_sac_delta_intercept_three,
+  ..surv_juv_outmigration_sac_delta_intercept_one,
+  ..surv_juv_outmigration_sac_delta_intercept_two,
+  ..surv_juv_outmigration_sac_delta_intercept_three,
   .surv_juv_outmigration_sac_delta_delta_flow,
   .surv_juv_outmigration_sac_delta_avg_temp,
   .surv_juv_outmigration_sac_delta_perc_diversions,
@@ -64,11 +64,13 @@ get_migratory_survival(
 
 \item{SWP_exports}{More details at \code{\link[DSMflow]{swp_exports}}}
 
-\item{.surv_juv_outmigration_sac_delta_intercept_one}{Intercept \code{\link{surv_juv_outmigration_sac_delta}} for model one}
+\item{upper_sacramento_flows}{average monthly flows on the Upper Sacramento River in cubic meters per second, more details at \code{\link[DSMflow]{upper_sacramento_flows}}}
 
-\item{.surv_juv_outmigration_sac_delta_intercept_two}{Intercept \code{\link{surv_juv_outmigration_sac_delta}} for model two}
+\item{delta_inflow}{Variable describing delta inflow in cubic meters per second, more details at \code{\link[DSMflow]{delta_inflow}}}
 
-\item{.surv_juv_outmigration_sac_delta_intercept_three}{Intercept \code{\link{surv_juv_outmigration_sac_delta}} for model three}
+\item{avg_temp_delta}{Variable describing monthly mean temperature in celsius, more details at  \code{\link[DSMtempetature]{delta_temprature}}}
+
+\item{delta_proportion_diverted}{Variable describing diversions from the delta in cubic meters per seccond, more details at \code{\link[DSMflow]{delta_proportion_diverted}}}
 
 \item{.surv_juv_outmigration_sac_delta_delta_flow}{Coefficient \code{\link{surv_juv_outmigration_sac_delta}} for \code{delta_flow} variable}
 
@@ -89,6 +91,14 @@ get_migratory_survival(
 \item{min_survival_rate}{estimated survival rate if temperature threshold is exceeded}
 
 \item{surv_juv_outmigration_sac_delta_model_weights}{weights for competing models}
+
+\item{stochastic}{\code{TRUE} \code{FALSE} value indicating if model is being run stochastically}
+
+\item{.surv_juv_outmigration_sac_delta_intercept_one}{Intercept \code{\link{surv_juv_outmigration_sac_delta}} for model one}
+
+\item{.surv_juv_outmigration_sac_delta_intercept_two}{Intercept \code{\link{surv_juv_outmigration_sac_delta}} for model two}
+
+\item{.surv_juv_outmigration_sac_delta_intercept_three}{Intercept \code{\link{surv_juv_outmigration_sac_delta}} for model three}
 }
 \description{
 Calculates the juvenile out migration survival rates in all
