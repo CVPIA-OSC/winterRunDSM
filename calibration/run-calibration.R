@@ -22,7 +22,7 @@ res <- ga(type = "real-valued",
               x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10],
               x[11], x[12], x[13], x[14], x[15]
             ),
-          lower = rep(-3.5, 15),
+          lower = c(2.5, rep(-3.5, 14)),
           upper = rep(3.5, 15),
           popSize = 150,
           maxiter = 10000,
@@ -30,15 +30,17 @@ res <- ga(type = "real-valued",
           parallel = TRUE,
           pmutation = .4)
 
-readr::write_rds(res, "calibration/fits/result-1-2021-08-10.rds")
+readr::write_rds(res, paste0("calibration/fits/result-", Sys.Date(), ".rds"))
 
+
+?ga
 # Evaluate Results ------------------------------------
 
-keep <- c(1,3)
+keep <- c(1)
 r1_solution <- res@solution
 
-r1_params <- update_params(x = r1_solution, fallRunDSM::params)
-r1_params <- DSMCalibrationData::set_synth_years(winterRunDSM::params)
+r1_params <- update_params(x = r1_solution, winterRunDSM::params)
+r1_params <- DSMCalibrationData::set_synth_years(r1_params)
 r1_sim <- winter_run_model(seeds = DSMCalibrationData::grandtab_imputed$winter, mode = "calibrate",
                          ..params = r1_params,
                          stochastic = FALSE)
