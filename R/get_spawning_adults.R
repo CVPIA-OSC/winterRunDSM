@@ -69,7 +69,7 @@ get_spawning_adults <- function(year, adults, hatch_adults, mode,
     })
 
     init_adults <- rowSums(adults_by_month_hatchery_removed)
-    proportion_natural <- 1 - winterRunDSM::params$proportion_hatchery
+    proportion_natural <- 1 - winterRunDSM::params$proportion_hatchery #TODO should we make this into a param?
     init_adults_by_month <- adults_by_month_hatchery_removed
 
   } else  {
