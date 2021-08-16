@@ -38,7 +38,7 @@ readr::write_rds(res, paste0("calibration/fits/result-", format(Sys.time(), "%Y-
 # Evaluate Results ------------------------------------
 
 keep <- c(1, 3)
-r1_solution <- res@solution
+r1_solution <- current_best_solution@solution
 
 r1_params <- update_params(x = r1_solution, winterRunDSM::params)
 r1_params <- DSMCalibrationData::set_synth_years(r1_params)
@@ -77,8 +77,8 @@ r1_eval_df %>%
   labs(title = "Observed vs Predicted",
        x = "Observed Natural Spawners",
        y = "Predicted Natural Spawners") +
-  xlim(0, 60000) +
-  ylim(0, 30000)
+  xlim(0, 20000) +
+  ylim(0, 20000)
 
 r1_eval_df %>%
   spread(type, spawners) %>%

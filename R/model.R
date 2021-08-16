@@ -158,9 +158,9 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
     
     spawntime_proportions <- c(0.2222222, 0.5555556, 0.2222222)
     
-    spawning_accumulated_degree_days <- cbind(may = ..params$degree_days[ , 5, year], # Spawn in may only may degree days
-                                              june = rowSums(..params$degree_days[ , 5:6, year]),
-                                              july = rowSums(..params$degree_days[ , 5:7, year]))
+    spawning_accumulated_degree_days <- cbind(may = ..params$degree_days[ , 5:7, year], # Spawn in may only may degree days
+                                              june = rowSums(..params$degree_days[ , 6:7, year]),
+                                              july = rowSums(..params$degree_days[ , 7, year]))
     
     spawning_average_degree_days <- apply(spawning_accumulated_degree_days, 1, weighted.mean, spawntime_proportions)
     prespawn_survival <- surv_adult_prespawn(spawning_average_degree_days,

@@ -38,8 +38,10 @@ usethis::use_data(adult_seeds, overwrite = TRUE)
 
 #TODO check on why in OG model they only have a single number not a vector of values
 #line 1552 OG model
-proportion_hatchery <- c(0.1759966, rep(0, 30)) #proportion hatchery based on CWT reports
+proportion_hatchery <- rep(0, 31) #proportion hatchery based on CWT reports
 names(proportion_hatchery) <- watershed_labels
+proportion_hatchery["Upper Sacramento River"] <- 0.1759966
+proportion_hatchery["Battle Creek"] <- .2
 
 usethis::use_data(proportion_hatchery, overwrite = TRUE)
 

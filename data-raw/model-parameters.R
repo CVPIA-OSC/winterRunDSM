@@ -1,12 +1,11 @@
 library(tidyverse)
-
-
 # 2021
-calib_results <- read_rds("calibration/solution-res7-08-05.rds")
+calib_results <- read_rds("calibration/calibration-result.rds")
 solution <- calib_results@solution
 
 params <- list(
 
+  # TODO set the battle creek to be 2% for prop hatch, do the same for late-fall
   # Data from winterRunDSM cache-data (values vary by run)
   hatchery_allocation = winterRunDSM::hatchery_allocation,
   natural_adult_removal_rate = winterRunDSM::natural_adult_removal_rate,
