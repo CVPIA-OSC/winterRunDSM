@@ -1,8 +1,9 @@
 #' @title Get Spawning Adults
+#' @details See \code{\link{params}} for details on parameter sources
 #' @param year the year of simulation
 #' @param adults potential spawning adults for each watershed (length = 31) values must be integer
 #' @param hatch_adults total hatchery adults
-#' @param seeds a value meant to be inherited to determine if model is in seeding stage or not
+#' @param mode a value meant to be inherited to determine if model is in "seed", "calibrate", or "simulate" mode
 #' @param month_return_proportions The proportion of fish returning for each month
 #' @param prop_flow_natal More details at \code{\link[DSMflow]{proportion_flow_natal}}
 #' @param south_delta_routed_watersheds More details at \code{\link[DSMhabitat]{south_delta_routed_watersheds}}
@@ -21,6 +22,7 @@
 #' @param .adult_en_route_migratory_temp Coefficient for \code{\link{surv_adult_enroute}} \code{migratory_temp} variable
 #' @param .adult_en_route_bypass_overtopped Coefficient for \code{\link{surv_adult_enroute}} \code{bypass_overtopped} variable
 #' @param .adult_en_route_adult_harvest_rate  Adult harvest rate for \code{\link{surv_adult_enroute}}
+#' @param stochastic TRUE FALSE value indicating if model is being run stochastically
 #' @source IP-117068
 #' @export
 get_spawning_adults <- function(year, adults, hatch_adults, mode,
