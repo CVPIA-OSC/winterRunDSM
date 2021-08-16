@@ -1,8 +1,7 @@
 library(tidyverse)
 
-
 # 2021
-calib_results <- read_rds("calibration/solution-res7-08-05.rds")
+calib_results <- read_rds("calibration/calibration-result.rds")
 solution <- calib_results@solution
 
 params <- list(
@@ -149,7 +148,7 @@ params <- list(
   # Calibration Variables (vary by run)
   ..surv_adult_enroute_int = solution[1],
   ..surv_egg_to_fry_mean_egg_temp_effect = solution[2],
-  ..surv_juv_rear_int = solution[3],
+  ..surv_juv_rear_int = rep(solution[3], 31),
   ..surv_juv_rear_contact_points = solution[4],
   ..surv_juv_rear_prop_diversions = solution[5],
   ..surv_juv_rear_total_diversions = solution[6],
@@ -161,11 +160,10 @@ params <- list(
   ..surv_juv_outmigration_sac_delta_intercept_one = solution[12],
   ..surv_juv_outmigration_sac_delta_intercept_two = solution[13],
   ..surv_juv_outmigration_sac_delta_intercept_three = solution[14],
-  ..ocean_entry_success_int = solution[15]
+  ..ocean_entry_success_int = rep(solution[15], 31)
 
 )
 
-params <- params_2019
 usethis::use_data(params, overwrite = TRUE)
 
 
