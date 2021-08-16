@@ -18,6 +18,8 @@ period in front are model or submodel coefficients. Parameters with double perio
   \item \code{sutter_habitat}: More details at \code{\link[DSMhabitat]{sutter_habitat}}
   \item \code{yolo_habitat}: More details at \code{\link[DSMhabitat]{yolo_habitat}}
   \item \code{delta_habitat}: More details at \code{\link[DSMhabitat]{delta_habitat}}
+  \item \code{spawn_decay_rate}: More details at \code{\link[DSMscenario]{spawn_decay_rate}}
+  \item \code{rear_decay_rate}: More details at \code{\link[DSMscenario]{rear_decay_rate}}
 }
 }
 
@@ -27,6 +29,8 @@ period in front are model or submodel coefficients. Parameters with double perio
   \item \code{prop_flow_natal}: More details at \code{\link[DSMflow]{proportion_flow_natal}}
   \item \code{south_delta_routed_watersheds}: More details at \code{\link[DSMhabitat]{south_delta_routed_watersheds}}
   \item \code{cc_gates_days_closed}: More details at \code{\link[DSMflow]{delta_cross_channel_closed}}
+  \item \code{cross_channel_stray_rate}: More details at \code{\link{cross_channel_stray_rate}}
+  \item \code{stray_rate}: More details at \code{\link{stray_rate}}
   \item \code{gates_overtopped}: More details at \code{\link[DSMflow]{gates_overtopped}}
   \item \code{tisdale_bypass_watershed}: More details at \code{\link[DSMhabitat]{tisdale_bypass_watershed}}
   \item \code{yolo_bypass_watershed}: More details at \code{\link[DSMhabitat]{yolo_bypass_watershed}}
@@ -43,12 +47,14 @@ period in front are model or submodel coefficients. Parameters with double perio
   \item \code{.adult_en_route_adult_harvest_rate}:  Adult harvest rate, source:  \href{https://nrm.dfg.ca.gov/FileHandler.ashx?DocumentID=162355&usg= AOvVaw0VgMOwD7knFfSxRZy6k8RG}{(Palmer-Zwahlen & Kormos 2013-2015, Palmer-Zwahlen et al. 2018)}
   \item \code{degree_days}: More details at \code{\link[DSMtemperature]{degree_days}}
   \item \code{month_return_proportions}: More details at \code{\link[winterRunDSM]{month_return_proportions}}
-  \item \code{..surv_adult_prespawn_int}:  Intercept, Source: Calibration Estimate
+  \item \code{.adult_prespawn_int}:  Intercept, Source: TODO
   \item \code{.adult_prespawn_deg_day}: Coefficient for \code{deg_day} variable, source: \href{https://onlinelibrary.wiley.com/doi/epdf/10.1002/rra.3348}{Colvin et al. (2018)}
   \item \code{prob_nest_scoured}: More details at \code{\link[DSMhabitat]{prob_nest_scoured}}
   \item \code{spawn_success_sex_ratio}: Variable describing the female to male spawning ratio, default 0.5 TODO (find source for default)
   \item \code{spawn_success_redd_size}: Variable describing the size of redds including defensible space, default value 9.29 square meters TODO (find source for default)
   \item \code{spawn_success_fecundity}: Variable describing the number of eggs per female, default value 5522 TODO (find source for default)
+  \item \code{hatchery_allocation}: More details at \code{\link{hatchery_allocation}}
+  \item \code{natural_adult_removal_rate}: More details at \code{\link{natural_adult_removal_rate}}
 }
 }
 
@@ -60,7 +66,7 @@ period in front are model or submodel coefficients. Parameters with double perio
   \item \code{..surv_egg_to_fry_mean_egg_temp_effect}: More details at \code{\link[DSMtemperature]{egg_temperature_effect}}, source: Calibration (winter run only)
   \item \code{.surv_egg_to_fry_proportion_natural}: Coefficient for \code{proportion_natural} variable, Source: \href{https://cdnsciencepub.com/doi/abs/10.1139/F10-168}{Chilcote et al. (2011)}
   \item \code{.surv_egg_to_fry_scour}: Coefficient for \code{scour} variable, Source: \href{https://dsm-docs.s3-us-west-2.amazonaws.com/montogemery_1996.pdf}{Montgomery et al. (1996)}
-  \item \code{..surv_egg_to_fry_int}:  Intercept, Source: Calibration
+  \item \code{.surv_egg_to_fry_int}:  Intercept, Source: TODO
 }
 }
 
@@ -205,6 +211,14 @@ period in front are model or submodel coefficients. Parameters with double perio
   \item \code{.ocean_entry_success_length}: Size related intercept representing the fork lengths for each size classes, source: \href{https://dsm-docs.s3-us-west-2.amazonaws.com/Satterthwaite_et_al_2014.pdf}{Satterthwaite et al. (2014)}
   \item \code{..ocean_entry_success_int}: Intercept, source: Calibration (Varies by tributary)
   \item \code{.ocean_entry_success_months}: Coefficient for \code{month} variable, source: \href{https://dsm-docs.s3-us-west-2.amazonaws.com/Satterthwaite_et_al_2014.pdf}{Satterthwaite et al. (2014)}
+}
+}
+
+\section{Generating model outputs}{
+
+\itemize{
+  \item \code{mass_by_size_class}: More details at \code{\link{mass_by_size_class}}
+  \item \code{diversity_group}: More details at \code{\link{diversity_group}}
 }
 }
 
