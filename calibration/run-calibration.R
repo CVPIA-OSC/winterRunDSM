@@ -1,4 +1,4 @@
-library(fallRunDSM)
+library(winterRunDSM)
 library(GA)
 library(dplyr)
 library(tidyr)
@@ -10,7 +10,7 @@ source("calibration/update-params.R")
 
 params <- DSMCalibrationData::set_synth_years(winterRunDSM::params)
 
-# current_best_solution <- read_rds("calibration/calibration-result.rds")
+current_best_solution <- read_rds("calibration/calibration-result.rds")
 
 # Perform calibration --------------------
 res <- ga(type = "real-valued",
@@ -28,15 +28,16 @@ res <- ga(type = "real-valued",
           maxiter = 10000,
           run = 50,
           parallel = TRUE,
-          pmutation = .4)
+          pmutation = .4, 
+          suggestions = current_best_solution@soltuion)
 
-readr::write_rds(res, paste0("calibration/fits/result-", Sys.Date(), ".rds"))
+readr::write_rds(res, paste0("calibration/fits/result-", format(Sys.time(), "%Y-%m-%d_%H%M%S"), ".rds"))
 
 
 ?ga
 # Evaluate Results ------------------------------------
 
-keep <- c(1)
+keep <- c(1, 3)
 r1_solution <- res@solution
 
 r1_params <- update_params(x = r1_solution, winterRunDSM::params)

@@ -38,11 +38,11 @@ winter_run_fitness <- function(
   params_init$..surv_juv_outmigration_sac_delta_intercept_three = surv_juv_outmigration_sac_delta_intercept_three
   params_init$..ocean_entry_success_int = rep(ocean_entry_success_int, 31)
   
-  keep <- c(1)
+  keep <- c(1, 3)
   # num_obs <- rowSums(!is.na(known_adults[keep, 6:19, drop = FALSE]))
   # total_obs <- sum(!is.na(known_adults[keep, 6:19, drop = FALSE]))
   # weights <- num_obs / total_obs
-  # 
+
   
   tryCatch({
     preds <- winter_run_model(mode = "calibrate",
@@ -53,26 +53,12 @@ winter_run_fitness <- function(
     known_nats <- known_adults[keep, 6:19, drop = FALSE] * (1 - params_init$proportion_hatchery[keep])
     mean_escapent <-rowMeans(known_nats, na.rm = TRUE)
     
-    watershed_cor <- sapply(1:length(keep), function(i) {
-      cor(preds[i,], known_nats[i,], use = "pairwise.complete.obs")
-    })
-    
     sse <- sum(((preds[keep, , drop = FALSE] - known_nats)^2)/mean_escapent, na.rm = TRUE)
     
-    return(sse + sum(watershed_cor < 0 ) * 50000)
+    return(sse)
   },
   error = function(e) return(1e12),
   warning = function(w) return(1e12)
   )
 }
 
-
-# x <- runif(15)
-# 
-# print(winter_run_fitness(
-#   known_adults = DSMCalibrationData::grandtab_observed$winter,
-#   seeds = DSMCalibrationData::grandtab_imputed$winter,
-#   params = params,
-#   x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10],
-#   x[11], x[12], x[13], x[14], x[15]
-# ))
