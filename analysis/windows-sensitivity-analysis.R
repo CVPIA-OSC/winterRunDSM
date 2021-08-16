@@ -1,4 +1,4 @@
-library(fallRunDSM)
+library(winterRunDSM)
 library(DSMscenario)
 library(purrr)
 library(parallel)
@@ -14,7 +14,7 @@ registerDoParallel(cl)
 
 run_scenario <- function(scenario, sensi_params) {
   seeds <- fall_run_model(mode = "seed", ..params = sensi_params, stochastic = FALSE)
-  run <- fall_run_model(scenario = scenario,
+  run <- winter_run_model(scenario = scenario,
                         mode = "simulate", seeds = seeds,
                         ..params = sensi_params, stochastic = FALSE)
   return(mean(colSums(run$spawners * run$proportion_natural, na.rm = TRUE)))
@@ -29,11 +29,11 @@ scenarios <- list(DSMscenario::scenarios$NO_ACTION, DSMscenario::scenarios$ONE,
                   DSMscenario::scenarios$TWELVE, DSMscenario::scenarios$THIRTEEN)
 
 # register the functions for use in parallel mode
-clusterExport(cl, list('run_scenario', 'fall_run_model', 'scenarios'))
+clusterExport(cl, list('run_scenario', 'winter_run_model', 'scenarios'))
 
 run_scenarios_scaled_param <- function(param, scalar) {
 
-  sensi_params <- fallRunDSM::params
+  sensi_params <- winterRunDSM::params
   sensi_params[param][[1]] <-
     if (param %in% c("cc_gates_prop_days_closed", "cross_channel_stray_rate",
                      "delta_prop_high_predation", "delta_proportion_diverted",
@@ -104,6 +104,9 @@ View(x)
 y <- param_sensitivity("hatchery_allocation")
 
 # how to separate coefficients from other model inputs within params
-coefficients <- names(params)[grep('\\.', names(params))]
-model_inputs <- sort(names(params)[grep('\\.', names(params), invert = TRUE)])
+coefficients <- names(winterRunDSM::params)[grep('\\.', names(params))]
+model_inputs <- sort(names(winterRunDSM::params)[grep('\\.', names(params), invert = TRUE)])
 
+
+# close all cluster connections
+closeAllConnections()
