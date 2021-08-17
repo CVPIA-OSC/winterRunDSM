@@ -13,7 +13,7 @@ cl <- makeCluster(no_cores-1)
 registerDoParallel(cl)
 
 run_scenario <- function(scenario, sensi_params) {
-  seeds <- fall_run_model(mode = "seed", ..params = sensi_params, stochastic = FALSE)
+  seeds <- winter_run_model(mode = "seed", ..params = sensi_params, stochastic = FALSE)
   run <- winter_run_model(scenario = scenario,
                         mode = "simulate", seeds = seeds,
                         ..params = sensi_params, stochastic = FALSE)
