@@ -2,6 +2,10 @@ library(tidyverse)
 
 # 2019 Calibration Parameters ------------
 params_2019 <- list(
+  
+  # Data from DSMscenarios
+  spawn_decay_rate = DSMscenario::spawn_decay_rate,
+  rear_decay_rate = DSMscenario::rear_decay_rate,
 
   # Data from winterRunDSM cache-data (values vary by run)
   hatchery_allocation = winterRunDSM::hatchery_allocation,

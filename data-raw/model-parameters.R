@@ -6,7 +6,10 @@ solution <- calib_results@solution
 
 params <- list(
 
-  # TODO set the battle creek to be 2% for prop hatch, do the same for late-fall
+  # Data from DSMscenarios
+  spawn_decay_rate = DSMscenario::spawn_decay_rate,
+  rear_decay_rate = DSMscenario::rear_decay_rate,
+  
   # Data from winterRunDSM cache-data (values vary by run)
   hatchery_allocation = winterRunDSM::hatchery_allocation,
   natural_adult_removal_rate = winterRunDSM::natural_adult_removal_rate,
