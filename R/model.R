@@ -65,17 +65,6 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
     proportion_natural = matrix(NA_real_, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20))
   )
   
-  # initialize 31 x 4 matrices for natal fish, migrants, and ocean fish
-  lower_mid_sac_fish <- matrix(0, nrow = 20, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:20], winterRunDSM::size_class_labels))
-  lower_sac_fish <- matrix(0, nrow = 27, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:27], winterRunDSM::size_class_labels))
-  upper_mid_sac_fish <- matrix(0, nrow = 15, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:15], winterRunDSM::size_class_labels))
-  sutter_fish <- matrix(0, nrow = 15, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:15], winterRunDSM::size_class_labels))
-  yolo_fish <- matrix(0, nrow = 20, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:20], winterRunDSM::size_class_labels))
-  san_joaquin_fish <- matrix(0, nrow = 3, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[28:30], winterRunDSM::size_class_labels))
-  north_delta_fish <- matrix(0, nrow = 23, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:23], winterRunDSM::size_class_labels))
-  south_delta_fish <- matrix(0, nrow = 31, ncol = 4, dimnames = list(winterRunDSM::watershed_labels, winterRunDSM::size_class_labels))
-  juveniles_at_chipps <- matrix(0, nrow = 31, ncol = 4, dimnames = list(winterRunDSM::watershed_labels, winterRunDSM::size_class_labels))
-  
   if (mode == 'calibrate') {
     calculated_adults <- matrix(0, nrow = 31, ncol = 30)
   }
@@ -93,6 +82,18 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
   
   for (year in 1:simulation_length) {
     adults_in_ocean <- numeric(31)
+    
+    # initialize 31 x 4 matrices for natal fish, migrants, and ocean fish
+    lower_mid_sac_fish <- matrix(0, nrow = 20, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:20], winterRunDSM::size_class_labels))
+    lower_sac_fish <- matrix(0, nrow = 27, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:27], winterRunDSM::size_class_labels))
+    upper_mid_sac_fish <- matrix(0, nrow = 15, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:15], winterRunDSM::size_class_labels))
+    sutter_fish <- matrix(0, nrow = 15, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:15], winterRunDSM::size_class_labels))
+    yolo_fish <- matrix(0, nrow = 20, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:20], winterRunDSM::size_class_labels))
+    san_joaquin_fish <- matrix(0, nrow = 3, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[28:30], winterRunDSM::size_class_labels))
+    north_delta_fish <- matrix(0, nrow = 23, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:23], winterRunDSM::size_class_labels))
+    south_delta_fish <- matrix(0, nrow = 31, ncol = 4, dimnames = list(winterRunDSM::watershed_labels, winterRunDSM::size_class_labels))
+    juveniles_at_chipps <- matrix(0, nrow = 31, ncol = 4, dimnames = list(winterRunDSM::watershed_labels, winterRunDSM::size_class_labels))
+    
     
     avg_ocean_transition_month <- ocean_transition_month(stochastic = stochastic) # 2
     
@@ -354,13 +355,14 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                              territory_size = ..params$territory_size,
                                              stochastic = stochastic)
         
-        migrants[1:15, ] <- upper_mid_sac_fish$migrants
         
         sutter_fish <- route_bypass(bypass_fish = sutter_fish + upper_mid_sac_fish$detoured,
                                     bypass_habitat = habitat$sutter,
                                     migration_survival_rate = migratory_survival$sutter,
                                     territory_size = ..params$territory_size,
                                     stochastic = stochastic)
+        
+        migrants[1:15, ] <- upper_mid_sac_fish$migrants + sutter_fish$migrants
         
         upper_mid_sac_fish <- rear(juveniles = upper_mid_sac_fish$inchannel,
                                    survival_rate = rearing_survival$inchannel[16, ],
