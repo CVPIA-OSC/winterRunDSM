@@ -10,7 +10,7 @@ IP-117068
 surv_egg_to_fry(
   proportion_natural,
   scour,
-  ..surv_egg_to_fry_int = winterRunDSM::params$..surv_egg_to_fry_int,
+  .surv_egg_to_fry_int = winterRunDSM::params$.surv_egg_to_fry_int,
  
     ..surv_egg_to_fry_mean_egg_temp_effect = winterRunDSM::params$..surv_egg_to_fry_mean_egg_temp_effect,
   .proportion_natural = winterRunDSM::params$.surv_egg_to_fry_proportion_natural,
@@ -22,7 +22,9 @@ surv_egg_to_fry(
 
 \item{scour}{Variable describing the probability of redd scouring event}
 
-\item{..surv_egg_to_fry_int}{Intercept}
+\item{.surv_egg_to_fry_int}{Intercept}
+
+\item{..surv_egg_to_fry_mean_egg_temp_effect}{TODO}
 
 \item{.proportion_natural}{Coefficient for \code{proportion_natural} variable}
 

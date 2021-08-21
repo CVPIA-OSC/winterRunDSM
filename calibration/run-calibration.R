@@ -74,7 +74,7 @@ r1_eval_df %>%
   # filter(watershed == "Yuba River") %>%
   ggplot(aes(observed, simulated)) + geom_point() +
   geom_abline(intercept = 0, slope = 1) +
-  labs(title = "Observed vs Predicted",
+  labs(title = "Observed vs Predicted updated",
        x = "Observed Natural Spawners",
        y = "Predicted Natural Spawners") +
   xlim(0, 20000) +

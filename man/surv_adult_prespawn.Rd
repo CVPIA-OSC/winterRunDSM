@@ -9,14 +9,14 @@ IP-117068
 \usage{
 surv_adult_prespawn(
   deg_day,
-  ..surv_adult_prespawn_int = winterRunDSM::params$..surv_adult_prespawn_int,
+  .adult_prespawn_int = winterRunDSM::params$.adult_prespawn_int,
   .deg_day = winterRunDSM::params$.adult_prespawn_deg_day
 )
 }
 \arguments{
 \item{deg_day}{Variable describing average degree days}
 
-\item{..surv_adult_prespawn_int}{Intercept}
+\item{.adult_prespawn_int}{Intercept}
 
 \item{.deg_day}{Coefficient for \code{deg_day} variable}
 }
