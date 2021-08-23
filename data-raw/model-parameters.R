@@ -1,7 +1,7 @@
 library(tidyverse)
 
 # 2021
-calib_results <- read_rds("calibration/calibration-result.rds")
+calib_results <- read_rds("calibration/calibrated-results.rds")
 solution <- calib_results@solution
 
 params <- list(
@@ -161,10 +161,7 @@ params <- list(
   ..surv_juv_delta_contact_points = solution[9],
   ..surv_juv_delta_total_diverted = solution[10],
   ..surv_juv_outmigration_sj_int = solution[11],
-  ..surv_juv_outmigration_sac_delta_intercept_one = solution[12],
-  ..surv_juv_outmigration_sac_delta_intercept_two = solution[13],
-  ..surv_juv_outmigration_sac_delta_intercept_three = solution[14],
-  ..ocean_entry_success_int = rep(solution[15], 31)
+  ..ocean_entry_success_int = rep(solution[12], 31)
 
 )
 

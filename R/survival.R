@@ -10,19 +10,20 @@
 #' @param stranded variable representing stranding rate per watershed
 #' @param weeks_flooded variable representing total weeks flooded per watershed
 #' @param ..surv_juv_rear_int  intercept, source: calibration (varies by tributary)
-#' @param .avg_temp_thresh coefficient for avg_temp_thresh variable
-#' @param .high_predation coefficient for high_predation variable
-#' @param .surv_juv_rear_contact_points coefficient for contact_points variable
-#' @param ..surv_juv_rear_contact_points calibrated coefficient for contact_points variable
-#' @param .surv_juv_rear_prop_diversions coefficient for prop_diversions variable
-#' @param ..surv_juv_rear_prop_diversions calibrated coefficient for prop_diversions variable
-#' @param .surv_juv_rear_total_diversions coefficient for total_diversions variable
-#' @param ..surv_juv_rear_total_diversions calibrated coefficient for total_diversions variable
-#' @param .stranded coefficient for stranded variable
+#' @param .avg_temp_thresh coefficient for \code{avg_temp_thresh} variable
+#' @param .high_predation coefficient for \code{high_predation} variable
+#' @param .surv_juv_rear_contact_points coefficient for \code{contact_points} variable
+#' @param ..surv_juv_rear_contact_points calibrated coefficient for \code{contact_points} variable
+#' @param .surv_juv_rear_prop_diversions coefficient for \code{prop_diversions} variable
+#' @param ..surv_juv_rear_prop_diversions calibrated coefficient for \code{prop_diversions} variable
+#' @param .surv_juv_rear_total_diversions coefficient for \code{total_diversions} variable
+#' @param ..surv_juv_rear_total_diversions calibrated coefficient for \code{total_diversions} variable
+#' @param .stranded coefficient for \code{stranded} variable
 #' @param .medium size related intercept for medium sized fish
 #' @param .large size related intercept for large sized fish
 #' @param .floodplain Additional intercept for floodplain rearing benefit
-#' @param min_survival_rate estimated survival rate if temperature threshold is exceeded, source: expert opinion
+#' @param min_survival_rate estimated survival rate if temperature threshold is exceeded
+#' @param stochastic \code{TRUE} \code{FALSE} value indicating if model is being run stochastically
 #' @source IP-117068
 #' @export
 surv_juv_rear <- function(max_temp_thresh, avg_temp_thresh, high_predation,
@@ -93,12 +94,13 @@ stochastic){
 #' @param avg_temp_thresh Variable representing the probability of exceeding the average temperature
 #' @param high_predation Variable representing an indicator for high predation in watershed
 #' @param ..surv_juv_bypass_int intercept, source: calibration
-#' @param .avg_temp_thresh coefficient for avg_temp_thresh variable
-#' @param .high_predation coefficient for high_predation variable
+#' @param .avg_temp_thresh coefficient for \code{avg_temp_thresh} variable
+#' @param .high_predation coefficient for \code{high_predation} variable
 #' @param .medium size related intercept for medium sized fish
 #' @param .large size related intercept for large sized fish
 #' @param .floodplain Additional intercept for floodplain rearing benefit
 #' @param min_survival_rate estimated survival rate if temperature threshold is exceeded
+#' @param stochastic \code{TRUE} \code{FALSE} value indicating if model is being run stochastically
 #' @source IP-117068
 #' @export
 surv_juv_bypass <- function(max_temp_thresh, avg_temp_thresh, high_predation,
@@ -139,16 +141,17 @@ stochastic){
 #' @param prop_diverted Variable representing the proportion of water diverted
 #' @param total_diverted Variable representing the total diversions
 #' @param ..surv_juv_delta_int intercept, source: calibration
-#' @param .avg_temp_thresh Coefficient for avg_temp_thresh variable
-#' @param .high_predation Coefficient for high_predation variable
-#' @param .surv_juv_delta_contact_points Coefficient for contact_points variable
-#' @param ..surv_juv_delta_contact_points Calibrated coefficient for contact_points variable
-#' @param .prop_diverted Coefficient for prop_diversions variable
-#' @param .surv_juv_delta_total_diverted Coefficient for total_diversions variable
-#' @param ..surv_juv_delta_total_diverted Calibrated coefficient for total_diversions variable
+#' @param .avg_temp_thresh Coefficient for \code{avg_temp_thresh} variable
+#' @param .high_predation Coefficient for \code{high_predation} variable
+#' @param .surv_juv_delta_contact_points Coefficient for \code{contact_points} variable
+#' @param ..surv_juv_delta_contact_points Calibrated coefficient for \code{contact_points} variable
+#' @param .prop_diverted Coefficient for \code{prop_diversions} variable
+#' @param .surv_juv_delta_total_diverted Coefficient for \code{total_diversions} variable
+#' @param ..surv_juv_delta_total_diverted Calibrated coefficient for \code{total_diversions} variable
 #' @param .medium size related intercept for medium sized fish
 #' @param .large size related intercept for large sized fish
 #' @param min_survival_rate estimated survival rate if temperature threshold is exceeded
+#' @param stochastic \code{TRUE} \code{FALSE} value indicating if model is being run stochastically
 #' @source IP-117068
 #' @export
 surv_juv_delta <- function(avg_temp, max_temp_thresh, avg_temp_thresh, high_predation, contact_points,
@@ -200,7 +203,7 @@ stochastic){
 #' deltas rearing survival rates for a month and year of the simulation
 #' @param year The simulation year, 1-20
 #' @param month The simulation month, 1-8
-#' @param scenario The current scenario
+#' @param mode The mode that the model is being run in
 #' @param avg_temp More details at \code{\link[DSMtemperature]{stream_tempetature}}
 #' @param avg_temp_delta More details at \code{\link[DSMtempetature]{delta_temprature}}
 #' @param prob_strand_early More details at \code{\link[DSMhabitat]{prop_strand_early}}
@@ -244,6 +247,7 @@ stochastic){
 #' @param .surv_juv_delta_medium Size related intercept for \code{\link{surv_juv_delta}} medium sized fish
 #' @param .surv_juv_delta_large Size related intercept for \code{\link{surv_juv_delta}} large sized fish
 #' @param min_survival_rate estimated survival rate if temperature threshold is exceeded
+#' @param stochastic \code{TRUE} \code{FALSE} value indicating if model is being run stochastically
 #' @source IP-117068
 #' @export
 get_rearing_survival <- function(year, month,
@@ -450,57 +454,11 @@ surv_juv_outmigration_san_joaquin <- function(..surv_juv_outmigration_sj_int = w
   cbind(s = s, m = m, l = l, vl = vl)
 }
 
-#' @title Juvenile Delta Outmigration Survival
-#' @description Calculates the Sacramento Delta juvenile out migration survival
-#' @details See \code{\link{params}} for details on parameter sources
-#' @param delta_flow Variable describing delta inflow in cubic meters per second
-#' @param avg_temp Variable describing monthly mean temperature in celsius
-#' @param perc_diversions Variable describing monthly mean percent diverted
-#' @param .intercept_one Intercept for model one
-#' @param .intercept_two Intercept for model two
-#' @param .intercept_three Intercept for model three
-#' @param .delta_flow Coefficient for delta_flow variable
-#' @param .avg_temp Coefficient for avg_temp variable
-#' @param .perc_diversions Coefficient for perc_diversions variable
-#' @param .medium Size related intercept for medium sized fish
-#' @param .large Size related intercept for large sized fish
-#' @param model_weights weights for competing models
-#' @source IP-117068
-#' @export
-surv_juv_outmigration_sac_delta <- function(delta_flow, avg_temp, perc_diversions,
-                                            ..intercept_one = winterRunDSM::params$..surv_juv_outmigration_sac_delta_intercept_one,
-                                            ..intercept_two = winterRunDSM::params$..surv_juv_outmigration_sac_delta_intercept_two,
-                                            ..intercept_three = winterRunDSM::params$..surv_juv_outmigration_sac_delta_intercept_three,
-                                            .delta_flow = winterRunDSM::params$.surv_juv_outmigration_sac_delta_delta_flow,
-                                            .avg_temp = winterRunDSM::params$.surv_juv_outmigration_sac_delta_avg_temp,
-                                            .perc_diversions = winterRunDSM::params$.surv_juv_outmigration_sac_delta_perc_diversions,
-                                            .medium = winterRunDSM::params$.surv_juv_outmigration_sac_delta_medium,
-                                            .large = winterRunDSM::params$.surv_juv_outmigration_sac_delta_large,
-                                            model_weights = winterRunDSM::params$surv_juv_outmigration_sac_delta_model_weights){
-
-  base_score1 <- ..intercept_one + .delta_flow * delta_flow
-  base_score2 <- ..intercept_two + .avg_temp * avg_temp
-  base_score3 <- ..intercept_three + .perc_diversions * perc_diversions
-
-  s <- boot::inv.logit(base_score1) * model_weights[1] +
-    boot::inv.logit(base_score2) * model_weights[2] +
-    boot::inv.logit(base_score3) * model_weights[3]
-
-  m <- boot::inv.logit(base_score1 + .medium) * model_weights[1] +
-    boot::inv.logit(base_score2 + .medium) * model_weights[2] +
-    boot::inv.logit(base_score3 + .medium) * model_weights[3]
-
-  vl <- l <- boot::inv.logit(base_score1 + .large) * model_weights[1] +
-    boot::inv.logit(base_score2 + .large) * model_weights[2] +
-    boot::inv.logit(base_score3 + .large) * model_weights[3]
-
-  cbind(s = s, m = m, l = l, vl = vl)
-}
 
 #' @title Juvenile Delta Outmigration Survival
 #' @description Calculates the North and South Delta juvenile out migration survival
 #' @param prop_DCC_closed proportion of days the Delta Cross Channel Gates are closed
-#' @param horr_barr indicator if head of old river physical barrier in place
+#' @param hor_barr indicator if head of old river physical barrier in place
 #' @param freeport_flow average daily discharge at Freeport in cubic meters per second
 #' @param vernalis_flow average daily discharge at Vernalis in cubic meters per second
 #' @param stockton_flow average daily discharge at Stockton in cubic meters per second
@@ -508,7 +466,7 @@ surv_juv_outmigration_sac_delta <- function(delta_flow, avg_temp, perc_diversion
 #' @param prisoners_point_temperature average daily temperature of the San Joaquin River at Prisoners Point °C
 #' @param CVP_exp average daily exports Central Valley Project in cubic meters per second
 #' @param SWP_exp average daily exports State Water Project in cubic meters per second
-#' @param Trap_trans proportion of smolts trapped at Vernalis and transported to Chips island
+#' @param trap_trans proportion of smolts trapped at Vernalis and transported to Chips island
 #' @section Parameters:
 #' All parameters were derived from Perry et al. (2018)
 #' @details function returns proportion of fish from the Sacramento at Feeeport (northern_fish)
@@ -673,19 +631,15 @@ surv_juv_outmigration_delta <- function(prop_DCC_closed, hor_barr, freeport_flow
 #' @param prisoners_point_temps More details at \code{\link[DSMtemperature]{prisoners_point_temperature}}
 #' @param CVP_exports More details at \code{\link[DSMflow]{cvp_exports}}
 #' @param SWP_exports More details at \code{\link[DSMflow]{swp_exports}}
+#' @param upper_sacramento_flows average monthly flows on the Upper Sacramento River in cubic meters per second, more details at \code{\link[DSMflow]{upper_sacramento_flows}}
+#' @param delta_inflow Variable describing delta inflow in cubic meters per second, more details at \code{\link[DSMflow]{delta_inflow}}
+#' @param avg_temp_delta Variable describing monthly mean temperature in celsius, more details at  \code{\link[DSMtempetature]{delta_temprature}}
+#' @param delta_proportion_diverted Variable describing diversions from the delta in cubic meters per seccond, more details at \code{\link[DSMflow]{delta_proportion_diverted}}
 #' @param ..surv_juv_outmigration_sj_int Intercept for \code{\link{surv_juv_outmigration_san_joaquin}}
-#' @param .surv_juv_outmigration_sac_delta_intercept_one Intercept \code{\link{surv_juv_outmigration_sac_delta}} for model one
-#' @param .surv_juv_outmigration_sac_delta_intercept_two Intercept \code{\link{surv_juv_outmigration_sac_delta}} for model two
-#' @param .surv_juv_outmigration_sac_delta_intercept_three Intercept \code{\link{surv_juv_outmigration_sac_delta}} for model three
-#' @param .surv_juv_outmigration_sac_delta_delta_flow Coefficient \code{\link{surv_juv_outmigration_sac_delta}} for \code{delta_flow} variable
-#' @param .surv_juv_outmigration_sac_delta_avg_temp Coefficient \code{\link{surv_juv_outmigration_sac_delta}} for \code{avg_temp} variable
-#' @param .surv_juv_outmigration_sac_delta_perc_diversions Coefficient \code{\link{surv_juv_outmigration_sac_delta}} for \code{perc_diversions} variable
-#' @param .surv_juv_outmigration_sac_delta_medium Size related intercept for \code{\link{surv_juv_outmigration_sac_delta}} medium sized fish
-#' @param .surv_juv_outmigration_sac_delta_large Size related intercept for \code{\link{surv_juv_outmigration_sac_delta}} large sized fish
 #' @param .surv_juv_outmigration_san_joaquin_medium Size related intercept for \code{\link{surv_juv_outmigration_san_joaquin}} medium sized fish
 #' @param .surv_juv_outmigration_san_joaquin_large Size related intercept for \code{\link{surv_juv_outmigration_san_joaquin}} large sized fish
 #' @param min_survival_rate estimated survival rate if temperature threshold is exceeded
-#' @param surv_juv_outmigration_sac_delta_model_weights weights for competing models
+#' @param stochastic \code{TRUE} \code{FALSE} value indicating if model is being run stochastically
 #' @source IP-117068
 #' @export
 get_migratory_survival <- function(year, month,
@@ -702,23 +656,10 @@ get_migratory_survival <- function(year, month,
                                    avg_temp_delta,
                                    avg_temp,
                                    delta_proportion_diverted,
-                                   ..surv_juv_outmigration_sac_delta_intercept_one,
-                                   ..surv_juv_outmigration_sac_delta_intercept_two,
-                                   ..surv_juv_outmigration_sac_delta_intercept_three,
-                                   .surv_juv_outmigration_sac_delta_delta_flow,
-                                   .surv_juv_outmigration_sac_delta_avg_temp,
-                                   .surv_juv_outmigration_sac_delta_perc_diversions,
-                                   .surv_juv_outmigration_sac_delta_medium,
-                                   .surv_juv_outmigration_sac_delta_large,
                                    ..surv_juv_outmigration_sj_int,
-                                   ..surv_juv_outmigration_sac_int_one,
-                                   ..surv_juv_outmigration_sac_prop_diversions,
-                                   ..surv_juv_outmigration_sac_total_diversions,
-                                   ..surv_juv_outmigration_sac_int_two,
                                    .surv_juv_outmigration_san_joaquin_medium,
                                    .surv_juv_outmigration_san_joaquin_large,
                                    min_survival_rate,
-                                   surv_juv_outmigration_sac_delta_model_weights,
                                    stochastic) {
 
   aveT20 <- boot::inv.logit(-14.32252 + 0.72102 * avg_temp[ , month , year])
@@ -729,22 +670,7 @@ get_migratory_survival <- function(year, month,
     maxT25 <- rbinom(31, 1, maxT25)
   }
 
-  delta_survival <- surv_juv_outmigration_delta(
-    prop_DCC_closed = cc_gates_prop_days_closed[month],
-    hor_barr = 0,
-    freeport_flow = freeport_flows[month, year],
-    vernalis_flow = vernalis_flows[month, year],
-    stockton_flow = stockton_flows[month, year],
-    vernalis_temperature = vernalis_temps[month, year],
-    prisoners_point_temperature = prisoners_point_temps[month, year],
-    CVP_exp = CVP_exports[month, year],
-    SWP_exp = SWP_exports[month, year],
-    trap_trans = 0) # newDsurv
-
   u_sac_flow <- upper_sacramento_flows[month, year]
-  sj_migration_surv <- surv_juv_outmigration_san_joaquin(..surv_juv_outmigration_sj_int = ..surv_juv_outmigration_sj_int,
-                                                         .medium = .surv_juv_outmigration_san_joaquin_medium,
-                                                         .large = .surv_juv_outmigration_san_joaquin_large)
 
   uppermid_sac_migration_surv <- surv_juv_outmigration_sac(flow_cms = u_sac_flow)
 
@@ -752,37 +678,39 @@ get_migratory_survival <- function(year, month,
 
   lower_sac_migration_surv <- surv_juv_outmigration_sac(flow_cms = u_sac_flow)
 
-  sac_delta_migration_surv <- surv_juv_outmigration_sac_delta(delta_flow = delta_inflow[month, year, ],
-                                                              avg_temp = avg_temp_delta[month, year, ],
-                                                              perc_diversions = delta_proportion_diverted[month, year, ] * 100,
-                                                              ..intercept_one = ..surv_juv_outmigration_sac_delta_intercept_one,
-                                                              ..intercept_two = ..surv_juv_outmigration_sac_delta_intercept_two,
-                                                              ..intercept_three = ..surv_juv_outmigration_sac_delta_intercept_three,
-                                                              .delta_flow = .surv_juv_outmigration_sac_delta_delta_flow,
-                                                              .avg_temp = .surv_juv_outmigration_sac_delta_avg_temp,
-                                                              .perc_diversions = .surv_juv_outmigration_sac_delta_perc_diversions,
-                                                              .medium = .surv_juv_outmigration_sac_delta_medium,
-                                                              .large = .surv_juv_outmigration_sac_delta_large,
-                                                              model_weights = surv_juv_outmigration_sac_delta_model_weights) #Sac.Delt.S
-
-  bay_delta_migration_surv <- mean(c(0.43, 0.46, 0.26, 0.25, 0.39)) # Bay.S Chipps island to bay
-
   bp_surv <- sqrt(surv_juv_bypass(max_temp_thresh = maxT25[22],
                                   avg_temp_thresh = aveT20[22],
                                   high_predation = 0,
                                   min_survival_rate = min_survival_rate,
                                   stochastic = stochastic))
 
+  sj_migration_surv <- surv_juv_outmigration_san_joaquin(..surv_juv_outmigration_sj_int = ..surv_juv_outmigration_sj_int,
+                                                         .medium = .surv_juv_outmigration_san_joaquin_medium,
+                                                         .large = .surv_juv_outmigration_san_joaquin_large)
+
+  delta_survival <- surv_juv_outmigration_delta(prop_DCC_closed = cc_gates_prop_days_closed[month],
+                                                hor_barr = 0,
+                                                freeport_flow = freeport_flows[month, year],
+                                                vernalis_flow = vernalis_flows[month, year],
+                                                stockton_flow = stockton_flows[month, year],
+                                                vernalis_temperature = vernalis_temps[month, year],
+                                                prisoners_point_temperature = prisoners_point_temps[month, year],
+                                                CVP_exp = CVP_exports[month, year],
+                                                SWP_exp = SWP_exports[month, year],
+                                                trap_trans = 0) # newDsurv
+
+  bay_delta_migration_surv <- mean(c(0.43, 0.46, 0.26, 0.25, 0.39)) # Bay.S Chipps island to bay
+
+
   return(
     list(
-      delta = pmin(delta_survival, 1),
-      san_joaquin = pmin(sj_migration_surv, 1),
       uppermid_sac = pmin(uppermid_sac_migration_surv, 1),
       lowermid_sac = pmin(lowermid_sac_migration_surv, 1),
       lower_sac = pmin(lower_sac_migration_surv, 1),
       sutter = pmin(bp_surv, 1),
       yolo = pmin(bp_surv, 1),
-      sac_delta = pmin(sac_delta_migration_surv, 1),
+      san_joaquin = pmin(sj_migration_surv, 1),
+      delta = pmin(delta_survival, 1),
       bay_delta = pmin(bay_delta_migration_surv, 1)
     ))
 }

@@ -6,7 +6,8 @@
 #' @param seeds The default value is NULL runs the model in seeding mode,
 #' returning a 31 by 25 matrix with the first four years of seeded adults. This
 #' returned value can be fed into the model again as the value for the seeds argument
-#' @param ..params Parameters for model and submodels
+#' @param ..params Parameters for model and submodels. Defaults to \code{fallRunDSM::\code{\link{params}}}.
+#' @param stochastic \code{TRUE} \code{FALSE} value indicating if model should be run stochastically. Defaults to \code{FALSE}.
 #' @source IP-117068
 #' @examples
 #' winter_run_seeds <- winterRunDSM::winter_run_model(mode = "seed")
@@ -65,17 +66,6 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
     proportion_natural = matrix(NA_real_, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20))
   )
   
-  # initialize 31 x 4 matrices for natal fish, migrants, and ocean fish
-  lower_mid_sac_fish <- matrix(0, nrow = 20, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:20], winterRunDSM::size_class_labels))
-  lower_sac_fish <- matrix(0, nrow = 27, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:27], winterRunDSM::size_class_labels))
-  upper_mid_sac_fish <- matrix(0, nrow = 15, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:15], winterRunDSM::size_class_labels))
-  sutter_fish <- matrix(0, nrow = 15, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:15], winterRunDSM::size_class_labels))
-  yolo_fish <- matrix(0, nrow = 20, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:20], winterRunDSM::size_class_labels))
-  san_joaquin_fish <- matrix(0, nrow = 3, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[28:30], winterRunDSM::size_class_labels))
-  north_delta_fish <- matrix(0, nrow = 23, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:23], winterRunDSM::size_class_labels))
-  south_delta_fish <- matrix(0, nrow = 31, ncol = 4, dimnames = list(winterRunDSM::watershed_labels, winterRunDSM::size_class_labels))
-  juveniles_at_chipps <- matrix(0, nrow = 31, ncol = 4, dimnames = list(winterRunDSM::watershed_labels, winterRunDSM::size_class_labels))
-  
   if (mode == 'calibrate') {
     calculated_adults <- matrix(0, nrow = 31, ncol = 30)
   }
@@ -94,6 +84,18 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
   for (year in 1:simulation_length) {
     adults_in_ocean <- numeric(31)
     
+    # initialize 31 x 4 matrices for natal fish, migrants, and ocean fish
+    lower_mid_sac_fish <- matrix(0, nrow = 20, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:20], winterRunDSM::size_class_labels))
+    lower_sac_fish <- matrix(0, nrow = 27, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:27], winterRunDSM::size_class_labels))
+    upper_mid_sac_fish <- matrix(0, nrow = 15, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:15], winterRunDSM::size_class_labels))
+    sutter_fish <- matrix(0, nrow = 15, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:15], winterRunDSM::size_class_labels))
+    yolo_fish <- matrix(0, nrow = 20, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:20], winterRunDSM::size_class_labels))
+    san_joaquin_fish <- matrix(0, nrow = 3, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[28:30], winterRunDSM::size_class_labels))
+    north_delta_fish <- matrix(0, nrow = 23, ncol = 4, dimnames = list(winterRunDSM::watershed_labels[1:23], winterRunDSM::size_class_labels))
+    south_delta_fish <- matrix(0, nrow = 31, ncol = 4, dimnames = list(winterRunDSM::watershed_labels, winterRunDSM::size_class_labels))
+    juveniles_at_chipps <- matrix(0, nrow = 31, ncol = 4, dimnames = list(winterRunDSM::watershed_labels, winterRunDSM::size_class_labels))
+    
+    
     avg_ocean_transition_month <- ocean_transition_month(stochastic = stochastic) # 2
     
     hatch_adults <- if (stochastic) {
@@ -106,11 +108,11 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                     month_return_proportions = ..params$month_return_proportions,
                                     prop_flow_natal = ..params$prop_flow_natal,
                                     south_delta_routed_watersheds = ..params$south_delta_routed_watersheds,
-                                    cc_gates_days_closed = ..params$cc_gates_days_closed,
                                     gates_overtopped = ..params$gates_overtopped,
                                     tisdale_bypass_watershed = ..params$tisdale_bypass_watershed,
                                     yolo_bypass_watershed = ..params$yolo_bypass_watershed,
                                     migratory_temperature_proportion_over_20 = ..params$migratory_temperature_proportion_over_20,
+                                    natural_adult_removal_rate = ..params$natural_adult_removal_rate,
                                     ..surv_adult_enroute_int = ..params$..surv_adult_enroute_int,
                                     .adult_stray_intercept = ..params$.adult_stray_intercept,
                                     .adult_stray_wild = ..params$.adult_stray_wild,
@@ -249,23 +251,10 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                                    avg_temp_delta = ..params$avg_temp_delta,
                                                    avg_temp = ..params$avg_temp,
                                                    delta_proportion_diverted = ..params$delta_proportion_diverted,
-                                                   ..surv_juv_outmigration_sac_delta_intercept_one = ..params$..surv_juv_outmigration_sac_delta_intercept_one,
-                                                   ..surv_juv_outmigration_sac_delta_intercept_two = ..params$..surv_juv_outmigration_sac_delta_intercept_two,
-                                                   ..surv_juv_outmigration_sac_delta_intercept_three = ..params$..surv_juv_outmigration_sac_delta_intercept_three,
-                                                   .surv_juv_outmigration_sac_delta_delta_flow = ..params$.surv_juv_outmigration_sac_delta_delta_flow,
-                                                   .surv_juv_outmigration_sac_delta_avg_temp = ..params$.surv_juv_outmigration_sac_delta_avg_temp,
-                                                   .surv_juv_outmigration_sac_delta_perc_diversions = ..params$.surv_juv_outmigration_sac_delta_perc_diversions,
-                                                   .surv_juv_outmigration_sac_delta_medium = ..params$.surv_juv_outmigration_sac_delta_medium,
-                                                   .surv_juv_outmigration_sac_delta_large = ..params$.surv_juv_outmigration_sac_delta_large,
                                                    ..surv_juv_outmigration_sj_int = ..params$..surv_juv_outmigration_sj_int,
-                                                   ..surv_juv_outmigration_sac_int_one = ..params$..surv_juv_outmigration_sac_int_one,
-                                                   ..surv_juv_outmigration_sac_prop_diversions = ..params$..surv_juv_outmigration_sac_prop_diversions,
-                                                   ..surv_juv_outmigration_sac_total_diversions = ..params$..surv_juv_outmigration_sac_total_diversions,
-                                                   ..surv_juv_outmigration_sac_int_two = ..params$..surv_juv_outmigration_sac_int_two,
                                                    .surv_juv_outmigration_san_joaquin_medium = ..params$.surv_juv_outmigration_san_joaquin_medium,
                                                    .surv_juv_outmigration_san_joaquin_large = ..params$.surv_juv_outmigration_san_joaquin_large,
                                                    min_survival_rate = ..params$min_survival_rate,
-                                                   surv_juv_outmigration_sac_delta_model_weights = ..params$surv_juv_outmigration_sac_delta_model_weights,
                                                    stochastic = stochastic)
       
       migrants <- matrix(0, nrow = 31, ncol = 4, dimnames = list(winterRunDSM::watershed_labels, winterRunDSM::size_class_labels))
@@ -297,7 +286,6 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                             cc_gates_days_closed = ..params$cc_gates_days_closed,
                                             rearing_survival_delta = rearing_survival$delta,
                                             migratory_survival_delta = migratory_survival$delta,
-                                            migratory_survival_sac_delta = migratory_survival$sac_delta,
                                             migratory_survival_bay_delta = migratory_survival$bay_delta,
                                             juveniles_at_chipps = juveniles_at_chipps,
                                             growth_rates = ..params$growth_rates,
@@ -354,13 +342,14 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                              territory_size = ..params$territory_size,
                                              stochastic = stochastic)
         
-        migrants[1:15, ] <- upper_mid_sac_fish$migrants
         
         sutter_fish <- route_bypass(bypass_fish = sutter_fish + upper_mid_sac_fish$detoured,
                                     bypass_habitat = habitat$sutter,
                                     migration_survival_rate = migratory_survival$sutter,
                                     territory_size = ..params$territory_size,
                                     stochastic = stochastic)
+        
+        migrants[1:15, ] <- upper_mid_sac_fish$migrants + sutter_fish$migrants
         
         upper_mid_sac_fish <- rear(juveniles = upper_mid_sac_fish$inchannel,
                                    survival_rate = rearing_survival$inchannel[16, ],
@@ -605,7 +594,6 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                             cc_gates_days_closed = ..params$cc_gates_days_closed,
                                             rearing_survival_delta = rearing_survival$delta,
                                             migratory_survival_delta = migratory_survival$delta,
-                                            migratory_survival_sac_delta = migratory_survival$sac_delta,
                                             migratory_survival_bay_delta = migratory_survival$bay_delta,
                                             juveniles_at_chipps = juveniles_at_chipps,
                                             growth_rates = ..params$growth_rates,

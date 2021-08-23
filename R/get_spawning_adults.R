@@ -6,7 +6,6 @@
 #' @param month_return_proportions The proportion of fish returning for each month
 #' @param prop_flow_natal More details at \code{\link[DSMflow]{proportion_flow_natal}}
 #' @param south_delta_routed_watersheds More details at \code{\link[DSMhabitat]{south_delta_routed_watersheds}}
-#' @param cc_gates_days_closed More details at \code{\link[DSMflow]{delta_cross_channel_closed}}
 #' @param gates_overtopped More details at \code{\link[DSMflow]{gates_overtopped}}
 #' @param tisdale_bypass_watershed More details at \code{\link[DSMhabitat]{tisdale_bypass_watershed}}
 #' @param yolo_bypass_watershed More details at \code{\link[DSMhabitat]{yolo_bypass_watershed}}
@@ -27,7 +26,7 @@ get_spawning_adults <- function(year, adults, hatch_adults, mode,
                                 month_return_proportions,
                                 prop_flow_natal,
                                 south_delta_routed_watersheds,
-                                cc_gates_days_closed,
+                                natural_adult_removal_rate, 
                                 gates_overtopped,
                                 tisdale_bypass_watershed,
                                 yolo_bypass_watershed,
@@ -60,9 +59,9 @@ get_spawning_adults <- function(year, adults, hatch_adults, mode,
       if (stochastic) {
         rbinom(n = 31,
                size = round(adults_by_month[, month]),
-               prob = 1 - winterRunDSM::params$natural_adult_removal_rate)
+               prob = 1 - natural_adult_removal_rate)
       } else {
-        round(adults_by_month[, month] * (1 - winterRunDSM::params$natural_adult_removal_rate))
+        round(adults_by_month[, month] * (1 - natural_adult_removal_rate))
       }
     })
 
@@ -122,9 +121,9 @@ get_spawning_adults <- function(year, adults, hatch_adults, mode,
 
     surviving_natural_adults_by_month <- sapply(1:4, function(month) {
       if (stochastic) {
-        rbinom(31, round(adults_survived_to_spawning[, month]), (1 - winterRunDSM::params$natural_adult_removal_rate))
+        rbinom(31, round(adults_survived_to_spawning[, month]), (1 - natural_adult_removal_rate))
       } else {
-        round(adults_survived_to_spawning[, month] * (1 - winterRunDSM::params$natural_adult_removal_rate))
+        round(adults_survived_to_spawning[, month] * (1 - natural_adult_removal_rate))
       }
     })
 
