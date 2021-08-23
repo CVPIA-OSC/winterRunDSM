@@ -15,7 +15,7 @@ get_spawning_adults(
   month_return_proportions,
   prop_flow_natal,
   south_delta_routed_watersheds,
-  cc_gates_days_closed,
+  natural_adult_removal_rate,
   gates_overtopped,
   tisdale_bypass_watershed,
   yolo_bypass_watershed,
@@ -45,8 +45,6 @@ get_spawning_adults(
 \item{prop_flow_natal}{More details at \code{\link[DSMflow]{proportion_flow_natal}}}
 
 \item{south_delta_routed_watersheds}{More details at \code{\link[DSMhabitat]{south_delta_routed_watersheds}}}
-
-\item{cc_gates_days_closed}{More details at \code{\link[DSMflow]{delta_cross_channel_closed}}}
 
 \item{gates_overtopped}{More details at \code{\link[DSMflow]{gates_overtopped}}}
 

@@ -92,14 +92,6 @@ params <- list(
   .surv_juv_outmigration_san_joaquin_medium = 1.48,
   .surv_juv_outmigration_san_joaquin_large = 2.223,
   
-  # Sac delta outmigration coefficients and variables
-  .surv_juv_outmigration_sac_delta_delta_flow = 0.0013,
-  .surv_juv_outmigration_sac_delta_avg_temp = 0.386,
-  .surv_juv_outmigration_sac_delta_perc_diversions = -0.033,
-  .surv_juv_outmigration_sac_delta_medium = 1.48,
-  .surv_juv_outmigration_sac_delta_large = 2.223,
-  surv_juv_outmigration_sac_delta_model_weights = rep(1/3, 3),
-  
   ## Variable from load baseline data
   # DSMflow variables -----
   freeport_flows = DSMflow::freeport_flow,
