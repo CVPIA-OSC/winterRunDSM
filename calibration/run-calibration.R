@@ -10,7 +10,7 @@ source("calibration/update-params.R")
 
 params <- DSMCalibrationData::set_synth_years(winterRunDSM::params)
 
-current_best_solution <- read_rds("calibration/calibration-result.rds")
+current_best_solution <- read_rds("calibration/calibrated-results.rds")
 
 # Perform calibration --------------------
 res <- ga(type = "real-valued",
@@ -20,7 +20,7 @@ res <- ga(type = "real-valued",
               seeds = DSMCalibrationData::grandtab_imputed$winter,
               params = params,
               x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10],
-              x[11], x[12], x[13], x[14], x[15]
+              x[11], x[12]
             ),
           lower = c(2.5, rep(-3.5, 14)),
           upper = rep(3.5, 15),
@@ -28,13 +28,10 @@ res <- ga(type = "real-valued",
           maxiter = 10000,
           run = 50,
           parallel = TRUE,
-          pmutation = .4, 
-          suggestions = current_best_solution@soltuion)
+          pmutation = .4)
 
 readr::write_rds(res, paste0("calibration/fits/result-", format(Sys.time(), "%Y-%m-%d_%H%M%S"), ".rds"))
 
-
-?ga
 # Evaluate Results ------------------------------------
 
 keep <- c(1, 3)

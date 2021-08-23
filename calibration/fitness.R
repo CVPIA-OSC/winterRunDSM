@@ -14,9 +14,6 @@ winter_run_fitness <- function(
   surv_juv_delta_contact_points,
   surv_juv_delta_total_diverted,
   surv_juv_outmigration_sj_int,
-  surv_juv_outmigration_sac_delta_intercept_one,
-  surv_juv_outmigration_sac_delta_intercept_two,
-  surv_juv_outmigration_sac_delta_intercept_three,
   ocean_entry_success_int
 ) {
   
@@ -33,9 +30,6 @@ winter_run_fitness <- function(
   params_init$..surv_juv_delta_contact_points = surv_juv_delta_contact_points
   params_init$..surv_juv_delta_total_diverted = surv_juv_delta_total_diverted
   params_init$..surv_juv_outmigration_sj_int = surv_juv_outmigration_sj_int
-  params_init$..surv_juv_outmigration_sac_delta_intercept_one = surv_juv_outmigration_sac_delta_intercept_one
-  params_init$..surv_juv_outmigration_sac_delta_intercept_two = surv_juv_outmigration_sac_delta_intercept_two
-  params_init$..surv_juv_outmigration_sac_delta_intercept_three = surv_juv_outmigration_sac_delta_intercept_three
   params_init$..ocean_entry_success_int = rep(ocean_entry_success_int, 31)
   
   keep <- c(1, 3)
@@ -62,3 +56,12 @@ winter_run_fitness <- function(
   )
 }
 
+# x <- runif(12)
+# 
+# print(winter_run_fitness(
+#   known_adults = DSMCalibrationData::grandtab_observed$winter,
+#   seeds = DSMCalibrationData::grandtab_imputed$winter,
+#   params = params,
+#   x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10],
+#   x[11], x[12]
+# ))

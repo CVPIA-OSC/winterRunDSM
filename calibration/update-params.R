@@ -11,10 +11,7 @@ update_params <- function(x, params) {
   params$..surv_juv_delta_contact_points = x[9]
   params$..surv_juv_delta_total_diverted = x[10]
   params$..surv_juv_outmigration_sj_int = x[11]
-  params$..surv_juv_outmigration_sac_delta_intercept_one = x[12]
-  params$..surv_juv_outmigration_sac_delta_intercept_two = x[13]
-  params$..surv_juv_outmigration_sac_delta_intercept_three = x[14]
-  params$..ocean_entry_success_int = rep(x[15], 31)
+  params$..ocean_entry_success_int = rep(x[12], 31)
 
   return(params)
 
