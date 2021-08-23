@@ -75,8 +75,7 @@ usethis::use_data(hatchery_allocation, overwrite = TRUE)
 
 original_groups <- read_csv("data-raw/misc/Grouping.csv")
 
-diversity_group <- original_groups$DiversityGroup
-diversity_group[c(18,19,20,23,26,27)] <- 5 # from model delievered to FlowWest
+diversity_group <- original_groups$diversity_group
 names(diversity_group) <- original_groups$watershed
 usethis::use_data(diversity_group, overwrite = TRUE)
 
