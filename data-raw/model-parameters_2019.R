@@ -127,10 +127,10 @@ params_2019 <- list(
   migratory_temperature_proportion_over_20 = DSMtemperature::migratory_temperature_proportion_over_20,
 
   # DSMhabitat variables -----
-  spawning_habitat = DSMhabitat::fr_spawn,
-  inchannel_habitat_fry = DSMhabitat::fr_fry, # vary by run
-  inchannel_habitat_juvenile = DSMhabitat::fr_juv, # vary by run
-  floodplain_habitat = DSMhabitat::fr_fp, # vary by run
+  spawning_habitat = DSMhabitat::wr_spawn,
+  inchannel_habitat_fry = DSMhabitat::wr_fry, # vary by run
+  inchannel_habitat_juvenile = DSMhabitat::wr_juv, # vary by run
+  floodplain_habitat = DSMhabitat::wr_fp, # vary by run
   weeks_flooded = DSMhabitat::weeks_flooded,
   delta_habitat = DSMhabitat::delta_habitat,
   sutter_habitat = DSMhabitat::sutter_habitat,
