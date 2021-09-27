@@ -63,7 +63,13 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
     # SIT METRICS
     spawners = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20)),
     juvenile_biomass = matrix(0, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20)),
-    proportion_natural = matrix(NA_real_, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20))
+    proportion_natural = matrix(NA_real_, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20)),
+    
+    # debug output 
+    juveniles = data.frame(),
+    rearing_survival = data.frame(), # keeo track of survival
+    floodplain_survival = data.frame(),
+    migrants_at_golden_gate = data.frame()
   )
   
   if (mode == 'calibrate') {
@@ -169,6 +175,7 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                              .adult_prespawn_int = ..params$.adult_prespawn_int,
                                              .deg_day = ..params$.adult_prespawn_deg_day)
     
+    # TODO add trace here
     juveniles <- spawn_success(escapement = init_adults,
                                adult_prespawn_survival = prespawn_survival,
                                egg_to_fry_survival = egg_to_fry_surv,
@@ -178,6 +185,17 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                redd_size = ..params$spawn_success_redd_size,
                                fecundity = ..params$spawn_success_fecundity,
                                stochastic = stochastic)
+    
+    output$juveniles <- 
+      rbind(output$juveniles, 
+            data.frame(
+              year = rep(year, 31*4),
+              watershed = rep(winterRunDSM::watershed_labels, 4),
+              size_class = rep(c("s", "m", "l", "vl"), each = 31),
+              juveniles = as.vector(juveniles) # collapses vector by column
+            )
+      )
+    
     
     for (month in c(9:12, 1:5)) {
       if (month %in% 1:5) juv_dynamics_year <- year + 1 else juv_dynamics_year <- year
@@ -189,6 +207,7 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                              yolo_habitat = ..params$yolo_habitat,
                              delta_habitat = ..params$delta_habitat)
       
+      # TODO add trace here
       rearing_survival <- get_rearing_survival(juv_dynamics_year, month,
                                                survival_adjustment = scenario_data$survival_adjustment,
                                                mode = mode,
@@ -236,7 +255,30 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                                .surv_juv_delta_large = ..params$.surv_juv_delta_large,
                                                min_survival_rate = ..params$min_survival_rate,
                                                stochastic = stochastic)
+      # DEBUG
+      output$rearing_survival <- rbind(
+        output$rearing_survival, 
+        data.frame(
+          year = rep(year, 31*4),
+          month = rep(month, 31*4),
+          watershed = rep(winterRunDSM::watershed_labels, 4),
+          size_class = rep(c("s", "m", "l", "vl"), each = 31),
+          survival = as.vector(rearing_survival$inchannel) # collapses vector by column
+        )
+      )
       
+      output$floodplain_survival <- rbind(
+        output$floodplain_survival, 
+        data.frame(
+          year = rep(year, 31*4),
+          month = rep(month, 31*4),
+          watershed = rep(winterRunDSM::watershed_labels, 4),
+          size_class = rep(c("s", "m", "l", "vl"), each = 31),
+          survival = as.vector(rearing_survival$floodplain) # collapses vector by column
+        )
+      )
+      
+      # TODO add trace here
       migratory_survival <- get_migratory_survival(juv_dynamics_year, month,
                                                    cc_gates_prop_days_closed = ..params$cc_gates_prop_days_closed,
                                                    freeport_flows = ..params$freeport_flows,
@@ -606,6 +648,19 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
         south_delta_fish <- delta_fish$south_delta_fish
         juveniles_at_chipps <- delta_fish$juveniles_at_chipps
       }
+      
+      # DEBUG
+      output$migrants_at_golden_gate <- rbind(
+        output$migrants_at_golden_gate, 
+        data.frame(
+          year = rep(year, 31*4),
+          month = rep(month, 31*4),
+          watershed = rep(winterRunDSM::watershed_labels, 4),
+          size_class = rep(c("s", "m", "l", "vl"), each = 31),
+          migrants_at_golden_gate = as.vector(migrants_at_golden_gate) # collapses vector by column
+        )
+        
+      )
       
       adults_in_ocean <- adults_in_ocean + ocean_entry_success(migrants = migrants_at_golden_gate,
                                                                month = month,
