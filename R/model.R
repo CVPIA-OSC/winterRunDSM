@@ -67,9 +67,11 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
     
     # debug output 
     juveniles = data.frame(),
-    rearing_survival = data.frame(), # keeo track of survival
-    floodplain_survival = data.frame(),
-    migrants_at_golden_gate = data.frame()
+    battle_rearing_survival = data.frame(),
+    battle_floodplain_survival = data.frame(),
+    battle_inchannel = data.frame(),
+    battle_floodplain = data.frame(),
+    battle_migrants = data.frame()
   )
   
   if (mode == 'calibrate') {
@@ -189,10 +191,10 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
     output$juveniles <- 
       rbind(output$juveniles, 
             data.frame(
-              year = rep(year, 31*4),
-              watershed = rep(winterRunDSM::watershed_labels, 4),
-              size_class = rep(c("s", "m", "l", "vl"), each = 31),
-              juveniles = as.vector(juveniles) # collapses vector by column
+              year = rep(year, 4),
+              watershed = rep(winterRunDSM::watershed_labels[3], 4),
+              size_class = c("s", "m", "l", "vl"),
+              juveniles = as.vector(juveniles[3, ]) # collapses vector by column
             )
       )
     
@@ -256,25 +258,25 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                                min_survival_rate = ..params$min_survival_rate,
                                                stochastic = stochastic)
       # DEBUG
-      output$rearing_survival <- rbind(
-        output$rearing_survival, 
+      output$battle_rearing_survival <- rbind(
+        output$battle_rearing_survival, 
         data.frame(
-          year = rep(year, 31*4),
-          month = rep(month, 31*4),
-          watershed = rep(winterRunDSM::watershed_labels, 4),
-          size_class = rep(c("s", "m", "l", "vl"), each = 31),
-          survival = as.vector(rearing_survival$inchannel) # collapses vector by column
+          year = rep(year, 4),
+          month = rep(month, 4),
+          watershed = rep(winterRunDSM::watershed_labels[3], 4),
+          size_class = c("s", "m", "l", "vl"),
+          survival = as.vector(rearing_survival$inchannel[3, ]) # collapses vector by column
         )
       )
       
-      output$floodplain_survival <- rbind(
-        output$floodplain_survival, 
+      output$battle_floodplain_survival <- rbind(
+        output$battle_floodplain_survival, 
         data.frame(
-          year = rep(year, 31*4),
-          month = rep(month, 31*4),
-          watershed = rep(winterRunDSM::watershed_labels, 4),
-          size_class = rep(c("s", "m", "l", "vl"), each = 31),
-          survival = as.vector(rearing_survival$floodplain) # collapses vector by column
+          year = rep(year, 4),
+          month = rep(month, 4),
+          watershed = rep(winterRunDSM::watershed_labels[3], 4),
+          size_class = c("s", "m", "l", "vl"),
+          survival = as.vector(rearing_survival$floodplain[3, ]) # collapses vector by column
         )
       )
       
@@ -356,6 +358,40 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                       .pulse_movement_very_large_pulse = ..params$.pulse_movement_very_large_pulse,
                                       territory_size = ..params$territory_size,
                                       stochastic = stochastic)
+        
+        # Battle Debug
+        output$battle_inchannel <- rbind(
+          output$battle_inchannel, 
+          data.frame(
+            year = rep(year, 4),
+            month = rep(month, 4),
+            watershed = rep(winterRunDSM::watershed_labels[3], 4),
+            size_class = c("s", "m", "l", "vl"),
+            juveniles = as.vector(upper_sac_trib_fish$inchannel[3, ]) # collapses vector by column
+          )
+        )
+        
+        output$battle_floodplain <- rbind(
+          output$battle_floodplain, 
+          data.frame(
+            year = rep(year, 4),
+            month = rep(month, 4),
+            watershed = rep(winterRunDSM::watershed_labels[3], 4),
+            size_class = c("s", "m", "l", "vl"),
+            juveniles = as.vector(upper_sac_trib_fish$floodplain[3, ]) # collapses vector by column
+          )
+        )
+        
+        output$battle_migrants <- rbind(
+          output$battle_migrants, 
+          data.frame(
+            year = rep(year, 4),
+            month = rep(month, 4),
+            watershed = rep(winterRunDSM::watershed_labels[3], 4),
+            size_class = c("s", "m", "l", "vl"),
+            juveniles = as.vector(upper_sac_trib_fish$migrants[3, ]) # collapses vector by column
+          )
+        )
         
         upper_sac_trib_rear <- rear(juveniles = upper_sac_trib_fish$inchannel,
                                     survival_rate = rearing_survival$inchannel[1:15, ],
@@ -648,19 +684,6 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
         south_delta_fish <- delta_fish$south_delta_fish
         juveniles_at_chipps <- delta_fish$juveniles_at_chipps
       }
-      
-      # DEBUG
-      output$migrants_at_golden_gate <- rbind(
-        output$migrants_at_golden_gate, 
-        data.frame(
-          year = rep(year, 31*4),
-          month = rep(month, 31*4),
-          watershed = rep(winterRunDSM::watershed_labels, 4),
-          size_class = rep(c("s", "m", "l", "vl"), each = 31),
-          migrants_at_golden_gate = as.vector(migrants_at_golden_gate) # collapses vector by column
-        )
-        
-      )
       
       adults_in_ocean <- adults_in_ocean + ocean_entry_success(migrants = migrants_at_golden_gate,
                                                                month = month,
