@@ -303,7 +303,8 @@ get_rearing_survival <- function(year, month,
   aveT20D <- boot::inv.logit(-18.30017 + 0.96991 * avg_temp_delta[month, year, ])
   maxT25D <- boot::inv.logit(-157.537 + 6.998 * avg_temp_delta[month, year, ])
   
-  aveT20[c(1, 3)] <- 0
+  # NOTE: this is a temporary fix, based on the analysis from the hec5q output there
+  # are no days where max temp thresh or the ave temp thresh are exceeded.
   maxT25[c(1, 3)] <- 0
 
   if (stochastic) {

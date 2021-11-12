@@ -29,7 +29,7 @@ adult_seed_values <- DSMCalibrationData::mean_escapement_2013_2017 %>%
 rownames(adult_seeds) <- watershed_labels
 
 adult_seeds[ , 1] <- adult_seed_values
-adult_seeds["Battle Creek", 1] <- 600
+adult_seeds["Battle Creek", 1] <- 1200
 
 usethis::use_data(adult_seeds, overwrite = TRUE)
 
