@@ -267,7 +267,7 @@ The algorithm is always run in parallel.
 The results for calibration are below:
 
 ```{r, echo=FALSE, include=FALSE}
-calib_2021_results <- read_rds("../calibration/calibration-results-2021-10-11_125845.rds")@solution
+calib_2021_results <- read_rds("../calibration/calibration-results-2021-10-11_125845.rds")@solution[1, ]
 ```
 
 **Spawning Adults**
@@ -276,11 +276,6 @@ calib_2021_results <- read_rds("../calibration/calibration-results-2021-10-11_12
 
 
 **Rearing Survival Intercepts**
-
-Intercepts listed below are supplied into the model as a vector `..surv_juv_int`
-
-  params$..ocean_entry_success_int = rep(x[11], 31)
-
 
 * All Watersheds = `r calib_2021_results[2]`
 * `..surv_juv_rear_contact_points` = `r calib_2021_results[3]`
@@ -298,4 +293,4 @@ Intercepts listed below are supplied into the model as a vector `..surv_juv_int`
 **Ocean Entry Success**
 
 * All watersheds = `r calib_2021_results[11]`
-
+K
