@@ -4,7 +4,6 @@ winter_run_fitness <- function(
   seeds,
   params,
   surv_adult_enroute_int,
-  surv_egg_to_fry_mean_egg_temp_effect,
   surv_juv_rear_int,
   surv_juv_rear_contact_points,
   surv_juv_rear_prop_diversions,
@@ -20,7 +19,6 @@ winter_run_fitness <- function(
   params_init <- params
   
   params_init$..surv_adult_enroute_int = surv_adult_enroute_int
-  params_init$..surv_egg_to_fry_mean_egg_temp_effect = surv_egg_to_fry_mean_egg_temp_effect
   params_init$..surv_juv_rear_int = rep(surv_juv_rear_int, 31)
   params_init$..surv_juv_rear_contact_points = surv_juv_rear_contact_points
   params_init$..surv_juv_rear_prop_diversions = surv_juv_rear_prop_diversions
@@ -33,11 +31,7 @@ winter_run_fitness <- function(
   params_init$..ocean_entry_success_int = rep(ocean_entry_success_int, 31)
   
   keep <- c(1, 3)
-  # num_obs <- rowSums(!is.na(known_adults[keep, 6:19, drop = FALSE]))
-  # total_obs <- sum(!is.na(known_adults[keep, 6:19, drop = FALSE]))
-  # weights <- num_obs / total_obs
 
-  
   tryCatch({
     preds <- winter_run_model(mode = "calibrate",
                               seeds = seeds,
@@ -55,13 +49,3 @@ winter_run_fitness <- function(
   warning = function(w) return(1e12)
   )
 }
-
-# x <- runif(12)
-# 
-# print(winter_run_fitness(
-#   known_adults = DSMCalibrationData::grandtab_observed$winter,
-#   seeds = DSMCalibrationData::grandtab_imputed$winter,
-#   params = params,
-#   x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8], x[9], x[10],
-#   x[11], x[12]
-# ))
