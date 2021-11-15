@@ -1,8 +1,8 @@
 library(tidyverse)
 
 # 2021
-calib_results <- read_rds("calibration/calibrated-results.rds")
-solution <- calib_results@solution
+calib_results <- read_rds("calibration/ga-fit-upsac-and-battle-fixed-egg-effect-scaled-by-mean-2021-10-11_125845.rds")
+solution <- calib_results@solution[1, ]
 
 params <- list(
 
@@ -140,20 +140,22 @@ params <- list(
   prob_strand_early = DSMhabitat::prob_strand_early,
   prob_strand_late = DSMhabitat::prob_strand_late,
   prob_nest_scoured = DSMhabitat::prob_nest_scoured,
+
+  # TODO fix this update through out the model (remove ..)  
+  ..surv_egg_to_fry_mean_egg_temp_effect = winterRunDSM::params_2019$..surv_egg_to_fry_mean_egg_temp_effect,
   
   # Calibration Variables (vary by run)
   ..surv_adult_enroute_int = solution[1],
-  ..surv_egg_to_fry_mean_egg_temp_effect = solution[2],
-  ..surv_juv_rear_int = rep(solution[3], 31),
-  ..surv_juv_rear_contact_points = solution[4],
-  ..surv_juv_rear_prop_diversions = solution[5],
-  ..surv_juv_rear_total_diversions = solution[6],
-  ..surv_juv_bypass_int = solution[7],
-  ..surv_juv_delta_int = solution[8],
-  ..surv_juv_delta_contact_points = solution[9],
-  ..surv_juv_delta_total_diverted = solution[10],
-  ..surv_juv_outmigration_sj_int = solution[11],
-  ..ocean_entry_success_int = rep(solution[12], 31)
+  ..surv_juv_rear_int = rep(solution[2], 31),
+  ..surv_juv_rear_contact_points = solution[3],
+  ..surv_juv_rear_prop_diversions = solution[4],
+  ..surv_juv_rear_total_diversions = solution[5],
+  ..surv_juv_bypass_int = solution[6],
+  ..surv_juv_delta_int = solution[7],
+  ..surv_juv_delta_contact_points = solution[8],
+  ..surv_juv_delta_total_diverted = solution[9],
+  ..surv_juv_outmigration_sj_int = solution[10],
+  ..ocean_entry_success_int = rep(solution[11], 31)
 
 )
 
