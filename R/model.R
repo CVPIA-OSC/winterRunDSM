@@ -292,7 +292,7 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                             territory_size = ..params$territory_size,
                                             stochastic = stochastic)
         
-        
+        juveniles_at_chipps <- delta_fish$juveniles_at_chipps
         migrants_at_golden_gate <- delta_fish$migrants_at_golden_gate
         
       } else {
