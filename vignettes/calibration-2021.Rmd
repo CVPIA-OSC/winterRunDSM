@@ -136,10 +136,7 @@ tibble::tibble(
 We are minimizing the sum of squared errors of simulated natural adults and grandtab 
 adults scaled using simulated proportion natural, normalized by mean escapement. The
 purpose of normalizing is to prevent watersheds with large escapement values from
-dominating the calibration. In addition to normalizing we are adding weights to 
-each error term corresponding to the amount data available at that watershed. Doing
-so will penalize watersheds with more data whose error term is large, but be less
-aggressive with watersheds with less data.
+dominating the calibration. 
 
 All intercepts and watersheds that need calibration are described in the Objective
 section of this document.
@@ -277,7 +274,7 @@ calib_2021_results <- read_rds("../calibration/calibration-results-2021-10-11_12
 
 **Rearing Survival Intercepts**
 
-* All Watersheds = `r calib_2021_results[2]`
+* `..surv_juv_rear_int` (All Watersheds) = `r calib_2021_results[2]`
 * `..surv_juv_rear_contact_points` = `r calib_2021_results[3]`
 * `..surv_juv_rear_prop_diversions` = `r calib_2021_results[4]`
 * `..surv_juv_rear_total_diversions` = `r calib_2021_results[5]`
@@ -292,5 +289,4 @@ calib_2021_results <- read_rds("../calibration/calibration-results-2021-10-11_12
 
 **Ocean Entry Success**
 
-* All watersheds = `r calib_2021_results[11]`
-K
+* `..ocean_entry_success_int` (All watersheds) = `r calib_2021_results[11]`
