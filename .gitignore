@@ -5,3 +5,5 @@
 #man/
 calibration/fits/*
 inst/doc
+.DS*
+
