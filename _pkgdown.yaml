@@ -79,16 +79,21 @@ reference:
 
 navbar:
   structure:
-    left:  [home, reference, news]
+    left:  [home, reference, articles, news]
     right: [github]
   type: default
   left:
   - text: 'Reference'
     href: reference/index.html
+  - text: 'Articles'
+    menu:
+      - text: 'Calibration'
+        href: 'articles/calibration-2021.html'
   - text: 'News'
     href: news/index.html
-
+    
 repo:
  url:
   home: https://github.com/CVPIA-OSC/winterRunDSM
   issue: https://github.com/CVPIA-OSC/winterRunDSM/issues/
+  
