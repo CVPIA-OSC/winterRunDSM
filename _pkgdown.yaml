@@ -79,14 +79,19 @@ reference:
 
 navbar:
   structure:
-    left:  [home, reference, news]
+    left:  [home, reference, articles, news]
     right: [github]
   type: default
   left:
   - text: 'Reference'
     href: reference/index.html
+  - text: 'Articles'
+    menu:
+      - text: 'Sensitivity Analysis'
+        href: 'articles/sensitivity-analysis.html'
   - text: 'News'
     href: news/index.html
+
 
 repo:
  url:
