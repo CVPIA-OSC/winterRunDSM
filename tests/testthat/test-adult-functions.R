@@ -1,8 +1,20 @@
 library(testthat)
 library(winterRunDSM)
+
+# Model state ------------ 
 year <- 1
 month <- 9
-bypass_is_overtopped <- as.logical(params$tisdale_bypass_watershed + params$yolo_bypass_watershed)
+
+
+bypass_is_overtopped <- sapply(1:4, function(month) {
+  # sheds connected to tisdale and sutter gates overtopped
+  tis <- params$gates_overtopped[month, year, 1] * params$tisdale_bypass_watershed
+  # sheds connected to yolo and yolo bypass overtopped
+  yolo <- params$gates_overtopped[month, year, 2] * params$yolo_bypass_watershed
+  
+  as.logical(tis + yolo)
+})
+
 avg_migratory_temp <- rowMeans(params$migratory_temperature_proportion_over_20[ , 10:12])
 accumulated_degree_days <- cbind(jan = rowSums(params$degree_days[ , 1:4, year]),
                                  feb = rowSums(params$degree_days[ , 2:4, year]),
@@ -38,27 +50,28 @@ test_that('The straying function returns the expected values for year 1', {
 })
 
 #tests adult surv_en_route
-expected_surv_en_route <- c(`Upper Sacramento River` = 0.770142230517313, `Antelope Creek` = 0.970142230517313,
-                            `Battle Creek` = 0.970142230517313, `Bear Creek` = 0.970142230517313,
-                            `Big Chico Creek` = 0.970142230517313, `Butte Creek` = 0.970142230517313,
-                            `Clear Creek` = 0.970142230517313, `Cottonwood Creek` = 0.970142230517313,
-                            `Cow Creek` = 0.970142230517313, `Deer Creek` = 0.970142230517313,
-                            `Elder Creek` = 0.970142230517313, `Mill Creek` = 0.970142230517313,
-                            `Paynes Creek` = 0.970142230517313, `Stony Creek` = 0.970142230517313,
-                            `Thomes Creek` = 0.970142230517313, `Upper-mid Sacramento River` = 0.970142230517313,
-                            `Sutter Bypass` = 0.970687700961309, `Bear River` = 0.970142230517313,
-                            `Feather River` = 0.970142230517313, `Yuba River` = 0.970142230517313,
-                            `Lower-mid Sacramento River` = 0.970687700961309, `Yolo Bypass` = 0.970687700961309,
-                            `American River` = 0.970687700961309, `Lower Sacramento River` = 0.970687700961309,
-                            `Calaveras River` = 0.970528189037085, `Cosumnes River` = 0.970528189037085,
-                            `Mokelumne River` = 0.970528189037085, `Merced River` = 0.970408003063303,
-                            `Stanislaus River` = 0.970408003063303, `Tuolumne River` = 0.970408003063303,
-                            `San Joaquin River` = 0.970687700961309)
+expected_surv_en_route <- c(`Upper Sacramento River` = 0.609393012443221, `Antelope Creek` = 0.809393012443221, 
+                            `Battle Creek` = 0.809393012443221, `Bear Creek` = 0.809393012443221, 
+                            `Big Chico Creek` = 0.809393012443221, `Butte Creek` = 0.809393012443221, 
+                            `Clear Creek` = 0.809393012443221, `Cottonwood Creek` = 0.809393012443221, 
+                            `Cow Creek` = 0.809393012443221, `Deer Creek` = 0.809393012443221, 
+                            `Elder Creek` = 0.809393012443221, `Mill Creek` = 0.809393012443221, 
+                            `Paynes Creek` = 0.809393012443221, `Stony Creek` = 0.809393012443221, 
+                            `Thomes Creek` = 0.809393012443221, `Upper-mid Sacramento River` = 0.809393012443221, 
+                            `Sutter Bypass` = 0.812307038089034, `Bear River` = 0.809393012443221, 
+                            `Feather River` = 0.809393012443221, `Yuba River` = 0.809393012443221, 
+                            `Lower-mid Sacramento River` = 0.812307038089034, `Yolo Bypass` = 0.812307038089034, 
+                            `American River` = 0.812307038089034, `Lower Sacramento River` = 0.812307038089034, 
+                            `Calaveras River` = 0.812307038089034, `Cosumnes River` = 0.812307038089034, 
+                            `Mokelumne River` = 0.812307038089034, `Merced River` = 0.812307038089034, 
+                            `Stanislaus River` = 0.812307038089034, `Tuolumne River` = 0.812307038089034, 
+                            `San Joaquin River` = 0.812307038089034)
 
 test_that('The adult enroute survival function returns the expected values for year 1', {
-  expect_equal(surv_adult_enroute(migratory_temp = avg_migratory_temp,
-                                  bypass_overtopped = bypass_is_overtopped,
-                                  adult_harvest = adult_harvest_rate),
+  en_route_temps <- params$migratory_temperature_proportion_over_20[, 1:4]
+  expect_equal(surv_adult_enroute(migratory_temp = en_route_temps[, 1],
+                                  bypass_overtopped = bypass_is_overtopped[, 1],
+                                  adult_harvest = params$.adult_en_route_adult_harvest_rate),
                expected_surv_en_route)
 })
 
