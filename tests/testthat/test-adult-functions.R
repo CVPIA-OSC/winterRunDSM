@@ -235,34 +235,35 @@ test_that("Get spawning adults (seed mode) returns the expected values", {
                                          stochastic = FALSE)
   expect_equal(spawning_adults, expected_spawners)
 })
-# 
-# # Tests spawn success function
-# init_adults <- expected_spawners$init_adults
-# min_spawn_habitat <- apply(spawning_habitat[ , 10:12, year], 1, min)
-# 
-# expected_juveniles <- structure(c(15972966, 0, 1421639, 0, 0, 0, 0, 
-#                                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-#                                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-#                                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-#                                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-#                                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-#                                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), .Dim = c(31L, 4L), .Dimnames = list(
-#                                     c("Upper Sacramento River", "Antelope Creek", "Battle Creek", 
-#                                       "Bear Creek", "Big Chico Creek", "Butte Creek", "Clear Creek", 
-#                                       "Cottonwood Creek", "Cow Creek", "Deer Creek", "Elder Creek", 
-#                                       "Mill Creek", "Paynes Creek", "Stony Creek", "Thomes Creek", 
-#                                       "Upper-mid Sacramento River", "Sutter Bypass", "Bear River", 
-#                                       "Feather River", "Yuba River", "Lower-mid Sacramento River", 
-#                                       "Yolo Bypass", "American River", "Lower Sacramento River", 
-#                                       "Calaveras River", "Cosumnes River", "Mokelumne River", "Merced River", 
-#                                       "Stanislaus River", "Tuolumne River", "San Joaquin River"
-#                                     ), c("fry", "", "", "")))
-# 
-# test_that("spawn success function returns the expected value", {
-#   juveniles <- spawn_success(escapement = init_adults,
-#                              adult_prespawn_survival = expected_prespawn_surv,
-#                              egg_to_fry_survival = expected_egg_surv,
-#                              prob_scour = prob_nest_scoured,
-#                              spawn_habitat = min_spawn_habitat)
-#   expect_equal(round(juveniles), round(expected_juveniles))
-# })
+
+# Tests spawn success function
+init_adults <- expected_spawners$init_adults
+min_spawn_habitat <- apply(params$spawning_habitat[ , 10:12, year], 1, min)
+
+expected_juveniles <- structure(c(2023267, 0, 1148754, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                                  0, 0, 0, 0, 0, 0), 
+                                .Dim = c(31L, 4L), 
+                                .Dimnames = list(c("Upper Sacramento River", 
+                                                   "Antelope Creek", "Battle Creek", "Bear Creek", "Big Chico Creek", 
+                                                   "Butte Creek", "Clear Creek", "Cottonwood Creek", "Cow Creek", 
+                                                   "Deer Creek", "Elder Creek", "Mill Creek", "Paynes Creek", "Stony Creek", 
+                                                   "Thomes Creek", "Upper-mid Sacramento River", "Sutter Bypass", 
+                                                   "Bear River", "Feather River", "Yuba River", "Lower-mid Sacramento River", 
+                                                   "Yolo Bypass", "American River", "Lower Sacramento River", "Calaveras River", 
+                                                   "Cosumnes River", "Mokelumne River", "Merced River", "Stanislaus River", 
+                                                   "Tuolumne River", "San Joaquin River"), c("fry", "", "", "")))
+
+test_that("spawn success function returns the expected value", {
+  juveniles <- spawn_success(escapement = init_adults,
+                             adult_prespawn_survival = expected_prespawn_surv,
+                             egg_to_fry_survival = expected_egg_surv,
+                             prob_scour = params$prob_nest_scoured,
+                             spawn_habitat = min_spawn_habitat, 
+                             stochastic = FALSE)
+  expect_equal(round(juveniles), round(expected_juveniles))
+})
