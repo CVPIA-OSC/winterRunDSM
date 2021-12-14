@@ -3,6 +3,7 @@ library(tidyverse)
 # 2021
 calib_results <- read_rds("calibration/calibration-results-2021-10-11_125845.rds")
 solution <- calib_results@solution[1, ]
+names(solution) <- NULL
 
 params <- list(
 
