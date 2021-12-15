@@ -109,7 +109,13 @@ test_that("model seed returns correct data structure (deterministic)", {
   expect_equal(sum(model_seed[,5:25]), 0) # contains just seed data
 })
 
-test_that("model seed returns correct data structure (deterministic)", {
+test_that("model seed returns correct values (deterministic)", {
+  model_seed <- winter_run_model(mode = "seed")
+  
+  expect_equal(model_seed, expected_model_seeds)
+})
+
+test_that("model seed returns correct data structure (stochastic)", {
   set.seed(2021)
   model_seed <- winter_run_model(mode = "seed")
   
@@ -117,6 +123,16 @@ test_that("model seed returns correct data structure (deterministic)", {
   expect_equal(rownames(model_seed), winterRunDSM::watershed_labels) # has labels
   expect_equal(sum(model_seed[,5:25]), 0) # contains just seed data
 })
+
+test_that("model seed returns correct values (stochastic)", {
+  set.seed(2021)
+  model_seed <- winter_run_model(mode = "seed")
+  
+  expect_equal(model_seed, expected_model_seeds_stoch)
+})
+
+
+# Model Simulation -----------------
 
 
 
