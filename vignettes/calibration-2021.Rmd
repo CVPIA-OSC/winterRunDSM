@@ -46,7 +46,7 @@ knitr::kable(winterRunDSM::watershed_attributes[keep, "watershed", drop = FALSE]
 
 ## Packages
 
-```{r, message=FALSE}
+```{r, message=FALSE, warning = FALSE}
 library(GA)
 library(winterRunDSM)
 library(DSMCalibrationData)
