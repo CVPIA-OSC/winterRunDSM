@@ -645,7 +645,9 @@ expectd_delta_routing <- list(migrants_at_golden_gate = structure(c(0, 0, 0, 0, 
                                                                          "Tuolumne River", "San Joaquin River"), c("s", "m", "l", "vl"
                                                                          ))))
 
+# Route and rear deltas --------------------
 
+# stochastic
 test_that('The route_and_rear_delta function returns the expected values for year 1 month 3, stochastic = TRUE', {
   set.seed(2021)
   actual_delta_routing <- route_and_rear_deltas(year = year, month = month, migrants = migrants,
@@ -664,8 +666,9 @@ test_that('The route_and_rear_delta function returns the expected values for yea
                                                   stochastic = TRUE)
   expect_equal(actual_delta_routing, expectd_delta_routing)
 })
+
 # Deterministic
-delta_routing_det <- list(migrants_at_golden_gate = structure(c(0, 0, 0, 0, 0, 0,
+expected_delta_routing_det <- list(migrants_at_golden_gate = structure(c(0, 0, 0, 0, 0, 0,
                                                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -712,21 +715,23 @@ delta_routing_det <- list(migrants_at_golden_gate = structure(c(0, 0, 0, 0, 0, 0
 
 
 test_that('The route_and_rear_delta function returns the expected values for year 1 month 3, stochastic = FALSE', {
-  expected_delta_routing <- route_and_rear_deltas(year = year, month = month, migrants = migrants,
-                                                  north_delta_fish = north_delta_fish,
-                                                  south_delta_fish = south_delta_fish,
-                                                  north_delta_habitat = expected_habitat$north_delta,
-                                                  south_delta_habitat = expected_habitat$south_delta,
-                                                  cc_gates_days_closed = winterRunDSM::params$cc_gates_days_closed,
-                                                  freeport_flows = winterRunDSM::params$freeport_flows,
-                                                  rearing_survival_delta = rearing_survival$delta,
-                                                  migratory_survival_delta = migratory_survival$delta,
-                                                  migratory_survival_bay_delta = migratory_survival$bay_delta,
-                                                  juveniles_at_chipps = juveniles_at_chipps,
-                                                  growth_rates = growth_rates,
-                                                  territory_size = winterRunDSM::params$territory_size,
-                                                  stochastic = FALSE)
-  expect_equal(expected_delta_routing, delta_routing_det)
+  actual_delta_routing <- route_and_rear_deltas(year = year, 
+                                                month = month, 
+                                                migrants = migrants,
+                                                north_delta_fish = north_delta_fish,
+                                                south_delta_fish = south_delta_fish,
+                                                north_delta_habitat = expected_habitat$north_delta,
+                                                south_delta_habitat = expected_habitat$south_delta,
+                                                cc_gates_days_closed = winterRunDSM::params$cc_gates_days_closed,
+                                                freeport_flows = winterRunDSM::params$freeport_flows,
+                                                rearing_survival_delta = rearing_survival$delta,
+                                                migratory_survival_delta = migratory_survival$delta,
+                                                migratory_survival_bay_delta = migratory_survival$bay_delta,
+                                                juveniles_at_chipps = juveniles_at_chipps,
+                                                growth_rates = growth_rates,
+                                                territory_size = winterRunDSM::params$territory_size,
+                                                stochastic = FALSE)
+  expect_equal(actual_delta_routing, expected_delta_routing_det)
 })
 
 # Test that fill functions work as expected

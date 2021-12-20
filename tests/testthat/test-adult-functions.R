@@ -222,7 +222,9 @@ expected_spawners <- list(
                                                                                         "Yolo Bypass", "American River", "Lower Sacramento River", "Calaveras River", 
                                                                                         "Cosumnes River", "Mokelumne River", "Merced River", "Stanislaus River", 
                                                                                         "Tuolumne River", "San Joaquin River"), NULL)))
-test_that("Get spawning adults (seed mode) returns the expected values", {
+
+# deterministic
+test_that("Get spawning adults (seed mode) returns the expected values (deterministic)", {
   spawning_adults <- get_spawning_adults(year, 
                                          round(adults), 
                                          hatch_adults, 
@@ -249,6 +251,61 @@ test_that("Get spawning adults (seed mode) returns the expected values", {
   expect_equal(spawning_adults, expected_spawners)
 })
 
+# stochastic
+expected_spawning_adults_stoch <- 
+  list(
+    init_adults = c(2555, 0, 1200, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), 
+    proportion_natural = c(`Upper Sacramento River` = 0.8240034, 
+                           `Antelope Creek` = 1, `Battle Creek` = 0.8, `Bear Creek` = 1, 
+                           `Big Chico Creek` = 1, `Butte Creek` = 1, `Clear Creek` = 1, 
+                           `Cottonwood Creek` = 1, `Cow Creek` = 1, `Deer Creek` = 1, `Elder Creek` = 1, 
+                           `Mill Creek` = 1, `Paynes Creek` = 1, `Stony Creek` = 1, `Thomes Creek` = 1, 
+                           `Upper-mid Sacramento River` = 1, `Sutter Bypass` = 1, `Bear River` = 1, 
+                           `Feather River` = 1, `Yuba River` = 1, `Lower-mid Sacramento River` = 1, 
+                           `Yolo Bypass` = 1, `American River` = 1, `Lower Sacramento River` = 1, 
+                           `Calaveras River` = 1, `Cosumnes River` = 1, `Mokelumne River` = 1, 
+                           `Merced River` = 1, `Stanislaus River` = 1, `Tuolumne River` = 1, 
+                           `San Joaquin River` = 1), 
+    init_adults_by_month = structure(c(309L, 
+                                       0L, 134L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 
+                                       0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 986L, 
+                                       0L, 431L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 
+                                       0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 942L, 
+                                       0L, 467L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 
+                                       0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 318L, 
+                                       0L, 168L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 
+                                       0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L), .Dim = c(31L, 
+                                                                                                             4L)))
+test_that("Get spawning adults (seed mode) returns the expected values (stochastic)", {
+  set.seed(2021)
+  spawning_adults <- get_spawning_adults(year, 
+                                         round(adults), 
+                                         hatch_adults, 
+                                         mode = "seed",
+                                         month_return_proportions = params$month_return_proportions,
+                                         prop_flow_natal = params$prop_flow_natal,
+                                         south_delta_routed_watersheds = params$south_delta_routed_watersheds,
+                                         gates_overtopped = params$gates_overtopped,
+                                         tisdale_bypass_watershed = params$tisdale_bypass_watershed,
+                                         yolo_bypass_watershed = params$yolo_bypass_watershed,
+                                         migratory_temperature_proportion_over_20 = params$migratory_temperature_proportion_over_20,
+                                         natural_adult_removal_rate = params$natural_adult_removal_rate,
+                                         ..surv_adult_enroute_int = params$..surv_adult_enroute_int,
+                                         .adult_stray_intercept = params$.adult_stray_intercept,
+                                         .adult_stray_wild = params$.adult_stray_wild,
+                                         .adult_stray_natal_flow = params$.adult_stray_natal_flow,
+                                         .adult_stray_cross_channel_gates_closed = params$.adult_stray_cross_channel_gates_closed,
+                                         .adult_stray_prop_bay_trans = params$.adult_stray_prop_bay_trans,
+                                         .adult_stray_prop_delta_trans = params$.adult_stray_prop_delta_trans,
+                                         .adult_en_route_migratory_temp = params$.adult_en_route_migratory_temp,
+                                         .adult_en_route_bypass_overtopped = params$.adult_en_route_bypass_overtopped,
+                                         .adult_en_route_adult_harvest_rate = params$.adult_en_route_adult_harvest_rate,
+                                         stochastic = TRUE)
+  expect_equal(spawning_adults, expected_spawning_adults_stoch)
+})
+
+
 # Tests spawn success function
 init_adults <- expected_spawners$init_adults
 min_spawn_habitat <- apply(params$spawning_habitat[ , 10:12, year], 1, min)
@@ -271,7 +328,7 @@ expected_juveniles <- structure(c(2023267, 0, 1148754, 0, 0, 0, 0, 0, 0, 0, 0, 0
                                                    "Cosumnes River", "Mokelumne River", "Merced River", "Stanislaus River", 
                                                    "Tuolumne River", "San Joaquin River"), c("fry", "", "", "")))
 
-test_that("spawn success function returns the expected value", {
+test_that("spawn success function returns the expected value (deterministic)", {
   juveniles <- spawn_success(escapement = init_adults,
                              adult_prespawn_survival = expected_prespawn_surv,
                              egg_to_fry_survival = expected_egg_surv,
@@ -279,4 +336,25 @@ test_that("spawn success function returns the expected value", {
                              spawn_habitat = min_spawn_habitat, 
                              stochastic = FALSE)
   expect_equal(round(juveniles), round(expected_juveniles))
+})
+
+expected_juveniles_stoch <- 
+  structure(c(2008360, 0, 1077273, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+              0, 0, 0, 0, 0, 0), .Dim = c(31L, 4L), .Dimnames = list(NULL, 
+                                                                     c("fry", "", "", "")))
+
+test_that("spawn success function returns the expected value (stochastic)", {
+  set.seed(2021)
+  juveniles <- spawn_success(escapement = init_adults,
+                             adult_prespawn_survival = expected_prespawn_surv,
+                             egg_to_fry_survival = expected_egg_surv,
+                             prob_scour = params$prob_nest_scoured,
+                             spawn_habitat = min_spawn_habitat, 
+                             stochastic = TRUE)
+  expect_equal(round(juveniles), round(expected_juveniles_stoch))
 })
