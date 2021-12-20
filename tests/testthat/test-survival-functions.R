@@ -26,31 +26,72 @@ expected_surv_juv_rear <- list(inchannel = structure(c(0.162604214178863, 0.4603
                                                                                                                                                                       "Upper Sacramento River", c("s", "m", "l", "vl"))))
 
 test_that('The surv_juv_rear function returns the expected values for year 1 month 9 watershed 1', {
-  expect_equal(surv_juv_rear(max_temp_thresh = maxT25[1],
-                             avg_temp_thresh = aveT20[1],
-                             high_predation = high_predation[1],
-                             contact_points = params$contact_points[1],
-                             prop_diversions = params$proportion_diverted[1],
-                             total_diversions = params$total_diverted[1],
-                             stranded = ws_strand[1],
-                             weeks_flooded = params$weeks_flood[1],
-                             ..surv_juv_rear_int = params$..surv_juv_rear_int[1],
-                             .surv_juv_rear_contact_points = params$.surv_juv_rear_contact_points,
-                             ..surv_juv_rear_contact_points = params$..surv_juv_rear_contact_points,
-                             .surv_juv_rear_prop_diversions = params$.surv_juv_rear_prop_diversions,
-                             ..surv_juv_rear_prop_diversions = params$..surv_juv_rear_prop_diversions,
-                             .surv_juv_rear_total_diversions = params$.surv_juv_rear_total_diversions,
-                             ..surv_juv_rear_total_diversions = params$..surv_juv_rear_total_diversions,
-                             .avg_temp_thresh = params$.surv_juv_rear_avg_temp_thresh,
-                             .high_predation = params$.surv_juv_rear_high_predation,
-                             .stranded = params$.surv_juv_rear_stranded,
-                             .medium = params$.surv_juv_rear_medium,
-                             .large = params$.surv_juv_rear_large,
-                             .floodplain = params$.surv_juv_rear_floodplain,
-                             min_survival_rate = params$min_survival_rate,
-                             stochastic = FALSE),
+  actual_surv_juv_rear <- 
+    surv_juv_rear(max_temp_thresh = maxT25[1],
+                  avg_temp_thresh = aveT20[1],
+                  high_predation = high_predation[1],
+                  contact_points = params$contact_points[1],
+                  prop_diversions = params$proportion_diverted[1],
+                  total_diversions = params$total_diverted[1],
+                  stranded = ws_strand[1],
+                  weeks_flooded = params$weeks_flood[1],
+                  ..surv_juv_rear_int = params$..surv_juv_rear_int[1],
+                  .surv_juv_rear_contact_points = params$.surv_juv_rear_contact_points,
+                  ..surv_juv_rear_contact_points = params$..surv_juv_rear_contact_points,
+                  .surv_juv_rear_prop_diversions = params$.surv_juv_rear_prop_diversions,
+                  ..surv_juv_rear_prop_diversions = params$..surv_juv_rear_prop_diversions,
+                  .surv_juv_rear_total_diversions = params$.surv_juv_rear_total_diversions,
+                  ..surv_juv_rear_total_diversions = params$..surv_juv_rear_total_diversions,
+                  .avg_temp_thresh = params$.surv_juv_rear_avg_temp_thresh,
+                  .high_predation = params$.surv_juv_rear_high_predation,
+                  .stranded = params$.surv_juv_rear_stranded,
+                  .medium = params$.surv_juv_rear_medium,
+                  .large = params$.surv_juv_rear_large,
+                  .floodplain = params$.surv_juv_rear_floodplain,
+                  min_survival_rate = params$min_survival_rate,
+                  stochastic = FALSE)
+  expect_equal(actual_surv_juv_rear,
                expected_surv_juv_rear)
 })
+
+expected_surv_juv_rear_stoch <- 
+  list(inchannel = structure(c(0.162604214178863, 0.460339070349737, 
+                               0.641992409821651, 1), .Dim = c(1L, 4L), .Dimnames = list(NULL, 
+                                                                                         c("s", "m", "l", "vl"))), floodplain = structure(c(0.238706799591519, 
+                                                                                                                                            0.568977105205772, 0.73121289582857, 1), .Dim = c(1L, 4L), .Dimnames = list(
+                                                                                                                                              NULL, c("s", "m", "l", "vl"))))
+
+test_that('The surv_juv_rear function returns the expected values for year 1 month 9 watershed 1 (stochastic)', {
+  set.seed(2021)
+  actual_surv_juv_rear <- 
+    surv_juv_rear(max_temp_thresh = maxT25[1],
+                  avg_temp_thresh = aveT20[1],
+                  high_predation = high_predation[1],
+                  contact_points = params$contact_points[1],
+                  prop_diversions = params$proportion_diverted[1],
+                  total_diversions = params$total_diverted[1],
+                  stranded = ws_strand[1],
+                  weeks_flooded = params$weeks_flood[1],
+                  ..surv_juv_rear_int = params$..surv_juv_rear_int[1],
+                  .surv_juv_rear_contact_points = params$.surv_juv_rear_contact_points,
+                  ..surv_juv_rear_contact_points = params$..surv_juv_rear_contact_points,
+                  .surv_juv_rear_prop_diversions = params$.surv_juv_rear_prop_diversions,
+                  ..surv_juv_rear_prop_diversions = params$..surv_juv_rear_prop_diversions,
+                  .surv_juv_rear_total_diversions = params$.surv_juv_rear_total_diversions,
+                  ..surv_juv_rear_total_diversions = params$..surv_juv_rear_total_diversions,
+                  .avg_temp_thresh = params$.surv_juv_rear_avg_temp_thresh,
+                  .high_predation = params$.surv_juv_rear_high_predation,
+                  .stranded = params$.surv_juv_rear_stranded,
+                  .medium = params$.surv_juv_rear_medium,
+                  .large = params$.surv_juv_rear_large,
+                  .floodplain = params$.surv_juv_rear_floodplain,
+                  min_survival_rate = params$min_survival_rate,
+                  stochastic = TRUE)
+  expect_equal(actual_surv_juv_rear,
+               expected_surv_juv_rear_stoch)
+})
+
+
 
 expected_delta_juv_surv <- structure(c(0.0932457862245425, 1e-04, 0.0932457862245425, 1e-04, 
                                        0.0932457862245425, 1e-04, 1, 1), .Dim = c(2L, 4L), .Dimnames = list(
