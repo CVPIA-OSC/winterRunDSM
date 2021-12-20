@@ -602,7 +602,7 @@ migrants <- structure(c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         0, 0), .Dim = c(31L, 4L))
 # Stochastic
-delta_routing <- list(migrants_at_golden_gate = structure(c(0, 0, 0, 0, 0, 0,
+expectd_delta_routing <- list(migrants_at_golden_gate = structure(c(0, 0, 0, 0, 0, 0,
                                                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -648,7 +648,7 @@ delta_routing <- list(migrants_at_golden_gate = structure(c(0, 0, 0, 0, 0, 0,
 
 test_that('The route_and_rear_delta function returns the expected values for year 1 month 3, stochastic = TRUE', {
   set.seed(2021)
-  expected_delta_routing <- route_and_rear_deltas(year = year, month = month, migrants = migrants,
+  actual_delta_routing <- route_and_rear_deltas(year = year, month = month, migrants = migrants,
                                                   north_delta_fish = north_delta_fish,
                                                   south_delta_fish = south_delta_fish,
                                                   north_delta_habitat = expected_habitat$north_delta,
@@ -662,7 +662,7 @@ test_that('The route_and_rear_delta function returns the expected values for yea
                                                   growth_rates = growth_rates,
                                                   territory_size = winterRunDSM::params$territory_size,
                                                   stochastic = TRUE)
-  expect_equal(expected_delta_routing, delta_routing)
+  expect_equal(actual_delta_routing, expectd_delta_routing)
 })
 # Deterministic
 delta_routing_det <- list(migrants_at_golden_gate = structure(c(0, 0, 0, 0, 0, 0,
