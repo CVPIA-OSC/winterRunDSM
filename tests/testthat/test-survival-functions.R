@@ -17,7 +17,7 @@ high_predation <- c(1L, 0L, 0L, 0L, 0L, 0L, 1L, 1L, 1L, 0L, 0L, 0L, 0L, 0L, 0L,
 ws_strand <- c(1L, 0L, 0L, 0L, 0L, 0L, 1L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L,
                0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 1L, 0L, 1L, 0L, 0L)
 
-# Tests surv_juv_rear survival function
+# surv_juv_rear --------------------------------
 expected_surv_juv_rear <- list(inchannel = structure(c(0.162604214178863, 0.460339070349737, 
                                                        0.641992409821651, 1), .Dim = c(1L, 4L), 
                                                      .Dimnames = list("Upper Sacramento River", c("s", "m", "l", "vl"))), 
@@ -56,10 +56,13 @@ test_that('The surv_juv_rear function returns the expected values for year 1 mon
 
 expected_surv_juv_rear_stoch <- 
   list(inchannel = structure(c(0.162604214178863, 0.460339070349737, 
-                               0.641992409821651, 1), .Dim = c(1L, 4L), .Dimnames = list(NULL, 
-                                                                                         c("s", "m", "l", "vl"))), floodplain = structure(c(0.238706799591519, 
-                                                                                                                                            0.568977105205772, 0.73121289582857, 1), .Dim = c(1L, 4L), .Dimnames = list(
-                                                                                                                                              NULL, c("s", "m", "l", "vl"))))
+                               0.641992409821651, 1), 
+                             .Dim = c(1L, 4L), 
+                             .Dimnames = list(NULL, 
+                                              c("s", "m", "l", "vl"))), 
+       floodplain = structure(c(0.238706799591519, 
+                                0.568977105205772, 0.73121289582857, 1), .Dim = c(1L, 4L), .Dimnames = list(
+                                  NULL, c("s", "m", "l", "vl"))))
 
 test_that('The surv_juv_rear function returns the expected values for year 1 month 9 watershed 1 (stochastic)', {
   set.seed(2021)
@@ -92,12 +95,14 @@ test_that('The surv_juv_rear function returns the expected values for year 1 mon
 })
 
 
+# surv_juv_delta ---------------------------------
 
 expected_delta_juv_surv <- structure(c(0.0932457862245425, 1e-04, 0.0932457862245425, 1e-04, 
                                        0.0932457862245425, 1e-04, 1, 1), .Dim = c(2L, 4L), .Dimnames = list(
                                          c("North Delta", "South Delta"), c("s", "m", "l", "vl")))
 
-test_that('The delta_juv_surv function returns the expected values for year 1 month 9', {
+# deterministic
+test_that('The delta_juv_surv function returns the expected values for year 1 month 9 (deterministic)', {
   expect_equal(surv_juv_delta(avg_temp = params$avg_temp_delta[month, year, "North Delta"],
                               max_temp_thresh = maxT25D,
                               avg_temp_thresh = aveT20D,
@@ -109,7 +114,29 @@ test_that('The delta_juv_surv function returns the expected values for year 1 mo
                expected_delta_juv_surv)
 })
 
-# Tests surv_juv_bypass survival function
+expected_delta_juv_surv_stoch <- 
+  structure(c(0.0932457862245425, 1e-04, 0.0932457862245425, 1e-04, 
+              0.0932457862245425, 1e-04, 1, 1), .Dim = c(2L, 4L), .Dimnames = list(
+                c("North Delta", "South Delta"), c("s", "m", "l", "vl")))
+# stochastic 
+test_that('The delta_juv_surv function returns the expected values for year 1 month 9 (stochastic)', {
+  set.seed(2021)
+  actual_surv_juv_delta <- 
+    surv_juv_delta(avg_temp = params$avg_temp_delta[month, year, "North Delta"],
+                   max_temp_thresh = maxT25D,
+                   avg_temp_thresh = aveT20D,
+                   high_predation = params$delta_prop_high_predation,
+                   contact_points = params$delta_contact_points,
+                   prop_diverted = params$delta_proportion_diverted,
+                   total_diverted = params$delta_total_diverted,
+                   stochastic = TRUE)
+  expect_equal(expected_delta_juv_surv_stoch, expected_delta_juv_surv)
+})
+
+# surv_juv_bypass ------------------------
+
+
+# determinisitic
 expected_bypass_juv_surv <- structure(c(1e-04, 1e-04, 1e-04, 1), .Dim = c(1L, 4L), .Dimnames = list(
   NULL, c("s", "m", "l", "vl")))
 
@@ -121,7 +148,21 @@ test_that('The bypass_juv_surv function returns the expected values for year 1 m
                expected_bypass_juv_surv)
 })
 
-# Tests migratory survival for lower mid sac fish survival function
+# stochastic 
+expected_bypass_juv_surv_stoch <- structure(c(1e-04, 1e-04, 1e-04, 1), .Dim = c(1L, 4L), .Dimnames = list(
+  NULL, c("s", "m", "l", "vl")))
+
+test_that('The bypass_juv_surv function returns the expected values for year 1 month 9', {
+  set.seed(2021)
+  actual_surv_juv_bypass <- surv_juv_bypass(max_temp_thresh = maxT25[22],
+                  avg_temp_thresh = aveT20[22],
+                  high_predation = 0, 
+                  stochastic = TRUE)
+  expect_equal(actual_surv_juv_bypass, expected_bypass_juv_surv_stoch)
+})
+
+
+# surv_juv_outmigration_sac -----------------------------------
 expected_lms_mig_surv <- c(s = 0.189, m = 0.189, l = 0.189, vl = 0.189)
 
 test_that('The migratory_juv_surv function for lower mid sac returns the expected values for year 1 month 9', {
@@ -130,7 +171,7 @@ test_that('The migratory_juv_surv function for lower mid sac returns the expecte
 })
 
 
-# Tests migratory survival for san joaquin fish survival function
+# surv_juv_outmigration_san_joaquin --------------------------
 expected_lms_mig_surv <- structure(c(0.0426739282499506, 0.163754222436521, 0.291614460825888, 
                                      0.291614460825888), .Dim = c(1L, 4L), .Dimnames = list(NULL, 
                                                                                             c("s", "m", "l", "vl")))
@@ -140,7 +181,7 @@ test_that('The migratory_juv_surv function for lower mid sac returns the expecte
                expected_lms_mig_surv)
 })
 
-# tests the surv_juv_outmigration_delta function'
+# surv_juv_outmigration_delta ---------------------------
 expected_surv_juv_outmigration <- structure(c(0.266668614822945, 0.000123932662831837, 0.000819655793037249, 
                                               0.00566155265467863, 0.266668614822945, 0.000123932662831837, 
                                               0.000819655793037249, 0.00566155265467863, 0.266668614822945, 
@@ -164,8 +205,9 @@ test_that('tests that the surv_juv_outmigration_delta function returns the corre
 })
 
 
-## Tests survival functions with randomness (set.seed() for testing these)
-# Tests the rearing survival rates function
+# get_rearing_survival -----------------------------------
+
+# deterministic 
 expected_survival <- list(
   inchannel = structure(c(0.19105646240334, 0.0903106834397182, 
                           0.227352425068896, 0.00470808360749883, 0.000470730266560436, 
@@ -289,26 +331,136 @@ test_that("get_rearing_survival returns the expected result", {
   expect_equal(survival, expected_survival)
 })
 
+# stochastic
+expected_survival_stoch <- list(
+  inchannel = structure(c(0.0416562680790774, 0.167742287337405, 
+                          0.275845862981731, 1e-04, 1e-04, 1e-04, 0.339234738156582, 1e-04, 
+                          1e-04, 1e-04, 0.0647111839591493, 1e-04, 0.275845862981731, 1e-04, 
+                          1e-04, 1e-04, 1e-04, 0.34753636035629, 0.971062619677287, 1e-04, 
+                          1e-04, 1e-04, 0.234189594217233, 1e-04, 0.992476164412993, 1e-04, 
+                          1e-04, 1e-04, 0.965440003644798, 1e-04, 1e-04, 0.160332706301387, 
+                          0.469609172072052, 0.625939922404366, 1e-04, 1e-04, 1e-04, 0.692810918773036, 
+                          1e-04, 1e-04, 1e-04, 0.233094197048027, 1e-04, 0.625939922404366, 
+                          1e-04, 1e-04, 1e-04, 1e-04, 0.700591031001892, 0.993262170182544, 
+                          1e-04, 1e-04, 1e-04, 0.573267817085996, 1e-04, 0.998277280517416, 
+                          1e-04, 1e-04, 1e-04, 0.991917086410691, 1e-04, 1e-04, 0.286436478730075, 
+                          0.650511121353429, 0.778653702892697, 1e-04, 1e-04, 1e-04, 0.82582087381758, 
+                          1e-04, 1e-04, 1e-04, 0.389855101868182, 1e-04, 0.778653702892697, 
+                          1e-04, 1e-04, 1e-04, 1e-04, 0.831053753343973, 0.996783554430151, 
+                          1e-04, 1e-04, 1e-04, 0.738501848800219, 1e-04, 0.999179787812487, 
+                          1e-04, 1e-04, 1e-04, 0.99613871742679, 1e-04, 1e-04, 1, 1, 1, 
+                          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+                          1, 1, 1, 1, 1, 1, 1), .Dim = c(31L, 4L)), 
+  floodplain = structure(c(0.125595876001217, 
+                           0.167742287337405, 0.275845862981731, 1e-04, 1e-04, 1e-04, 0.344785545703312, 
+                           1e-04, 1e-04, 1e-04, 0.0647111839591493, 1e-04, 0.275845862981731, 
+                           1e-04, 1e-04, 1e-04, 1e-04, 0.34753636035629, 0.350427179633531, 
+                           1e-04, 1e-04, 1e-04, 0.29779609368316, 1e-04, 0.992476164412993, 
+                           1e-04, 1e-04, 1e-04, 0.581649737885811, 1e-04, 1e-04, 0.341662072657852, 
+                           0.469609172072052, 0.625939922404366, 1e-04, 1e-04, 1e-04, 0.698012556220588, 
+                           1e-04, 1e-04, 1e-04, 0.233094197048027, 1e-04, 0.625939922404366, 
+                           1e-04, 1e-04, 1e-04, 1e-04, 0.700591031001892, 0.703253247660221, 
+                           1e-04, 1e-04, 1e-04, 0.646047559547553, 1e-04, 0.998277280517416, 
+                           1e-04, 1e-04, 1e-04, 0.83520591019699, 1e-04, 1e-04, 0.493176874732759, 
+                           0.650511121353429, 0.778653702892697, 1e-04, 1e-04, 1e-04, 0.82931939731116, 
+                           1e-04, 1e-04, 1e-04, 0.389855101868182, 1e-04, 0.778653702892697, 
+                           1e-04, 1e-04, 1e-04, 1e-04, 0.831053753343973, 0.832832742017213, 
+                           1e-04, 1e-04, 1e-04, 0.791889044178489, 1e-04, 0.999179787812487, 
+                           1e-04, 1e-04, 1e-04, 0.910833101871064, 1e-04, 1e-04, 1, 1, 1, 
+                           1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+                           1, 1, 1, 1, 1, 1, 1), .Dim = c(31L, 4L)), 
+  sutter = structure(c(1e-04, 
+                       1e-04, 1e-04, 1), .Dim = c(1L, 4L), .Dimnames = list(NULL, c("s", 
+                                                                                    "m", "l", "vl"))), 
+  yolo = structure(c(1e-04, 1e-04, 1e-04, 1), .Dim = c(1L, 
+                                                       4L), .Dimnames = list(NULL, c("s", "m", "l", "vl"))), 
+  delta = structure(c(0.0932457862245425, 
+                      1.69830411272825e-146, 0.0932457862245425, 7.46055771689626e-146, 
+                      0.0932457862245425, 1.56838288566422e-145, 1, 1), .Dim = c(2L, 
+                                                                                 4L), .Dimnames = list(c("North Delta", "South Delta"), c("s", 
+                                                                                                                                          "m", "l", "vl"))))
+
+test_that("get_rearing_survival returns the expected result", {
+  set.seed(2021)
+  survival <- get_rearing_survival(year, month,
+                                   survival_adjustment = scenario_data$survival_adjustment,
+                                   mode = "seed",
+                                   avg_temp = params$avg_temp,
+                                   avg_temp_delta = params$avg_temp_delta,
+                                   prob_strand_early = params$prob_strand_early,
+                                   prob_strand_late = params$prob_strand_late,
+                                   proportion_diverted = params$proportion_diverted,
+                                   total_diverted = params$total_diverted,
+                                   delta_proportion_diverted = params$delta_proportion_diverted,
+                                   delta_total_diverted = params$delta_total_diverted,
+                                   weeks_flooded = params$weeks_flooded,
+                                   prop_high_predation = params$prop_high_predation,
+                                   contact_points = params$contact_points,
+                                   delta_contact_points = params$delta_contact_points,
+                                   delta_prop_high_predation = params$delta_prop_high_predation,
+                                   ..surv_juv_rear_int= params$..surv_juv_rear_int,
+                                   .surv_juv_rear_contact_points = params$.surv_juv_rear_contact_points,
+                                   ..surv_juv_rear_contact_points = params$..surv_juv_rear_contact_points,
+                                   .surv_juv_rear_prop_diversions = params$.surv_juv_rear_prop_diversions,
+                                   ..surv_juv_rear_prop_diversions = params$..surv_juv_rear_prop_diversions,
+                                   .surv_juv_rear_total_diversions = params$.surv_juv_rear_total_diversions,
+                                   ..surv_juv_rear_total_diversions = params$..surv_juv_rear_total_diversions,
+                                   ..surv_juv_bypass_int = params$..surv_juv_bypass_int,
+                                   ..surv_juv_delta_int = params$..surv_juv_delta_int,
+                                   .surv_juv_delta_contact_points = params$.surv_juv_delta_contact_points,
+                                   ..surv_juv_delta_contact_points = params$..surv_juv_delta_contact_points,
+                                   .surv_juv_delta_total_diverted = params$.surv_juv_delta_total_diverted,
+                                   ..surv_juv_delta_total_diverted = params$..surv_juv_delta_total_diverted,
+                                   .surv_juv_rear_avg_temp_thresh = params$.surv_juv_rear_avg_temp_thresh,
+                                   .surv_juv_rear_high_predation = params$.surv_juv_rear_high_predation,
+                                   .surv_juv_rear_stranded = params$.surv_juv_rear_stranded,
+                                   .surv_juv_rear_medium = params$.surv_juv_rear_medium,
+                                   .surv_juv_rear_large = params$.surv_juv_rear_large,
+                                   .surv_juv_rear_floodplain = params$.surv_juv_rear_floodplain,
+                                   .surv_juv_bypass_avg_temp_thresh = params$.surv_juv_bypass_avg_temp_thresh,
+                                   .surv_juv_bypass_high_predation = params$.surv_juv_bypass_high_predation,
+                                   .surv_juv_bypass_medium = params$.surv_juv_bypass_medium,
+                                   .surv_juv_bypass_large = params$.surv_juv_bypass_large,
+                                   .surv_juv_bypass_floodplain = params$.surv_juv_bypass_floodplain,
+                                   .surv_juv_delta_avg_temp_thresh = params$.surv_juv_delta_avg_temp_thresh,
+                                   .surv_juv_delta_high_predation = params$.surv_juv_delta_high_predation,
+                                   .surv_juv_delta_prop_diverted = params$.surv_juv_delta_prop_diverted,
+                                   .surv_juv_delta_medium = params$.surv_juv_delta_medium,
+                                   .surv_juv_delta_large = params$.surv_juv_delta_large,
+                                   min_survival_rate = params$min_survival_rate,
+                                   stochastic = TRUE)
+  expect_equal(survival, expected_survival_stoch)
+})
+
+
+
+# get_migratory_survival ------------------------------
+
+# determinisitc
 expected_migratory_survival <- list(
   uppermid_sac = c(s = 0.189, m = 0.189, l = 0.189, vl = 0.189), 
   lowermid_sac = c(s = 0.189, m = 0.189, l = 0.189, vl = 0.189), 
   lower_sac = c(s = 0.189, m = 0.189, l = 0.189, vl = 0.189), 
   sutter = structure(c(0.0385316447670822, 0.0632701201371452, 
                        0.0743504041336172, 1), .Dim = c(1L, 4L), .Dimnames = list(
-                         "Yolo Bypass", c("s", "m", "l", "vl"))), yolo = structure(c(0.0385316447670822, 
-                                                                                     0.0632701201371452, 0.0743504041336172, 1), .Dim = c(1L, 
-                                                                                                                                          4L), .Dimnames = list("Yolo Bypass", c("s", "m", "l", "vl"
-                                                                                                                                          ))), san_joaquin = structure(c(0.0426739282499506, 0.163754222436521, 
-                                                                                                                                                                         0.291614460825888, 0.291614460825888), .Dim = c(1L, 4L), .Dimnames = list(
-                                                                                                                                                                           NULL, c("s", "m", "l", "vl"))), delta = structure(c(0.266668614822945, 
-                                                                                                                                                                                                                               0.000123932662831837, 0.000819655793037249, 0.00566155265467863, 
-                                                                                                                                                                                                                               0.266668614822945, 0.000123932662831837, 0.000819655793037249, 
-                                                                                                                                                                                                                             0.00566155265467863, 0.266668614822945, 0.000123932662831837, 
-                                                                                                                                                                                                                             0.000819655793037249, 0.00566155265467863, 0.373914118050784, 
-                                                                                                                                                                                                                             0.000245928323835351, 0.00124096914866476, 0.0110614050155086
-                                                                                                                                                                         ), .Dim = c(4L, 4L), .Dimnames = list(c("northern_fish", 
-                                                                                                                                                                                                                 "cosumnes_mokelumne_fish", "calaveras_fish", "southern_fish"
-                                                                                                                                                                         ), c("s", "m", "l", "vl"))), bay_delta = 0.358)
+                         "Yolo Bypass", c("s", "m", "l", "vl"))), 
+  yolo = structure(c(0.0385316447670822, 
+                     0.0632701201371452, 0.0743504041336172, 1), .Dim = c(1L, 
+                                                                          4L), .Dimnames = list("Yolo Bypass", c("s", "m", "l", "vl"
+                                                                          ))), 
+  san_joaquin = structure(c(0.0426739282499506, 0.163754222436521, 
+                            0.291614460825888, 0.291614460825888), .Dim = c(1L, 4L), .Dimnames = list(
+                              NULL, c("s", "m", "l", "vl"))), 
+  delta = structure(c(0.266668614822945, 
+                      0.000123932662831837, 0.000819655793037249, 0.00566155265467863, 
+                      0.266668614822945, 0.000123932662831837, 0.000819655793037249, 
+                      0.00566155265467863, 0.266668614822945, 0.000123932662831837, 
+                      0.000819655793037249, 0.00566155265467863, 0.373914118050784, 
+                      0.000245928323835351, 0.00124096914866476, 0.0110614050155086
+  ), .Dim = c(4L, 4L), .Dimnames = list(c("northern_fish", "cosumnes_mokelumne_fish", "calaveras_fish", "southern_fish"
+  ), c("s", "m", "l", "vl"))), 
+  bay_delta = 0.358)
+
 test_that("get_migratory_survival returns the expected result", {
   migratory_survival <- get_migratory_survival(year, month,
                                                cc_gates_prop_days_closed = params$cc_gates_prop_days_closed,
@@ -331,3 +483,53 @@ test_that("get_migratory_survival returns the expected result", {
                                                stochastic = FALSE)
   expect_equal(migratory_survival, expected_migratory_survival)
 })
+
+
+# stochastic 
+
+expected_migratory_survival_stoch <- list(
+  uppermid_sac = c(s = 0.189, m = 0.189, l = 0.189, vl = 0.189), 
+  lowermid_sac = c(s = 0.189, m = 0.189, l = 0.189, vl = 0.189), 
+  lower_sac = c(s = 0.189, m = 0.189, l = 0.189, vl = 0.189), 
+  sutter = structure(c(0.01, 0.01, 0.01, 1), .Dim = c(1L, 4L
+  ), .Dimnames = list(NULL, c("s", "m", "l", "vl"))), 
+  yolo = structure(c(0.01, 0.01, 0.01, 1), .Dim = c(1L, 4L), .Dimnames = list(NULL, c("s", "m", "l", "vl"))), 
+  san_joaquin = structure(c(0.0426739282499506, 
+                            0.163754222436521, 0.291614460825888, 0.291614460825888), .Dim = c(1L, 4L), .Dimnames = list(NULL, c("s", "m", "l", "vl"))), 
+  delta = structure(c(0.266668614822945, 
+                      0.000123932662831837, 0.000819655793037249, 0.00566155265467863, 
+                      0.266668614822945, 0.000123932662831837, 0.000819655793037249, 
+                      0.00566155265467863, 0.266668614822945, 0.000123932662831837, 
+                      0.000819655793037249, 0.00566155265467863, 0.373914118050784, 
+                      0.000245928323835351, 0.00124096914866476, 0.0110614050155086), 
+                    .Dim = c(4L, 4L), .Dimnames = list(c("northern_fish", 
+                                          "cosumnes_mokelumne_fish", 
+                                          "calaveras_fish", "southern_fish"), c("s", "m", "l", "vl"))), 
+  bay_delta = 0.358)
+
+test_that("get_migratory_survival returns the expected result", {
+  set.seed(2021)
+  migratory_survival <- get_migratory_survival(year, month,
+                                               cc_gates_prop_days_closed = params$cc_gates_prop_days_closed,
+                                               freeport_flows = params$freeport_flows,
+                                               vernalis_flows = params$vernalis_flows,
+                                               stockton_flows = params$stockton_flows,
+                                               vernalis_temps = params$vernalis_temps,
+                                               prisoners_point_temps = params$prisoners_point_temps,
+                                               CVP_exports = params$CVP_exports,
+                                               SWP_exports = params$SWP_exports,
+                                               upper_sacramento_flows = params$upper_sacramento_flows,
+                                               delta_inflow = params$delta_inflow,
+                                               avg_temp_delta = params$avg_temp_delta,
+                                               avg_temp = params$avg_temp,
+                                               delta_proportion_diverted = params$delta_proportion_diverted,
+                                               ..surv_juv_outmigration_sj_int = params$..surv_juv_outmigration_sj_int,
+                                               .surv_juv_outmigration_san_joaquin_medium = params$.surv_juv_outmigration_san_joaquin_medium,
+                                               .surv_juv_outmigration_san_joaquin_large = params$.surv_juv_outmigration_san_joaquin_large,
+                                               min_survival_rate = params$min_survival_rate,
+                                               stochastic = TRUE)
+  expect_equal(migratory_survival, expected_migratory_survival_stoch)
+})
+
+
+
