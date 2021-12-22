@@ -89,11 +89,12 @@ navbar:
     menu:
       - text: 'Calibration'
         href: 'articles/calibration-2021.html'
+      - text: 'Sensitivity Analysis'
+        href: 'articles/sensitivity-analysis.html'
   - text: 'News'
     href: news/index.html
-    
+
 repo:
  url:
   home: https://github.com/CVPIA-OSC/winterRunDSM
   issue: https://github.com/CVPIA-OSC/winterRunDSM/issues/
-  
