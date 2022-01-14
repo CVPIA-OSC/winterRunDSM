@@ -91,6 +91,8 @@ navbar:
         href: 'articles/calibration-2021.html'
       - text: 'Sensitivity Analysis'
         href: 'articles/sensitivity-analysis.html'
+      - text: 'Temperature Modeling'
+        href: 'articles/temperature-model.html'        
   - text: 'News'
     href: news/index.html
 
