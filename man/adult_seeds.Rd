@@ -14,6 +14,9 @@ Derived from average escapement estimates from 2013 to 2017 \href{https://dsm-do
 adult_seeds
 }
 \description{
-adult fish for the initial 5 years of the simulations derived
+Adult fish for the initial 5 years of the simulations.
+}
+\details{
+Adult Seeds
 }
 \keyword{datasets}

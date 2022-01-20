@@ -5,7 +5,7 @@
 \alias{cross_channel_stray_rate}
 \title{Cross Channel Stray Rate}
 \format{
-1 dimensional array [31 watersheds]
+Vector of length 31 [31 watersheds]
 }
 \source{
 Expert opinion from SIT members.
@@ -14,6 +14,6 @@ Expert opinion from SIT members.
 cross_channel_stray_rate
 }
 \description{
-Natural straying allocation across channels, source: expert opinion from SIT members.
+Natural straying allocation across channels.
 }
 \keyword{datasets}

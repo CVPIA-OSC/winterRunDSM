@@ -38,7 +38,6 @@
 #' @description Proportion of spawning fish that are from a hatchery.
 #' @format 1 dimensional array [31 watersheds]
 #' @source Coded Wire Tag Analysis and data from chinookprod database
-#' 
 "proportion_hatchery"
 
 #' @title Month Return Proportions

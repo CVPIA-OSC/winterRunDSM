@@ -5,7 +5,7 @@
 \alias{month_return_proportions}
 \title{Month Return Proportions}
 \format{
-1 dimensional array [31 watersheds]
+Vector of length 4
 }
 \source{
 Expert opinion from SIT members.
@@ -14,6 +14,6 @@ Expert opinion from SIT members.
 month_return_proportions
 }
 \description{
-the proportion of spawning fish in Oct-Dec
+The proportion of spawning fish in Jan-Apr
 }
 \keyword{datasets}
