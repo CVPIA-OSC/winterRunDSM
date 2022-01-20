@@ -27,24 +27,33 @@
 
 #' @title Adult Seeds
 #' @description adult fish for the initial 5 years of the simulations derived
-#' from average escapement estimates from 2013 to 2017 \href{https://dsm-docs.s3.us-west-2.amazonaws.com/Azat+2019.pdf}{Azat 2019}.
 #' @format A matrix with dimension 31 x 30 (watershed x year)
+#' @source Derived from average escapement estimates from 2013 to 2017 \href{https://dsm-docs.s3.us-west-2.amazonaws.com/Azat+2019.pdf}{Azat 2019}.
 "adult_seeds"
 
 #' @title Proportion Hatchery
-#' @description TODO
+#' @description Proportion of spawning fish that are from a hatchery.
+#' @format 1 dimensional array [31 watersheds]
+#' @source Coded Wire Tag Analysis and data from chinookprod database
+#' 
 "proportion_hatchery"
 
 #' @title Month Return Proportions
 #' @description the proportion of spawning fish in Oct-Dec
+#' @format 1 dimensional array [31 watersheds]
+#' @source Expert opinion from SIT members.
 "month_return_proportions"
 
 #' @title Mass by Size Class
 #' @description mass of fish by the size class
+#' @format 1 dimensional array [4 size classes]
+#' @source TODO
 "mass_by_size_class"
 
 #' @title Cross Channel Stray Rate
 #' @description Natural straying allocation across channels, source: expert opinion from SIT members.
+#' @format 1 dimensional array [31 watersheds]
+#' @source Expert opinion from SIT members.
 "cross_channel_stray_rate"
 
 #' @title Stray Rate
@@ -54,8 +63,10 @@
 "stray_rate"
 
 #' @title Diversity Groups
-#' @description The diversity groups are sourced from the ["Framework for Assessing Viability of Threatened and Endangered Chinook Salmon and Steelhead in the Sacramento-San Joaquin Basin"](http://escholarship.org/uc/item/3653x9xc) 
-#' with slight modification. The "Northern Sierra" diversity group covers a very large geographic area and was divided into two groups based on proximity.
+#' @description Watershed groups.
+#' @format 1 dimensional named array [31 watersheds]
+#' @source The diversity groups are sourced from the ["Framework for Assessing Viability of Threatened and Endangered Chinook Salmon and Steelhead in the Sacramento-San Joaquin Basin"](http://escholarship.org/uc/item/3653x9xc) with slight modification.
+#' The "Northern Sierra" diversity group covers a very large geographic area and was divided into two groups based on proximity.
 "diversity_group"
 
 #' @title Growth Rates
@@ -115,9 +126,9 @@ NULL
 #'   \item \code{.adult_prespawn_int}:  Intercept, Source: TODO
 #'   \item \code{.adult_prespawn_deg_day}: Coefficient for \code{deg_day} variable, source: \href{https://onlinelibrary.wiley.com/doi/epdf/10.1002/rra.3348}{Colvin et al. (2018)}
 #'   \item \code{prob_nest_scoured}: More details at \code{\link[DSMhabitat]{prob_nest_scoured}}
-#'   \item \code{spawn_success_sex_ratio}: Variable describing the female to male spawning ratio, default 0.5 TODO (find source for default)
+#'   \item \code{spawn_success_sex_ratio}: Variable describing the female to male spawning ratio, default 0.5, source: expert opinion from SIT members.
 #'   \item \code{spawn_success_redd_size}: Variable describing the size of redds including defensible space, default value 9.29 square meters TODO (find source for default)
-#'   \item \code{spawn_success_fecundity}: Variable describing the number of eggs per female, default value 5522 TODO (find source for default)
+#'   \item \code{spawn_success_fecundity}: Variable describing the number of eggs per female, default value 5522, source: \href{https://www.ucpress.edu/book/9780520227545/inland-fishes-of-california}{Moyle, P. B. 2002. Inland Fishes of California. University of California Press, Berkeley CA}
 #' }
 #' @section Egg to Fry Survival:
 #' \itemize{

@@ -5,7 +5,10 @@
 \alias{month_return_proportions}
 \title{Month Return Proportions}
 \format{
-An object of class \code{numeric} of length 4.
+1 dimensional array [31 watersheds]
+}
+\source{
+Expert opinion from SIT members.
 }
 \usage{
 month_return_proportions
