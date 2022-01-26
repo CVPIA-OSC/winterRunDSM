@@ -1,4 +1,5 @@
 #' Adult Harvest Rate
+#' @title Adult Harvest Rate
 #' @description Proportion of adults harvested from golden gate until they reach their natal shed
 #' @format 1 dimensional array [31 watersheds]
 #' @source
@@ -8,6 +9,7 @@
 "adult_harvest_rate"
 
 #' Natural Spawners Removal Rate
+#' @title Natural Spawners Removal Rate
 #' @description Spawners removed for hatcheries
 #' @format 1 dimensional array [31 watersheds]
 #' @source
@@ -16,7 +18,7 @@
 #' Compiled by: James T. Peterson \email{jt.peterson@@oregonstate.edu}
 "natural_adult_removal_rate"
 
-#' Hatchery Allocation
+#' @title Hatchery Allocation
 #' @description The proportion of hatchery fish spawning
 #' @format 1 dimensional array [31 watersheds]
 #' @source
@@ -25,41 +27,56 @@
 #' Compiled by: James T. Peterson \email{jt.peterson@@oregonstate.edu}
 "hatchery_allocation"
 
+#' Adult Seeds
 #' @title Adult Seeds
-#' @description adult fish for the initial 5 years of the simulations derived
-#' from average escapement estimates from 2013 to 2017 \href{https://dsm-docs.s3.us-west-2.amazonaws.com/Azat+2019.pdf}{Azat 2019}.
+#' @description Adult fish for the initial 5 years of the simulations.
 #' @format A matrix with dimension 31 x 30 (watershed x year)
+#' @source Derived from average escapement estimates from 2013 to 2017 \href{https://dsm-docs.s3.us-west-2.amazonaws.com/Azat+2019.pdf}{Azat 2019}.
 "adult_seeds"
 
 #' @title Proportion Hatchery
-#' @description TODO
+#' @description Proportion of spawning fish that are from a hatchery.
+#' @format 1 dimensional array [31 watersheds]
+#' @source Coded Wire Tag Analysis and data from chinookprod database
 "proportion_hatchery"
 
 #' @title Month Return Proportions
-#' @description the proportion of spawning fish in Oct-Dec
+#' @description The proportion of spawning fish in Jan-Apr
+#' @format Vector of length 4
+#' @source Expert opinion from SIT members.
 "month_return_proportions"
 
 #' @title Mass by Size Class
 #' @description mass of fish by the size class
+#' @format Vector of length 4 (4 size classes)
+#' @source size classes were derived from Analysis of Stanislaus data.
 "mass_by_size_class"
 
 #' @title Cross Channel Stray Rate
-#' @description Natural straying allocation across channels, source: expert opinion from SIT members.
+#' @description Natural straying allocation across channels.
+#' @format Vector of length 31 [31 watersheds]
+#' @source Expert opinion from SIT members.
 "cross_channel_stray_rate"
 
 #' @title Stray Rate
-#' @description Estimated with coded wire tag data 2010–2013 (\href{https://nrm.dfg.ca.gov/FileHandler.ashx?DocumentID=162355&usg= AOvVaw0VgMOwD7knFfSxRZy6k8RG}{Kormos et al. 2012},
+#' @description Natural straying allocation
+#' @format Vector of length 31 [31 watersheds]
+#' @source Estimated with coded wire tag data 2010–2013 (\href{https://nrm.dfg.ca.gov/FileHandler.ashx?DocumentID=162355&usg= AOvVaw0VgMOwD7knFfSxRZy6k8RG}{Kormos et al. 2012},
 #' \href{https://www.rmpc.org/files/mark-mtg-2014-docs/2011_CFM_CWT_Recovery_Report_FAR_2013(Melodie_Palmer-Zwahlen).pdf}{Palmer-Zwahlen & Kormos 2013-2015},
 #' \href{https://nrm.dfg.ca.gov/FileHandler.ashx?DocumentID=162355&usg=AOvVaw3wSbd-zJk1eQa085Xuxiyg}{Palmer-Zwahlen et al. 2018})
 "stray_rate"
 
 #' @title Diversity Groups
-#' @description The diversity groups are sourced from the ["Framework for Assessing Viability of Threatened and Endangered Chinook Salmon and Steelhead in the Sacramento-San Joaquin Basin"](http://escholarship.org/uc/item/3653x9xc) 
-#' with slight modification. The "Northern Sierra" diversity group covers a very large geographic area and was divided into two groups based on proximity.
+#' @description Watershed groups.
+#' @format Vector of length 31 [31 watersheds]
+#' @source The diversity groups are sourced from the ["Framework for Assessing Viability of Threatened and Endangered Chinook Salmon and Steelhead in the Sacramento-San Joaquin Basin"](http://escholarship.org/uc/item/3653x9xc) with slight modification.
+#' The "Northern Sierra" diversity group covers a very large geographic area and was divided into two groups based on proximity.
 "diversity_group"
 
 #' @title Growth Rates
-#' @description Growth rates determined by expert SIT judgment based on the following:
+#' @description Chinook growth rates in floodplain and inchannel habitat.
+#' @format 4 x 4 x 4 array [4 size classes x 4 size classes x 4 weeks]
+#' @source Growth rates determined by expert SIT judgment based on the following:
 #' \itemize{
 #'   \item \href{https://link.springer.com/article/10.1007/s10641-009-9473-8}{Limm, M.P., Marchetti, M.P.  (2009)}
 #'   \item \href{https://www.tandfonline.com/doi/abs/10.1577/T08-112.1}{Rene E. Henery, Ted R. Sommer & Charles R. Goldman (2010)}
@@ -90,12 +107,16 @@ NULL
 #'   \item \code{sutter_habitat}: More details at \code{\link[DSMhabitat]{sutter_habitat}}
 #'   \item \code{yolo_habitat}: More details at \code{\link[DSMhabitat]{yolo_habitat}}
 #'   \item \code{delta_habitat}: More details at \code{\link[DSMhabitat]{delta_habitat}}
+#'   \item \code{spawn_decay_rate}: More details at \code{\link[DSMscenario]{spawn_decay_rate}}
+#'   \item \code{rear_decay_rate}: More details at \code{\link[DSMscenario]{rear_decay_rate}}
 #' }
 #' @section Spawning Adults:
 #' \itemize{
 #'   \item \code{prop_flow_natal}: More details at \code{\link[DSMflow]{proportion_flow_natal}}
 #'   \item \code{south_delta_routed_watersheds}: More details at \code{\link[DSMhabitat]{south_delta_routed_watersheds}}
 #'   \item \code{cc_gates_days_closed}: More details at \code{\link[DSMflow]{delta_cross_channel_closed}}
+#'   \item \code{cross_channel_stray_rate}: More details at \code{\link{cross_channel_stray_rate}}
+#'   \item \code{stray_rate}: More details at \code{\link{stray_rate}}
 #'   \item \code{gates_overtopped}: More details at \code{\link[DSMflow]{gates_overtopped}}
 #'   \item \code{tisdale_bypass_watershed}: More details at \code{\link[DSMhabitat]{tisdale_bypass_watershed}}
 #'   \item \code{yolo_bypass_watershed}: More details at \code{\link[DSMhabitat]{yolo_bypass_watershed}}
@@ -112,12 +133,15 @@ NULL
 #'   \item \code{.adult_en_route_adult_harvest_rate}:  Adult harvest rate, source:  \href{https://nrm.dfg.ca.gov/FileHandler.ashx?DocumentID=162355&usg= AOvVaw0VgMOwD7knFfSxRZy6k8RG}{(Palmer-Zwahlen & Kormos 2013-2015, Palmer-Zwahlen et al. 2018)}
 #'   \item \code{degree_days}: More details at \code{\link[DSMtemperature]{degree_days}}
 #'   \item \code{month_return_proportions}: More details at \code{\link[winterRunDSM]{month_return_proportions}}
-#'   \item \code{.adult_prespawn_int}:  Intercept, Source: TODO
+#'   \item \code{.adult_prespawn_int}:  Intercept, Source: Inherited calibration value from FallRunDSM
 #'   \item \code{.adult_prespawn_deg_day}: Coefficient for \code{deg_day} variable, source: \href{https://onlinelibrary.wiley.com/doi/epdf/10.1002/rra.3348}{Colvin et al. (2018)}
 #'   \item \code{prob_nest_scoured}: More details at \code{\link[DSMhabitat]{prob_nest_scoured}}
-#'   \item \code{spawn_success_sex_ratio}: Variable describing the female to male spawning ratio, default 0.5 TODO (find source for default)
-#'   \item \code{spawn_success_redd_size}: Variable describing the size of redds including defensible space, default value 9.29 square meters TODO (find source for default)
-#'   \item \code{spawn_success_fecundity}: Variable describing the number of eggs per female, default value 5522 TODO (find source for default)
+#'   \item \code{spawn_success_sex_ratio}: Variable describing the female to male spawning ratio, default 0.5, source: expert opinion from SIT members.
+#'   \item \code{spawn_success_redd_size}: Variable describing the size of redds including defensible space, default value 9.29 square meters, source: expert opinion from SIT members.
+#'   \item \code{spawn_success_fecundity}: Variable describing the number of eggs per female, default value 5522, source: \href{https://www.ucpress.edu/book/9780520227545/inland-fishes-of-california}{Moyle, P. B. 2002. Inland Fishes of California. University of California Press, Berkeley CA}
+#'   \item \code{hatchery_allocation}: More details at \code{\link{hatchery_allocation}}
+#'   \item \code{natural_adult_removal_rate}: More details at \code{\link{natural_adult_removal_rate}}
+#'
 #' }
 #' @section Egg to Fry Survival:
 #' \itemize{
@@ -126,7 +150,7 @@ NULL
 #'   \item \code{..surv_egg_to_fry_mean_egg_temp_effect}: More details at \code{\link[DSMtemperature]{egg_temperature_effect}}, source: Calibration (winter run only)
 #'   \item \code{.surv_egg_to_fry_proportion_natural}: Coefficient for \code{proportion_natural} variable, Source: \href{https://cdnsciencepub.com/doi/abs/10.1139/F10-168}{Chilcote et al. (2011)}
 #'   \item \code{.surv_egg_to_fry_scour}: Coefficient for \code{scour} variable, Source: \href{https://dsm-docs.s3-us-west-2.amazonaws.com/montogemery_1996.pdf}{Montgomery et al. (1996)}
-#'   \item \code{.surv_egg_to_fry_int}:  Intercept, Source: TODO
+#'   \item \code{.surv_egg_to_fry_int}:  Intercept, Source: calibrated value inherited from 2019 calibration
 #' }
 #' @section Tributary Rearing Survival:
 #' \itemize{
@@ -139,11 +163,11 @@ NULL
 #'   \item \code{prop_high_predation}: More details at \code{\link[DSMhabitat]{prop_high_predation}}
 #'   \item \code{contact_points}: More details at \code{\link[DSMhabitat]{contact_points}}
 #'   \item \code{..surv_juv_rear_int}: Intercept, Source: calibration (varies by tributary)
-#'   \item \code{.surv_juv_rear_contact_points}: Coefficient for \code{contact_points} variable, Source: TODO - literature
+#'   \item \code{.surv_juv_rear_contact_points}: Coefficient for \code{contact_points} variable, Source: inherited from previous calibration
 #'   \item \code{..surv_juv_rear_contact_points}: Coefficient for \code{contact_points} variable, Source: calibration
 #'   \item \code{.surv_juv_rear_prop_diversions}: Coefficient for \code{prop_diversions} variable, Source: source: \href{https://dsm-docs.s3-us-west-2.amazonaws.com/Hierarchical_Modeling_of_Juvenile_Chinook_Salmon_S+(1).pdf}{Newman and Brandes (2010)}
 #'   \item \code{..surv_juv_rear_prop_diversions}: Coefficient for \code{prop_diversions} variable, Source: calibration
-#'   \item \code{.surv_juv_rear_total_diversions}: Coefficient for \code{total_diversions} variable, Source: TODO - Literature
+#'   \item \code{.surv_juv_rear_total_diversions}: Coefficient for \code{total_diversions} variable, Source: inherited from previous calibration
 #'   \item \code{..surv_juv_rear_total_diversions}: Coefficient for \code{total_diversions} variable, Source: calibration
 #'   \item \code{.surv_juv_rear_avg_temp_thresh}:  Coefficient for \code{avg_temp_thresh} variable, Source: \href{https://www.tandfonline.com/doi/full/10.1577/M07-130.1?scroll=top&needAccess=true}{Runge et al (2008)}
 #'   \item \code{.surv_juv_rear_high_predation}: Coefficient for \code{high_predation} variable, source: \href{https://pubag.nal.usda.gov/catalog/512123}{Cavallo et al. (2012)}
@@ -171,9 +195,9 @@ NULL
 #'   \item \code{delta_contact_points}: More details at \code{\link[DSMhabitat]{delta_contact_points}}
 #'   \item \code{delta_prop_high_predation}: More details at \code{\link[DSMhabitat]{delta_prop_high_predation}}
 #'   \item \code{..surv_juv_delta_int}: Intercept, Source: calibration
-#'   \item \code{.surv_juv_delta_contact_points}: Coefficient for \code{contact_points} variable, Source: TODO - literature
+#'   \item \code{.surv_juv_delta_contact_points}: Coefficient for \code{contact_points} variable, Source: inherited from previous calibration.
 #'   \item \code{..surv_juv_delta_contact_points}: Coefficient for \code{contact_points} variable, Source: calibration
-#'   \item \code{.surv_juv_delta_total_diverted}: Coefficient for \code{total_diversions} variable, Source: TODO - literature
+#'   \item \code{.surv_juv_delta_total_diverted}: Coefficient for \code{total_diversions} variable, Source: inherited from previous calibration.
 #'   \item \code{..surv_juv_delta_total_diverted}: Coefficient for \code{total_diversions} variable, Source: calibration
 #'   \item \code{.surv_juv_delta_avg_temp_thresh}: Coefficient for \code{avg_temp_thresh} variable, source: \href{https://dsm-docs.s3-us-west-2.amazonaws.com/marine_cech_water_temp_effects.pdf}{Marine and Chech (2004)}
 #'   \item \code{.surv_juv_delta_high_predation}: Coefficient for \code{high_predation} variable, source: \href{https://pubag.nal.usda.gov/catalog/512123}{Cavallo et al. (2012)}
@@ -222,7 +246,7 @@ NULL
 #'   \item \code{.pulse_movement_medium_pulse}: Additional coefficient for \code{proportion_pulse} variable for medium size fish, source: Empirical model fit to CVPIA Chinook salmon screw trap abundance estimates from American River, Stanislaus River, Feather River, Mokelumne River, Sacramento River, Tuolumne River, Clear Creek 2008–2015.
 #'   \item \code{.pulse_movement_large_pulse}: Additional coefficient for \code{proportion_pulse} variable for large size fish, source: Empirical model fit to CVPIA Chinook salmon screw trap abundance estimates from American River, Stanislaus River, Feather River, Mokelumne River, Sacramento River, Tuolumne River, Clear Creek 2008–2015.
 #'   \item \code{.pulse_movement_very_large_pulse}: Additional coefficient for \code{proportion_pulse} variable for very large size fish, source: Empirical model fit to CVPIA Chinook salmon screw trap abundance estimates from American River, Stanislaus River, Feather River, Mokelumne River, Sacramento River, Tuolumne River, Clear Creek 2008–2015.
-#'   \item \code{territory_size}: More details at \code{\link{territory_size}}
+#'   \item \code{territory_size}: More details at \code{\link{territory_by_size}}
 #' }
 #' @section Tributary Rearing:
 #' \itemize{
@@ -237,5 +261,14 @@ NULL
 #'   \item \code{..ocean_entry_success_int}: Intercept, source: Calibration (Varies by tributary)
 #'   \item \code{.ocean_entry_success_months}: Coefficient for \code{month} variable, source: \href{https://dsm-docs.s3-us-west-2.amazonaws.com/Satterthwaite_et_al_2014.pdf}{Satterthwaite et al. (2014)}
 #' }
-#'
+#' @section Generating Model Outputs:
+#' \itemize{
+#'   \item \code{mass_by_size_class}: More details at \code{\link{mass_by_size_class}}
+#'   \item \code{diversity_group}: More details at \code{\link{diversity_group}}
+#' }
+#' @usage params
 "params"
+
+#' @rdname params
+#' @format NULL
+"params_2019"
