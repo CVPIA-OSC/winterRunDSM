@@ -8,6 +8,7 @@
 #' @param sex_ratio The female to male spawning ratio
 #' @param redd_size The size of redds including defensible space
 #' @param fecundity The number of eggs per female
+#' @param stochastic \code{TRUE} \code{FALSE} value indicating if model is being run stochastically
 #' @source IP-117068
 #' @export
 

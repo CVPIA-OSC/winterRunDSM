@@ -12,6 +12,7 @@ days_in_month <- function(month, days_by_month = c(Jan = 31L, Feb = 28L, Mar = 3
 
 #' @title Ocean Transition Month
 #' @description Calculates the month juveniles transition to the ocean
+#' @param stochastic \code{TRUE} \code{FALSE} value indicating if model is being run stochastically
 #' @source IP-117068
 ocean_transition_month <- function(stochastic) {
   if (stochastic) {

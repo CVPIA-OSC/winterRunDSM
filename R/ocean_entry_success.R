@@ -7,6 +7,7 @@
 #' @param .ocean_entry_success_length Size related intercept representing the fork lengths for each size classes
 #' @param ..ocean_entry_success_int Intercept
 #' @param .ocean_entry_success_months Coefficient for month variable
+#' @param stochastic \code{TRUE} \code{FALSE} value indicating if model is being run stochastically
 #' @source IP-117068
 #' @export
 ocean_entry_success <- function(migrants, month, avg_ocean_transition_month,

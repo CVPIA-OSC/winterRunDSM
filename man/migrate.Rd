@@ -13,6 +13,8 @@ migrate(migrants, migration_survival_rate, stochastic)
 \item{migrants}{An n by 4 matrix of juveniles (watersheds by size class)}
 
 \item{migration_survival_rate}{The survival rates for s, m, l, and vl fish}
+
+\item{stochastic}{\code{TRUE} \code{FALSE} value indicating if model is being run stochastically}
 }
 \description{
 Stocastic application of survival rate to migrating juvenile fish

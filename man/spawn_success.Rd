@@ -35,6 +35,8 @@ spawn_success(
 \item{redd_size}{The size of redds including defensible space}
 
 \item{fecundity}{The number of eggs per female}
+
+\item{stochastic}{\code{TRUE} \code{FALSE} value indicating if model is being run stochastically}
 }
 \description{
 Calculates the annual reproductive success.
