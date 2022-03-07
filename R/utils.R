@@ -1,6 +1,7 @@
 #' @title Days in Month
 #' @description Number of days withing a month
 #' @param month Integer representation of month
+#' @param days_by_month The number of days in each month
 days_in_month <- function(month, days_by_month = c(Jan = 31L, Feb = 28L, Mar = 31L,
                                        Apr = 30L, May = 31L, Jun = 30L,
                                        Jul = 31L, Aug = 31L, Sep = 30L,
@@ -27,7 +28,9 @@ ocean_transition_month <- function(stochastic) {
 
 #' @title Pretty Number
 #' @description Formats numbers for ease of reading
-#' @export 
+#' @param num A number to be reformatted
+#' @param places The number of places to round a number to, defaults to two
+#' @export
 pretty_num <- function(num, places = 2) {
   format(round(num, places), big.mark = ',', drop = FALSE)
 }

@@ -17,5 +17,5 @@ migrate(migrants, migration_survival_rate, stochastic)
 \item{stochastic}{\code{TRUE} \code{FALSE} value indicating if model is being run stochastically}
 }
 \description{
-Stocastic application of survival rate to migrating juvenile fish
+Application of survival rate to migrating juvenile fish
 }
