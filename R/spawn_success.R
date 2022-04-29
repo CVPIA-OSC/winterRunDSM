@@ -1,7 +1,7 @@
 #' @title Spawning Success
 #' @description Calculates the annual reproductive success.
 #' @param escapement The number of returning adults
-#' @param adult_prespawn_survival The adult prespawn surival rate
+#' @param adult_prespawn_survival The adult prespawn survival rate
 #' @param egg_to_fry_survival The egg to fry survival rate
 #' @param prob_scour The probability of nest scouring
 #' @param spawn_habitat The available spawning habitat in square meters
