@@ -92,6 +92,8 @@ navbar:
         href: 'articles/sensitivity-analysis.html'
       - text: 'Temperature Modeling'
         href: 'articles/temperature-model.html'        
+      - text: 'Model FAQs'
+        href: 'articles/model-faq.html'  
   - text: 'News'
     href: news/index.html
 
