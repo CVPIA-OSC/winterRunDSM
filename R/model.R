@@ -17,7 +17,10 @@
 #' @export
 winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "calibrate"),
                              seeds = NULL, ..params = winterRunDSM::params, 
-                             stochastic = FALSE){
+                             stochastic = FALSE, 
+                             which_surv = c("egg_to_fry", "juv_rear", "juv_migratory"),
+                             location_surv = "Upper Sacramento River",
+                             month_surv = 1){
   
   mode <- match.arg(mode)
   
@@ -139,6 +142,10 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
       .scour = ..params$.surv_egg_to_fry_scour
     )
     
+    if (which_surv == "egg_to_fry") {
+      egg_to_fry_surv <- min(egg_to_fry_surv * 1.2, 1) 
+    }
+    
     min_spawn_habitat <- apply(..params$spawning_habitat[ , 1:4, year], 1, min)
     
     accumulated_degree_days <- cbind(jan = rowSums(..params$degree_days[ , 1:4, year]),
@@ -237,6 +244,15 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                                min_survival_rate = ..params$min_survival_rate,
                                                stochastic = stochastic)
       
+      if (which_surv == "juv_rear"  & month == month_surv) {
+        rearing_survival$inchannel[location_surv] <- min(rearing_survival$inchannel[rearing_survival$inchannel] * 1.2, 1)
+          rearing_survival$floodplain[location_surv] <- min(rearing_survival$floodplain[rearing_survival$floodplain] * 1.2, 1)
+        # waiting on jim  
+          rearing_survival$sutter[location_surv] <- min(rearing_survival$sutter[rearing_survival$sutter] * 1.2, 1)
+          rearing_survival$yolo[location_surv] <- min(rearing_survival$yolo[rearing_survival$yolo] * 1.2, 1)
+          rearing_survival$delta[location_surv] <- min(rearing_survival$delta[rearing_survival$delta] * 1.2, 1)
+      }
+      
       migratory_survival <- get_migratory_survival(juv_dynamics_year, month,
                                                    cc_gates_prop_days_closed = ..params$cc_gates_prop_days_closed,
                                                    freeport_flows = ..params$freeport_flows,
@@ -256,6 +272,26 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                                    .surv_juv_outmigration_san_joaquin_large = ..params$.surv_juv_outmigration_san_joaquin_large,
                                                    min_survival_rate = ..params$min_survival_rate,
                                                    stochastic = stochastic)
+      
+      if (which_surv == "juv_migratory" & month == month_surv) {
+        if (location_surv == "Upper-mid Sacramento River") {
+          migratory_survival$uppermid_sac = min(migratory_survival$uppermid_sac[location_surv]* 1.2, 1)
+        }
+        
+        if (location_surv == "Lower-mid Sacramento River") {
+          migratory_survival$lowermid_sac = min(migratory_survival$lowermid_sac[location_surv]* 1.2, 1)
+        }
+        
+        if (location_surv == "Lower Sacramento River") {
+          migratory_survival$lower_sac = min(migratory_survival$lower_sac[location_surv]* 1.2, 1)
+        }
+
+              # wait on jim 
+        # migratory_survival$sutter = min(migratory_survival$sutter[location_surv]* 1.2, 1)
+        # migratory_survival$yolo = min(migratory_survival$yolo[location_surv]* 1.2, 1)
+        # migratory_survival$delta = min(migratory_survival$delta[location_surv]* 1.2, 1)
+        # migratory_survival$bay_delta = min(migratory_survival$bay_delta[location_surv]* 1.2, 1)
+      }
       
       migrants <- matrix(0, nrow = 31, ncol = 4, dimnames = list(winterRunDSM::watershed_labels, winterRunDSM::size_class_labels))
       
