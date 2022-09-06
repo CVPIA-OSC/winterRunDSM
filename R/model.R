@@ -245,12 +245,18 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                                stochastic = stochastic)
       
       if (which_surv == "juv_rear"  & month == month_surv) {
-        rearing_survival$inchannel[location_surv] <- min(rearing_survival$inchannel[rearing_survival$inchannel] * 1.2, 1)
-          rearing_survival$floodplain[location_surv] <- min(rearing_survival$floodplain[rearing_survival$floodplain] * 1.2, 1)
+        if(location_surv %in% c("Upper Sacramento River", "Lower-mid Sacramento River", 
+                                "Lower Sacramento River", "Upper-mid Sacramento River")) {
+          index_position <- which(winterRunDSM::watershed_labels == location_surv)
+          rearing_survival$inchannel[index_position, ] <- min(rearing_survival$inchannel[index_position, ] * 1.2, 1)
+          rearing_survival$floodplain[index_position, ] <- min(rearing_survival$floodplain[index_position, ] * 1.2, 1)
+
+        }
+        
         # waiting on jim  
-          rearing_survival$sutter[location_surv] <- min(rearing_survival$sutter[rearing_survival$sutter] * 1.2, 1)
-          rearing_survival$yolo[location_surv] <- min(rearing_survival$yolo[rearing_survival$yolo] * 1.2, 1)
-          rearing_survival$delta[location_surv] <- min(rearing_survival$delta[rearing_survival$delta] * 1.2, 1)
+          # rearing_survival$sutter[location_surv] <- min(rearing_survival$sutter[rearing_survival$sutter] * 1.2, 1)
+          # rearing_survival$yolo[location_surv] <- min(rearing_survival$yolo[rearing_survival$yolo] * 1.2, 1)
+          # rearing_survival$delta[location_surv] <- min(rearing_survival$delta[rearing_survival$delta] * 1.2, 1)
       }
       
       migratory_survival <- get_migratory_survival(juv_dynamics_year, month,
@@ -274,16 +280,17 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                                    stochastic = stochastic)
       
       if (which_surv == "juv_migratory" & month == month_surv) {
+
         if (location_surv == "Upper-mid Sacramento River") {
-          migratory_survival$uppermid_sac = min(migratory_survival$uppermid_sac[location_surv]* 1.2, 1)
+          migratory_survival$uppermid_sac = min(migratory_survival$uppermid_sac* 1.2, 1)
         }
         
         if (location_surv == "Lower-mid Sacramento River") {
-          migratory_survival$lowermid_sac = min(migratory_survival$lowermid_sac[location_surv]* 1.2, 1)
+          migratory_survival$lowermid_sac = min(migratory_survival$lowermid_sac* 1.2, 1)
         }
         
         if (location_surv == "Lower Sacramento River") {
-          migratory_survival$lower_sac = min(migratory_survival$lower_sac[location_surv]* 1.2, 1)
+          migratory_survival$lower_sac = min(migratory_survival$lower_sac* 1.2, 1)
         }
 
               # wait on jim 
