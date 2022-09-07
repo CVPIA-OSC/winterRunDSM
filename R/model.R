@@ -245,10 +245,10 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                                stochastic = stochastic)
       
       if (mode == "simulate" & !is.na(which_surv) &  which_surv == "juv_rear"  & month == month_surv) {
-        index_position <- which(winterRunDSM::watershed_labels == location_surv)
         if(location_surv %in% c("Upper Sacramento River", "Lower-mid Sacramento River", 
                                 "Lower Sacramento River", "Upper-mid Sacramento River", 
                                 "Battle Creek")) {
+          index_position <- which(winterRunDSM::watershed_labels == location_surv)
           rearing_survival$inchannel[index_position, ] <- pmin(rearing_survival$inchannel[index_position, ] * 1.2, 1)
           rearing_survival$floodplain[index_position, ] <- pmin(rearing_survival$floodplain[index_position, ] * 1.2, 1)
         }
