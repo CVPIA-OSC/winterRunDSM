@@ -18,9 +18,10 @@
 winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "calibrate"),
                              seeds = NULL, ..params = winterRunDSM::params, 
                              stochastic = FALSE, 
-                             which_surv = c("egg_to_fry", "juv_rear", "juv_migratory"),
-                             location_surv = "Upper Sacramento River",
-                             month_surv = 1){
+                             which_surv = NULL, #c("egg_to_fry", "juv_rear", "juv_migratory"),
+                             location_surv = NULL, # "Upper Sacramento River",
+                             month_surv = NULL #1
+                             ){
   
   mode <- match.arg(mode)
   

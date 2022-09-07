@@ -3,7 +3,7 @@ library(purrr)
 library(parallel)
 library(doParallel)
 
-
+# TODO add in bypasses and delta 
 df <- expand.grid(location_surv = winterRunDSM::watershed_labels[c(1, 16, 21, 24)], 
                   month_surv = c(9:12, 1:5),
                   which_surv = c("juv_rear", "juv_migratory", "egg_to_fry"))
@@ -69,3 +69,25 @@ test <- df %>%
 
 test2 <- df %>%
   map_dfr(~winter_run_model(.))
+
+seeds <- winter_run_model(mode = "seed")
+sensitivity_winter_run_model <- function(which_surv, location_surv, month_surv){
+  if (which_surv == "egg_to_fry") {
+    location_surv = NA
+    month_surv = NA
+  }
+  model_results <- winter_run_model(scenario = NULL, mode = "simulate",
+                                    seeds = seeds, 
+                                    ..params = winterRunDSM::params, 
+                                    stochastic = FALSE,
+                                    which_surv = which_surv,
+                                    location_surv = location_surv,
+                                    month_surv = month_surv)
+  natural_spawners <- sum(model_results$spawners  * model_results$proportion_natural, na.rm = T)
+  tibble(survival_element = which_surv, 
+         watershed = location_surv, 
+         month = month_surv, 
+         natural_spawners = natural_spawners)
+}
+
+pmap_dfr(df, sensitivity_winter_run_model)
