@@ -121,4 +121,62 @@ do_nothing <- dplyr::as_tibble((model_results$spawners * model_results$proportio
   dplyr::select(id, location, survival_target, location_target, month_target, `1`:`20`)
 
 results <- dplyr::bind_rows(r1, r2, r3, r4, r5, do_nothing)
-write_csv(results, "analysis/survival_sensi_model_ouput.csv")
+#write_csv(results, "analysis/survival_sensi_model_ouput.csv")
+
+results <- read_csv('analysis/survival_sensi_model_ouput.csv') %>%  
+  mutate(row_sum = rowSums(results[6:20])) 
+
+# elasticity calc and visual  ---------------------------------------------
+
+filtered <- results  %>%
+  filter(is.na(survival_target)) 
+
+do_nothing_var <- filtered %>%
+  mutate(row_sum = rowSums(filtered[6:20])) 
+
+var = "Upper Sacramento River"
+sac_locations <- c('Upper Sacramento River', 'Lower-mid Sacramento River',
+                   'Upper-mid Sacramento River', 'Lower Sacramento River',
+                   'North Delta', 'South Delta', 'Yolo Bypass', 'Sutter Bypass',
+                   'Bay Delta', 'Delta')
+month_var = 9
+
+baseline_val <- do_nothing_var %>%
+  filter(location == var) %>%
+  pull(row_sum)
+
+elasticity <- results %>%
+  filter(location == var,
+         location_target %in% sac_locations) %>%
+  rename(total_spawners = row_sum) %>%
+  select(id, location, survival_target, location_target, month_target, total_spawners) %>%
+  mutate(perc_change = ((total_spawners - baseline_val)/baseline_val),
+         elasticity = perc_change/0.2) %>%
+  glimpse
+
+elasticity %>% 
+  group_by(location_target, survival_target) %>%
+  summarise(mean_elasticity = mean(elasticity)) %>%
+  ggplot() +
+  geom_segment( aes(x=location_target, xend=location_target, y=0, yend=mean_elasticity), color = "gray", size = 1) +
+  geom_point(aes(x = location_target, y = mean_elasticity), size = 3) +
+  xlab('location_target') +
+  ylab('') +
+  ggtitle('elasticity') +
+  coord_flip() +
+  facet_wrap(~ survival_target)
+
+
+# some visuals  -----------------------------------------------------------
+
+results %>%
+  filter(is.na(survival_target)) %>%
+  bind_rows(results %>%
+              filter(survival_target == "juv_migratory",
+                     location_target == "Bay Delta",  
+                     month_target == 12)) %>%
+  pivot_longer(cols = c(`1`:`20`), values_to = 'natural_spawners', names_to = "year") %>%
+  mutate(year = as.numeric(year)) %>%
+  ggplot() +
+  geom_point(aes(x = as.factor(year), y = natural_spawners, color = as.factor(id), alpha = 0.5)) +
+  coord_flip() 
