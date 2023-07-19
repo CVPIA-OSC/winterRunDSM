@@ -186,14 +186,14 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
     for (month in c(9:12, 1:5)) {
       if (month %in% 1:5) juv_dynamics_year <- year + 1 else juv_dynamics_year <- year
       
-      growth_rates_ic <- get_growth_rates(growth_temps[,month, year],
+      growth_rates_ic <- get_growth_rates(growth_temps[,month, juv_dynamics_year],
                                           prey_density = ..params$prey_density)
       
-      growth_rates_fp <- get_growth_rates(growth_temps[,month, year],
+      growth_rates_fp <- get_growth_rates(growth_temps[,month, juv_dynamics_year],
                                           prey_density = ..params$prey_density,
                                           floodplain = TRUE)
       
-      growth_rates_delta <- get_growth_rates(..params$avg_temp_delta[month, year,],
+      growth_rates_delta <- get_growth_rates(..params$avg_temp_delta[month, juv_dynamics_year,],
                                              prey_density = ..params$prey_density_delta)
       
       habitat <- get_habitat(juv_dynamics_year, month,
