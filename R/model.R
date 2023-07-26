@@ -654,7 +654,10 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
   if (mode == "seed") {
     return(adults[ , 6:30])
   } else if (mode == "calibrate") {
-    return(calculated_adults[, 5:21])
+    year_names <- colnames(seeds)
+    calculated_adults_to_return <- calculated_adults[, 1:19]
+    colnames(calculated_adults_to_return) <- year_names[1:19]
+    return(calculated_adults_to_return)
   }
   
   spawn_change <- sapply(1:19, function(year) {
