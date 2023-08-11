@@ -66,10 +66,6 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
     proportion_natural = matrix(NA_real_, nrow = 31, ncol = 20, dimnames = list(winterRunDSM::watershed_labels, 1:20))
   )
   
-  if (mode == 'calibrate') {
-    calculated_adults <- matrix(0, nrow = 31, ncol = 30)
-  }
-  
   adults <- switch (mode,
                     "seed" = winterRunDSM::adult_seeds,
                     "simulate" = seeds,
@@ -80,6 +76,10 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                               "seed" = 5,
                               "simulate" = 20,
                               "calibrate" = 19)
+  
+  if (mode == 'calibrate') {
+    calculated_adults <- matrix(0, nrow = 31, ncol = simulation_length + 4)
+  }
   
   for (year in 1:simulation_length) {
     adults_in_ocean <- numeric(31)
@@ -658,7 +658,7 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
       return(calculated_adults)
     } else {
       
-    return(calculated_adults[, 6:19])
+    return(calculated_adults[, 6:19] * output$proportion_natural[, 6:19])
     }
   }
   
