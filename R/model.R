@@ -77,6 +77,10 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                               "simulate" = 20,
                               "calibrate" = 19)
   
+  if (mode == 'calibrate') {
+    calculated_adults <- matrix(0, nrow = 31, ncol = simulation_length)
+  }
+  
   for (year in 1:simulation_length) {
     adults_in_ocean <- numeric(31)
     
