@@ -1,5 +1,27 @@
 library(tidyverse)
 
+# params with new routing
+params_multi_route <- winterRunDSM::params
+params_multi_route$..adults_in_ocean_weights <- rep(1/8, 8)
+params_multi_route$..habitat_capacity = 5
+params_multi_route$..floodplain_capacity = 5
+
+usethis::use_data(params_multi_route, overwrite = TRUE)
+
+# 2022
+# start with old params
+params_2022_raw <- fallRunDSM::params
+# add new decay multiplier
+params_2022_raw$spawn_decay_multiplier <- DSMhabitat::spawning_decay_multiplier
+
+# updates based on latest calibration
+source("calibration/update-params.R")
+calib_results_2022 <- readr::read_rds("calibration/calibration-results-2022.rds")@solution[1,]
+params_2022 <- update_params(x = calib_results_2022, params = params_2022_raw)
+
+usethis::use_data(params_2022, overwrite = TRUE)
+
+
 # 2021
 calib_results <- read_rds("calibration/calibration-results-2021-10-11_125845.rds")
 solution <- calib_results@solution[1, ]
