@@ -30,13 +30,44 @@ route <- function(year, month, juveniles, inchannel_habitat, floodplain_habitat,
                   .pulse_movement_medium_pulse,
                   .pulse_movement_large_pulse,
                   .pulse_movement_very_large_pulse,
+                  filling_fn = fallRunDSM::fill_natal,
+                  filling_args = NULL,
+                  movement_fn = NULL,
+                  movement_args = NULL,
+                  movement_months = NULL,
                   territory_size,
                   stochastic) {
 
-  natal_watersheds <- fill_natal(juveniles = juveniles,
-                                 inchannel_habitat = inchannel_habitat,
-                                 floodplain_habitat = floodplain_habitat,
-                                 territory_size = territory_size)
+
+  filling_combined_args <- append(list(juveniles = juveniles,
+                                       inchannel_habitat = inchannel_habitat,
+                                       floodplain_habitat = floodplain_habitat),
+                                  filling_args)
+
+  natal_watersheds <- do.call(filling_fn, filling_combined_args)
+
+
+  if ((!is.null(movement_fn) && is.null(movement_months)) || (is.null(movement_fn) && !is.null(movement_months))) {
+    stop("if using 'movement_fn' argument you must supply 'movement_fn' and vice-versa")
+  }
+
+  if (!is.null(movement_fn)) {
+
+    if (month %in% movement_months) {
+
+      if (sum(natal_watersheds$inchannel) == 0) {
+        movement_results <- do.call(movement_fn, args = append(list(juveniles=natal_watersheds$floodplain), movement_args))
+        natal_watersheds$floodplain <- movement_results$river_rear
+        natal_watersheds$migrants <- natal_watersheds$migrants + movement_results$migrants
+      } else {
+        movement_results <- do.call(movement_fn, args = append(list(juveniles=natal_watersheds$inchannel), movement_args))
+        natal_watersheds$floodplain <- movement_results$river_rear
+        natal_watersheds$migrants <- natal_watersheds$migrants + movement_results$migrants
+      }
+
+    }
+
+  }
 
   # estimate probability leaving as function of pulse flow
   prob_pulse_leave <- pulse_movement(prop_pulse_flows[ , month],
@@ -80,9 +111,11 @@ route <- function(year, month, juveniles, inchannel_habitat, floodplain_habitat,
 #' @source IP-117068
 #' @export
 route_bypass <- function(bypass_fish, bypass_habitat, migration_survival_rate,
-                         territory_size, stochastic) {
+                         territory_size, stochastic,
+                         filling_fn = winterRunDSM::fill_regional,
+                         filling_args = NULL) {
 
-  bypass_fish <- fill_regional(juveniles = bypass_fish,
+  bypass_fish <- filling_fn(juveniles = bypass_fish,
                                habitat = bypass_habitat,
                                territory_size = territory_size)
 
@@ -114,12 +147,19 @@ route_bypass <- function(bypass_fish, bypass_habitat, migration_survival_rate,
 #' @param detour Values can be 'sutter' or 'yolo' if some juveniles are detoured on to that bypass, otherwise NULL
 #' @param territory_size Array of juvenile fish territory requirements for \code{\link{fill_regional}}
 #' @param stochastic \code{TRUE} \code{FALSE} value indicating if model is being run stochastically
+#' @param filling_fn optional filling function to use in routing procedure, by default it uses fallRunDSM::fill_regional
+#' @param filling_args when passing custom filling function, pass function specific arguments as a list here
 #' @source IP-117068
 #' @export
 route_regional <- function(month, year, migrants,
                            inchannel_habitat, floodplain_habitat,
                            prop_pulse_flows, migration_survival_rate,
                            proportion_flow_bypass, detour = NULL,
+                           filling_fn = winterRunDSM::fill_regional,
+                           filling_args = NULL,
+                           movement_fn = NULL,
+                           movement_months = NULL,
+                           movement_args = NULL,
                            territory_size,
                            stochastic) {
 
@@ -141,10 +181,34 @@ route_regional <- function(month, year, migrants,
   }
 
   # fill up upper mainstem, but in river fish can leave due to pulses
-  regional_fish <- fill_regional(juveniles = migrants,
+  regional_fish <- filling_fn(juveniles = migrants,
                                  habitat = inchannel_habitat,
                                  floodplain_habitat = floodplain_habitat,
                                  territory_size = territory_size)
+
+  if ((!is.null(movement_fn) && is.null(movement_months)) || (is.null(movement_fn) && !is.null(movement_months))) {
+    stop("if using 'movement_fn' argument you must supply 'movement_fn' and vice-versa")
+  }
+
+  if (!is.null(movement_fn)) {
+
+    if (month %in% movement_months) {
+
+      if (sum(natal_watersheds$inchannel) == 0) {
+        movement_results <- do.call(movement_fn, args = append(list(juveniles=regional_fish$floodplain), movement_args))
+        regional_fish$floodplain <- movement_results$river_rear
+        regional_fish$migrants <- natal_watersheds$migrants + movement_results$migrants
+      } else {
+        movement_results <- do.call(movement_fn, args = append(list(juveniles=regional_fish$inchannel), movement_args))
+        regional_fish$floodplain <- movement_results$river_rear
+        regional_fish$migrants <- natal_watersheds$migrants + movement_results$migrants
+      }
+
+    }
+
+  }
+
+
   # estimate probability leaving as function of pulse flow
   pulse_flows <- prop_pulse_flows[ , month]
   prob_pulse_leave <- matrix(pulse_movement(pulse_flows), ncol = 4, byrow = T)
@@ -277,6 +341,7 @@ route_and_rear_deltas <- function(year, month, migrants, north_delta_fish, south
                          juveniles_at_chipps, growth_rates,
                          location_index = c(rep(1, 24), 3, rep(2, 2), rep(4, 4)),
                          territory_size,
+                         filling_fn = fallRunDSM::fill_regional,
                          stochastic) {
 
   prop_delta_fish_entrained <- route_to_south_delta(freeport_flow = freeport_flows[[month, year]] * 35.3147,
@@ -295,11 +360,12 @@ route_and_rear_deltas <- function(year, month, migrants, north_delta_fish, south
   migrants_and_salvaged <- migrants
   migrants_and_salvaged[1:23, ] <- migrants_and_salvaged[1:23, ] - sac_not_entrained
 
-  north_delta_fish <- fill_regional(juveniles = sac_not_entrained + north_delta_fish,
+
+  north_delta_fish <- filling_fn(juveniles = sac_not_entrained + north_delta_fish,
                                     habitat = north_delta_habitat,
                                     territory_size = territory_size)
 
-  south_delta_fish <- fill_regional(juveniles = migrants_and_salvaged + south_delta_fish,
+  south_delta_fish <- filling_fn(juveniles = migrants_and_salvaged + south_delta_fish,
                                     habitat = south_delta_habitat,
                                     territory_size = territory_size)
 
