@@ -17,7 +17,7 @@
 #' @export
 winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "calibrate"),
                              seeds = NULL, ..params = winterRunDSM::params, 
-                             stochastic = FALSE, calib_return_all = FALSE){
+                             stochastic = FALSE){
   
   mode <- match.arg(mode)
   
@@ -654,12 +654,7 @@ winter_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
   if (mode == "seed") {
     return(adults[ , 6:30])
   } else if (mode == "calibrate") {
-    if (calib_return_all) {
-      return(calculated_adults)
-    } else {
-      
-    return(calculated_adults[, 6:19] * output$proportion_natural[, 6:19])
-    }
+    return(calculated_adults[, 6:19])
   }
   
   spawn_change <- sapply(1:19, function(year) {
